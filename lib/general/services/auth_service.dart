@@ -11,7 +11,10 @@ class AuthService {
     return _auth.authStateChanges().map((User? user) => _appUserFromFirebaseUser(user));
   }
 
-  // Create account
+  // Register
+  static Future registerWithEmail({required String email, required String password}) async {
+    await _auth.createUserWithEmailAndPassword(email: email, password: password);
+  }
 
   // Login to account
   static Future loginWithGoogle() async {
@@ -29,10 +32,17 @@ class AuthService {
     await _auth.signInWithCredential(credential);
   }
 
+  static Future loginWithEmail({required String email, required String password}) async {
+    await _auth.signInWithEmailAndPassword(email: email, password: password);
+  }
+
   // Forgot password to account
 
   // Sign out of account
   static Future signOut() async {
+    if (_googleSignIn.currentUser != null) {
+      await _googleSignIn.disconnect();
+    }
     await _auth.signOut();
   }
 
