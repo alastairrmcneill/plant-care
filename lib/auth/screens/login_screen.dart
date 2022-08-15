@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            await AuthService.loginWithEmail(email: '1@1.com', password: '123456');
+            await AuthService.registerWithEmail(email: '1@1.com', password: '123456');
           },
           child: Text('Sign in with email'),
         ),

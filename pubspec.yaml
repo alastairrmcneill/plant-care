@@ -25,6 +25,8 @@ dependencies:
   google_sign_in: ^5.4.1
   font_awesome_flutter: ^10.1.0
 
+  one_context: ^2.1.0
+
 
 
 dev_dependencies:

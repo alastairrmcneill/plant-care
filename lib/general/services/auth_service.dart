@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:plant_care/general/models/models.dart';
+import 'package:plant_care/general/widgets/widgets.dart';
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,7 +14,12 @@ class AuthService {
 
   // Register
   static Future registerWithEmail({required String email, required String password}) async {
-    await _auth.createUserWithEmailAndPassword(email: email, password: password);
+    try {
+      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (error) {
+      print(error.message);
+      // showErrorDialog(error.message!);
+    }
   }
 
   // Login to account
@@ -33,7 +39,12 @@ class AuthService {
   }
 
   static Future loginWithEmail({required String email, required String password}) async {
-    await _auth.signInWithEmailAndPassword(email: email, password: password);
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (error) {
+      print(error.message);
+      // showErrorDialog(error.message!);
+    }
   }
 
   // Forgot password to account
