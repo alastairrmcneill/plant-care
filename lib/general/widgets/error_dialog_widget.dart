@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:one_context/one_context.dart';
 
 showErrorDialog(BuildContext context, String errorMessage) {
   Dialog alert = Dialog(
@@ -25,7 +24,6 @@ showErrorDialog(BuildContext context, String errorMessage) {
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(Colors.red)),
               onPressed: () async {
                 Navigator.pop(context);
-                // OneContext().pop();
               },
               child: Text('OK'),
             ),
@@ -35,12 +33,6 @@ showErrorDialog(BuildContext context, String errorMessage) {
     ),
   );
 
-  // show the dialog
-  // OneContext().showDialog(
-  //   builder: (BuildContext context) {
-  //     return alert;
-  //   },
-  // );
   showDialog(
     context: context,
     builder: (BuildContext context) {
