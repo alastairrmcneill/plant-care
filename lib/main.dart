@@ -1,20 +1,26 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_care/features/onboarding/screens/screens.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/support/theme.dart';
 import 'package:plant_care/support/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'general/services/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+
+  final prefs = await SharedPreferences.getInstance();
+  final bool showHome = prefs.getBool('showHome') ?? false;
+  runApp(MyApp(showHome: showHome));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool showHome;
+  MyApp({Key? key, required this.showHome}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +38,7 @@ class MyApp extends StatelessWidget {
         title: 'Plant Care',
         debugShowCheckedModeBanner: false,
         theme: MyThemes.lightTheme,
-        home: const Wrapper(),
+        home: showHome ? const Wrapper() : const OnboardingScreen(),
       ),
     );
   }

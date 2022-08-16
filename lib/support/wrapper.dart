@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:plant_care/auth/screens/screens.dart';
+import 'package:plant_care/features/auth/screens/screens.dart';
 import 'package:plant_care/general/models/models.dart';
-import 'package:plant_care/home/general/screens/screens.dart';
+import 'package:plant_care/features/home/general/screens/screens.dart';
 import 'package:provider/provider.dart';
 
 class Wrapper extends StatelessWidget {
