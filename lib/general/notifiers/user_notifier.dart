@@ -17,4 +17,12 @@ class UserNotifier extends ChangeNotifier {
     _currentUser = currentUser;
     notifyListeners();
   }
+
+  set setWithoutNotifyCurrentUserId(String currentUserId) {
+    _currentUserId = currentUserId;
+  }
+
+  set setWithoutNotifyCurrentUser(AppUser currentUser) {
+    _currentUser = currentUser;
+  }
 }

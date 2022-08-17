@@ -12,10 +12,7 @@ class AuthService {
 
   // Auth user stream
   Stream<AppUser?> get appUserStream {
-    return _auth.authStateChanges().map((User? user) {
-      print(user);
-      return _appUserFromFirebaseUser(user);
-    });
+    return _auth.authStateChanges().map((User? user) => _appUserFromFirebaseUser(user));
   }
 
   // Register
