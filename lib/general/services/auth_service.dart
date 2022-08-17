@@ -66,9 +66,8 @@ class AuthService {
 
     try {
       await _auth.sendPasswordResetEmail(email: email);
-
-      stopCircularProgressOverlay(context);
       showSnackBar(context, 'Password retreival email sent');
+      stopCircularProgressOverlay(context);
     } on FirebaseAuthException catch (error) {
       stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
