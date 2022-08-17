@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:plant_care/general/models/models.dart';
+import 'package:plant_care/general/services/services.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:plant_care/support/wrapper.dart';
 
@@ -16,13 +20,40 @@ class AuthService {
   }
 
   // Register
-  static Future registerWithEmail(BuildContext context, {required String email, required String password}) async {
+  static Future registerWithEmail(
+    BuildContext context, {
+    required String email,
+    required String password,
+    required String name,
+    required File? image,
+  }) async {
     showCircularProgressOverlay(context);
 
     try {
-      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      User? user = result.user;
+      if (user != null) {
+        AppUser appUser = AppUser(
+          uid: user.uid,
+          name: name,
+          email: email,
+          photoUrl: null,
+        );
+
+        // Add user to database
+        await UserDatabase.createUser(
+          context,
+          appUser: appUser,
+          image: image,
+        );
+      }
+
       stopCircularProgressOverlay(context);
     } on FirebaseAuthException catch (error) {
+      stopCircularProgressOverlay(context);
+      showErrorDialog(context, error.message!);
+      return;
+    } on FirebaseException catch (error) {
       stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
       return;
@@ -101,6 +132,6 @@ class AuthService {
 
   // AppUser from Firebase user
   AppUser? _appUserFromFirebaseUser(User? user) {
-    return (user != null) ? AppUser(uid: user.uid) : null;
+    return (user != null) ? AppUser(uid: user.uid, name: '', email: '') : null;
   }
 }

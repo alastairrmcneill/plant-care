@@ -16,7 +16,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   File? _image;
 
   void _handleImageFromGallery() async {
@@ -67,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 10),
                     PasswordFormField(textEditingController: _passwordController),
                     const SizedBox(height: 10),
-                    RegisterButton(formKey: _formKey, nameController: _nameController, emailController: _emailController, passwordController: _passwordController),
+                    RegisterButton(formKey: _formKey, nameController: _nameController, emailController: _emailController, passwordController: _passwordController, image: _image),
                   ],
                 ),
               ),
