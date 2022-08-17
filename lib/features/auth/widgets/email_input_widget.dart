@@ -13,6 +13,7 @@ class EmailFormField extends StatelessWidget {
       ),
       textInputAction: TextInputAction.next,
       maxLines: 1,
+      autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
         if (value == null || value.trim().isEmpty) {

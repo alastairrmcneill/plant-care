@@ -16,7 +16,7 @@ class RegisterNowButton extends StatelessWidget {
             children: [
               const Text('Not a member? '),
               TextButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen())),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => RegisterScreen())),
                 child: const Text('Register now'),
               ),
             ],

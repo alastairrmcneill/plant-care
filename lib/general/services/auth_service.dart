@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
+import 'package:plant_care/support/wrapper.dart';
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -11,7 +12,10 @@ class AuthService {
 
   // Auth user stream
   Stream<AppUser?> get appUserStream {
-    return _auth.authStateChanges().map((User? user) => _appUserFromFirebaseUser(user));
+    return _auth.authStateChanges().map((User? user) {
+      print(user);
+      return _appUserFromFirebaseUser(user);
+    });
   }
 
   // Register
@@ -24,7 +28,9 @@ class AuthService {
     } on FirebaseAuthException catch (error) {
       stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
+      return;
     }
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
   }
 
   // Login to account
