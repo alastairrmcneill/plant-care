@@ -8,18 +8,18 @@ import 'package:plant_care/general/services/storage_service.dart';
 
 class UserDatabase {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
-  static final CollectionReference usersRef = _db.collection('users');
+  static final CollectionReference _usersRef = _db.collection('users');
 
   static Future createUser(BuildContext context, {required AppUser appUser, required File? image}) async {
     String? imageUrl;
     // Upload image
     if (image != null) {
-      String imageUrl = await StorageService.uploadUserImage(image);
+      imageUrl = await StorageService.uploadUserImage(image);
     }
 
     AppUser newAppUser = appUser.copy(photoUrl: imageUrl);
     // Save to Database
-    DocumentReference ref = usersRef.doc(newAppUser.uid);
+    DocumentReference ref = _usersRef.doc(newAppUser.uid);
 
     ref.set(newAppUser.toJSON());
 
@@ -27,7 +27,7 @@ class UserDatabase {
   }
 
   static Future<AppUser?> readUser(BuildContext context, {required String uid}) async {
-    DocumentReference ref = _db.collection('Users').doc(uid);
+    DocumentReference ref = _usersRef.doc(uid);
     DocumentSnapshot snapshot = await ref.get();
     if (snapshot.exists) {
       Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
@@ -35,5 +35,11 @@ class UserDatabase {
       return user;
     }
     return null;
+  }
+
+  static Future updateUser(BuildContext context, AppUser appUser) async {
+    DocumentReference ref = _usersRef.doc(appUser.uid);
+
+    await ref.set(appUser.toJSON(), SetOptions(merge: true));
   }
 }

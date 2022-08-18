@@ -20,13 +20,7 @@ class AuthService {
   }
 
   // Register
-  static Future registerWithEmail(
-    BuildContext context, {
-    required String email,
-    required String password,
-    required String name,
-    required File? image,
-  }) async {
+  static Future registerWithEmail(BuildContext context, {required String email, required String password, required String name, required File? image}) async {
     showCircularProgressOverlay(context);
 
     try {
@@ -75,8 +69,19 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
       showCircularProgressOverlay(context);
-      await _auth.signInWithCredential(credential);
+      UserCredential result = await _auth.signInWithCredential(credential);
       stopCircularProgressOverlay(context);
+      User? user = result.user;
+      if (user != null) {
+        AppUser appUser = AppUser(
+          uid: user.uid,
+          name: user.displayName!,
+          email: user.email!,
+          photoUrl: user.photoURL,
+        );
+        // Add user to database
+        await UserDatabase.updateUser(context, appUser);
+      }
     } on FirebaseAuthException catch (error) {
       stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
