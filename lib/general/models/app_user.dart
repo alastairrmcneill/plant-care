@@ -1,8 +1,7 @@
-import 'package:plant_care/general/models/models.dart';
-
 class AppUser {
   final String? uid;
   final String name;
+  final String initials;
   final String email;
   final String? photoUrl;
 
@@ -11,6 +10,7 @@ class AppUser {
     required this.name,
     required this.email,
     this.photoUrl,
+    required this.initials,
   });
 
   // to json
@@ -20,6 +20,7 @@ class AppUser {
       AppUserFields.email: email,
       AppUserFields.name: name,
       AppUserFields.photoUrl: photoUrl,
+      AppUserFields.initials: initials,
     };
   }
 
@@ -30,6 +31,7 @@ class AppUser {
       name: json[AppUserFields.name] as String,
       email: json[AppUserFields.email] as String,
       photoUrl: json[AppUserFields.photoUrl] as String?,
+      initials: json[AppUserFields.initials] as String,
     );
   }
 
@@ -39,12 +41,14 @@ class AppUser {
     String? name,
     String? email,
     String? photoUrl,
+    String? initials,
   }) {
     return AppUser(
       uid: uid ?? this.uid,
       name: name ?? this.name,
       email: email ?? this.email,
       photoUrl: photoUrl ?? this.photoUrl,
+      initials: initials ?? this.initials,
     );
   }
 }
@@ -54,4 +58,5 @@ class AppUserFields {
   static String name = 'name';
   static String email = 'email';
   static String photoUrl = 'photoUrl';
+  static String initials = 'initials';
 }

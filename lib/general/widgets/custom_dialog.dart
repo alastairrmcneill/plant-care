@@ -1,6 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-showErrorDialog(BuildContext context, String errorMessage) {
+showTwoButtonDialog(BuildContext context, String text, String option1, AsyncCallback function1, String option2, VoidCallback function2) {
   Dialog alert = Dialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     child: Container(
@@ -12,19 +14,32 @@ showErrorDialog(BuildContext context, String errorMessage) {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            errorMessage,
+          AutoSizeText(
+            text,
             textAlign: TextAlign.center,
+            maxLines: 4,
           ),
           const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(Colors.red)),
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(Colors.teal)),
               onPressed: () async {
                 Navigator.pop(context);
+                function1();
               },
               child: Text('OK'),
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(Colors.grey)),
+              onPressed: () async {
+                Navigator.pop(context);
+                function2();
+              },
+              child: Text('Cancel'),
             ),
           ),
         ],

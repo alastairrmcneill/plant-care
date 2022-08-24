@@ -21,6 +21,13 @@ class AuthService {
 
   // Register
   static Future registerWithEmail(BuildContext context, {required String email, required String password, required String name, required File? image}) async {
+    String initials = '';
+    List<String> names = name.split(' ');
+    if (names.length == 0) {
+      initials = names.first[0].toUpperCase();
+    } else {
+      initials = names.first[0].toUpperCase() + names.last[0].toUpperCase();
+    }
     showCircularProgressOverlay(context);
 
     try {
@@ -32,6 +39,7 @@ class AuthService {
           name: name,
           email: email,
           photoUrl: null,
+          initials: initials,
         );
 
         // Add user to database
@@ -63,6 +71,13 @@ class AuthService {
       if (googleUser == null) return;
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      String initials = '';
+      List<String> names = googleUser.displayName!.split(' ');
+      if (names.length == 0) {
+        initials = names.first[0].toUpperCase();
+      } else {
+        initials = names.first[0].toUpperCase() + names.last[0].toUpperCase();
+      }
 
       final OAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -78,6 +93,7 @@ class AuthService {
           name: user.displayName!,
           email: user.email!,
           photoUrl: user.photoURL,
+          initials: initials,
         );
         // Add user to database
         await UserDatabase.updateUser(context, appUser);
@@ -100,7 +116,7 @@ class AuthService {
   }
 
   // Forgot password to account
-  static Future forgotPassword(context, {required String email}) async {
+  static Future forgotPassword(BuildContext context, {required String email}) async {
     showCircularProgressOverlay(context);
 
     try {
@@ -114,7 +130,7 @@ class AuthService {
   }
 
   // Sign out of account
-  static Future signOut() async {
+  static Future<void> signOut(BuildContext context) async {
     if (_googleSignIn.currentUser != null) {
       await _googleSignIn.disconnect();
     }
@@ -125,6 +141,7 @@ class AuthService {
   static Future delete(BuildContext context) async {
     showCircularProgressOverlay(context);
     try {
+      await UserDatabase.deleteUser(context, uid: _auth.currentUser!.uid);
       await _auth.currentUser!.delete();
       stopCircularProgressOverlay(context);
       showSnackBar(context, 'User deleted');

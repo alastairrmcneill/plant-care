@@ -34,6 +34,8 @@ dependencies:
   flutter_image_compress: ^1.1.1
   uuid: ^3.0.6
   google_nav_bar: ^5.0.6
+  auto_size_text: ^3.0.0
+  custom_navigator: ^0.3.0
 
 
 

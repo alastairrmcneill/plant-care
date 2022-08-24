@@ -8,6 +8,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.2"
+  auto_size_text:
+    dependency: "direct main"
+    description:
+      name: auto_size_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   back_button_interceptor:
     dependency: transitive
     description:
@@ -113,6 +120,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  custom_navigator:
+    dependency: "direct main"
+    description:
+      name: custom_navigator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   fake_async:
     dependency: transitive
     description:

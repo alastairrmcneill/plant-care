@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/features/onboarding/screens/screens.dart';
-import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/support/theme.dart';
 import 'package:plant_care/support/wrapper.dart';
@@ -16,12 +15,13 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
   final bool showHome = prefs.getBool('showHome') ?? false;
-  runApp(MyApp(showHome: showHome));
+  runApp(MyApp(prefs: prefs, showHome: showHome));
 }
 
 class MyApp extends StatelessWidget {
+  final SharedPreferences prefs;
   final bool showHome;
-  MyApp({Key? key, required this.showHome}) : super(key: key);
+  MyApp({Key? key, required this.prefs, required this.showHome}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +33,11 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<UserNotifier>(
           create: (_) => UserNotifier(),
+        ),
+        ChangeNotifierProvider<SettingsNotifier>(
+          create: (_) => SettingsNotifier(
+            darkMode: prefs.getBool('darkMode') ?? false,
+          ),
         ),
       ],
       child: MaterialApp(

@@ -90,4 +90,13 @@ class UserDatabase {
   }
 
   // Delete User
+  static Future deleteUser(BuildContext context, {required String uid}) async {
+    try {
+      // Read database
+      DocumentReference ref = _usersRef.doc(uid);
+      await ref.delete();
+    } on FirebaseException catch (error) {
+      showErrorDialog(context, error.message!);
+    }
+  }
 }
