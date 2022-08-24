@@ -15,8 +15,8 @@ class AuthService {
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // Auth user stream
-  Stream<AppUser?> get appUserStream {
-    return _auth.authStateChanges().map((User? user) => _appUserFromFirebaseUser(user));
+  static Stream<User?> get appUserStream {
+    return _auth.authStateChanges();
   }
 
   // Register
@@ -122,7 +122,6 @@ class AuthService {
   }
 
   // Delete Account
-
   static Future delete(BuildContext context) async {
     showCircularProgressOverlay(context);
     try {
@@ -133,10 +132,5 @@ class AuthService {
       stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
     }
-  }
-
-  // AppUser from Firebase user
-  AppUser? _appUserFromFirebaseUser(User? user) {
-    return (user != null) ? AppUser(uid: user.uid, name: '', email: '') : null;
   }
 }

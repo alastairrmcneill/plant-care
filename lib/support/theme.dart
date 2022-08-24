@@ -17,26 +17,6 @@ class MyThemes {
           ),
         ),
       ),
-
-      // textTheme: const TextTheme(
-      //   bodyText2: TextStyle(
-      //     color: MyColors.textColor,
-      //   ),
-      //   headline3: TextStyle(
-      //     color: MyColors.textColor,
-      //   ),
-      //   headline4: TextStyle(
-      //     color: MyColors.textColor,
-      //   ),
-      //   headline5: TextStyle(
-      //     color: MyColors.textColor,
-      //   ),
-      // ),
-      // textButtonTheme: TextButtonThemeData(
-      //   style: ButtonStyle(
-      //     foregroundColor: MaterialStateProperty.all<Color?>(MyColors.darkGreen),
-      //   ),
-      // ),
       inputDecorationTheme: InputDecorationTheme(
         fillColor: Colors.white,
         // focusColor: Colors.green,
