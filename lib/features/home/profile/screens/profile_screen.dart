@@ -22,42 +22,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
     SettingsNotifier settingsNotifier = Provider.of<SettingsNotifier>(context);
     AppUser user = userNotifier.currentUser!;
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-            const ProfilePhoto(),
-            const SizedBox(height: 10),
-            AutoSizeText(
-              user.name,
-              maxLines: 1,
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 10),
-            Divider(),
-            ListTile(
-              title: Text('Account Details'),
-              trailing: Icon(Icons.chevron_right_rounded),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => UpdateAccountDetails())),
-            ),
-            ListTile(
-              title: const Text('Dark Mode'),
-              trailing: Switch(
-                value: settingsNotifier.darkMode,
-                onChanged: (value) {
-                  setState(() {
-                    settingsNotifier.setDarkMode(value);
-                  });
-                },
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              const ProfilePhoto(),
+              const SizedBox(height: 10),
+              AutoSizeText(
+                user.name,
+                maxLines: 1,
+                style: TextStyle(fontSize: 20),
               ),
-            ),
-            const SizedBox(height: 10),
-            const SignOutButton(),
-            const DeleteAccountButton(),
-          ],
+              const SizedBox(height: 10),
+              Divider(),
+              ListTile(
+                title: Text('Account Details'),
+                trailing: Icon(Icons.chevron_right_rounded),
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => UpdateAccountDetails())),
+              ),
+              ListTile(
+                title: const Text('Dark Mode'),
+                trailing: Switch(
+                  value: settingsNotifier.darkMode,
+                  onChanged: (value) {
+                    setState(() {
+                      settingsNotifier.setDarkMode(value);
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+              const SignOutButton(),
+              const DeleteAccountButton(),
+            ],
+          ),
         ),
       ),
     );

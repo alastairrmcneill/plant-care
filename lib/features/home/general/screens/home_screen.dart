@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:plant_care/features/home/calendar/screens/screens.dart';
@@ -33,16 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
         backgroundColor: Colors.teal,
-        selectedItemColor: Theme.of(context).scaffoldBackgroundColor,
-        unselectedItemColor: Colors.white54,
-        showUnselectedLabels: false,
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
+        activeColor: Theme.of(context).scaffoldBackgroundColor,
+        inactiveColor: Colors.white54,
+        iconSize: 22,
+        border: Border.all(color: Colors.pink),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.seedling),
@@ -62,6 +60,30 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      tabBuilder: ((context, index) {
+        switch (index) {
+          case 0:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(child: PlantsScreen());
+            });
+          case 1:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(child: HouseholdsScreen());
+            });
+          case 2:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(child: CalendarScreen());
+            });
+          case 3:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(child: ProfileScreen());
+            });
+          default:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(child: PlantsScreen());
+            });
+        }
+      }),
     );
   }
 }
