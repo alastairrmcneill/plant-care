@@ -5,10 +5,7 @@ import 'package:plant_care/features/home/calendar/screens/screens.dart';
 import 'package:plant_care/features/home/households/screens/screens.dart';
 import 'package:plant_care/features/home/plants/screens/screens.dart';
 import 'package:plant_care/features/home/profile/screens/screens.dart';
-import 'package:plant_care/general/notifiers/notifiers.dart';
-import 'package:plant_care/general/services/auth_service.dart';
 import 'package:plant_care/general/services/user_database.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-  List<Widget> screens = const [
+  List<Widget> screens = [
     PlantsScreen(),
     HouseholdsScreen(),
     CalendarScreen(),
@@ -40,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         activeColor: Theme.of(context).scaffoldBackgroundColor,
         inactiveColor: Colors.white54,
         iconSize: 22,
-        border: Border.all(color: Colors.pink),
+        border: Border.all(color: Colors.transparent),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.seedling),
