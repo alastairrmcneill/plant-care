@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:plant_care/features/home/plants/screens/screens.dart';
 
 class PlantsScreen extends StatelessWidget {
   const PlantsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text('Plants'),
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CreatePlantScreen())),
+        child: const Icon(Icons.add),
       ),
     );
   }

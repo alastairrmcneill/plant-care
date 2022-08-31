@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MyThemes {
   static ThemeData get lightTheme {
     return ThemeData(
-      scaffoldBackgroundColor: const Color(0xFFF9F9F9),
+      scaffoldBackgroundColor: MyColors.appBackgroundColor,
       primarySwatch: Colors.teal,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -49,4 +49,5 @@ class MyThemes {
 class MyColors {
   static const Color darkGreen = Color(0xFF466443);
   static const Color textColor = Color(0xFF0A2D31);
+  static const Color appBackgroundColor = Color(0xFFF9F9F9);
 }

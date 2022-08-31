@@ -22,7 +22,8 @@ showErrorDialog(BuildContext context, String errorMessage) {
             child: ElevatedButton(
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(Colors.red)),
               onPressed: () async {
-                Navigator.pop(context);
+                // Navigator.pop(context);
+                Navigator.of(context, rootNavigator: true).pop();
               },
               child: Text('OK'),
             ),

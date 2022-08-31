@@ -25,7 +25,7 @@ showTwoButtonDialog(BuildContext context, String text, String option1, AsyncCall
             child: ElevatedButton(
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(Colors.teal)),
               onPressed: () async {
-                Navigator.pop(context);
+                Navigator.of(context, rootNavigator: true).pop();
                 function1();
               },
               child: Text('OK'),
@@ -36,7 +36,8 @@ showTwoButtonDialog(BuildContext context, String text, String option1, AsyncCall
             child: ElevatedButton(
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(Colors.grey)),
               onPressed: () async {
-                Navigator.pop(context);
+                Navigator.of(context, rootNavigator: true).pop();
+
                 function2();
               },
               child: Text('Cancel'),

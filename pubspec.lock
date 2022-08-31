@@ -127,6 +127,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
+  customtogglebuttons:
+    dependency: "direct main"
+    description:
+      name: customtogglebuttons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.5"
+  expandable:
+    dependency: "direct main"
+    description:
+      name: expandable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.1"
   fake_async:
     dependency: transitive
     description:
