@@ -3,10 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:plant_care/features/home/households/widgets/widgets.dart';
 import 'package:plant_care/features/home/plants/widgets/widgets.dart';
+import 'package:plant_care/general/models/models.dart';
+import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:plant_care/support/theme.dart';
+import 'package:provider/provider.dart';
 
 class CreatePlantScreen extends StatefulWidget {
   const CreatePlantScreen({Key? key}) : super(key: key);
@@ -30,6 +34,8 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
   late String feedingRecurrence;
   bool showMisting = false;
   bool showFood = false;
+  int? householdIndex;
+  List<Household> households = [];
   File? _image;
 
   @override
@@ -38,6 +44,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     wateringRecurrence = recurranceOptions[0];
     mistingRecurrence = recurranceOptions[0];
     feedingRecurrence = recurranceOptions[0];
+    HouseholdDatabase.readAllHouseholds(context);
   }
 
   void _handleImageFromGallery() async {
@@ -49,7 +56,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     }
   }
 
-  Widget _displayChatImage() {
+  Widget _displayPlantImage() {
     return GestureDetector(
       onTap: _handleImageFromGallery,
       child: CircleAvatar(
@@ -82,6 +89,68 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
               )
             : null,
       ),
+    );
+  }
+
+  Widget _displayHouseholdDetails() {
+    HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: false);
+    households = householdNotifier.allHouseholds;
+
+    List<String> items = [];
+    if (households.isNotEmpty) {
+      for (var household in households) {
+        items.add(household.name);
+      }
+    }
+    String? householdSelected;
+    Widget button = TextButton(
+      onPressed: () {
+        showCreateHouseholdDialog(context);
+      },
+      child: Text(households.isEmpty ? 'New Household' : 'New'),
+    );
+
+    return Column(
+      children: [
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            households.isEmpty
+                ? Expanded(child: button)
+                : SizedBox(
+                    width: 70,
+                    child: button,
+                  ),
+            const SizedBox(width: 8),
+            households.isEmpty
+                ? Container()
+                : Expanded(
+                    flex: 1,
+                    child: DropdownButtonFormField(
+                      hint: Text('Household'),
+                      value: householdSelected,
+                      items: items
+                          .map((household) => DropdownMenuItem(
+                                value: household,
+                                child: Text(
+                                  household,
+                                  style: const TextStyle(color: Colors.teal, fontWeight: FontWeight.w500),
+                                ),
+                              ))
+                          .toList(),
+                      onChanged: (item) {
+                        setState(() {
+                          householdSelected = item as String;
+                        });
+                      },
+                      onSaved: (value) {
+                        householdIndex = items.indexOf(value as String);
+                      },
+                    ),
+                  ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -296,15 +365,20 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     }
     _formKey.currentState!.save();
 
+    if (householdIndex == null || householdIndex == -1) {
+      showErrorDialog(context, 'Please select a household to add this plant to');
+      return;
+    }
     // Check selected watering days
     if (!wateringDays.contains(true)) {
       showErrorDialog(context, 'Please select a day to water your plant');
       return;
     }
 
-    // Save plant
+    // // Save plant
     PlantService.create(
       context,
+      household: households[householdIndex!],
       name: _nameController.text.trim(),
       image: _image,
       wateringDays: wateringDays,
@@ -321,6 +395,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
 
   @override
   Widget build(BuildContext context) {
+    HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         title: Text('Add new plant'),
@@ -342,33 +417,36 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
                 children: [
                   Row(
                     children: [
-                      _displayChatImage(),
+                      _displayPlantImage(),
                       const SizedBox(width: 8),
                       Expanded(child: PlantNameFormField(textEditingController: _nameController)),
                     ],
                   ),
+                  _displayHouseholdDetails(),
                   _displayWateringDetails(),
                   showMisting ? _displayMistingDetails() : Container(),
                   showFood ? _displayFeedingDetails() : Container(),
-                  Column(
-                    children: [
-                      showMisting
-                          ? Container()
-                          : ElevatedButton(
+                  showMisting
+                      ? Container()
+                      : SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
                               onPressed: () => setState(() {
                                     showMisting = true;
                                   }),
-                              child: Text('Add misting')),
-                      showFood
-                          ? Container()
-                          : ElevatedButton(
-                              onPressed: () => setState(() {
-                                showFood = true;
-                              }),
-                              child: Text('Add food'),
-                            ),
-                    ],
-                  )
+                              child: const Text('Add misting')),
+                        ),
+                  showFood
+                      ? Container()
+                      : SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                            onPressed: () => setState(() {
+                              showFood = true;
+                            }),
+                            child: const Text('Add food'),
+                          ),
+                        ),
                 ],
               ),
             ),

@@ -42,6 +42,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<EventNotifier>(
           create: (_) => EventNotifier(),
         ),
+        ChangeNotifierProvider<HouseholdNotifier>(
+          create: (_) => HouseholdNotifier(),
+        ),
       ],
       child: MaterialApp(
         title: 'Plant Care',

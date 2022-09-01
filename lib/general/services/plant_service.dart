@@ -10,6 +10,7 @@ import 'package:plant_care/general/widgets/widgets.dart';
 class PlantService {
   static Future create(
     BuildContext context, {
+    required Household household,
     required String name,
     required File? image,
     required List<bool> wateringDays,
@@ -35,7 +36,7 @@ class PlantService {
     //TODO: include rough event details in plant to make it easier to view when not in the calendar
 
     // Upload plant
-    await PlantDatabase.create(context, plant: plant);
+    await PlantDatabase.create(context, householdID: household.uid!, plant: plant);
 
     // Create Events
     await EventService.create(

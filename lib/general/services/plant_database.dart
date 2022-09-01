@@ -5,11 +5,11 @@ import 'package:plant_care/general/widgets/widgets.dart';
 
 class PlantDatabase {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
-  static final CollectionReference _plantRef = _db.collection('plants');
+  // static final CollectionReference _plantRef = _db.collection('plants');
 
-  static create(BuildContext context, {required Plant plant}) async {
+  static create(BuildContext context, {required String householdID, required Plant plant}) async {
     try {
-      DocumentReference _ref = _plantRef.doc();
+      DocumentReference _ref = _db.collection('households').doc(householdID).collection('plants').doc();
 
       Plant newPlant = plant.copy(uid: _ref.id);
 
