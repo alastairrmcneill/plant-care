@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:customtogglebuttons/customtogglebuttons.dart';
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:plant_care/features/home/plants/widgets/widgets.dart';
-import 'package:plant_care/general/services/plant_service.dart';
+import 'package:plant_care/general/services/services.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:plant_care/support/theme.dart';
 
@@ -23,13 +21,13 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
   String? wateringNotesText;
   String? mistingNotesText;
   String? feedingNotesText;
-  List<bool> wateringSelectedDays = [false, false, false, false, false, false, false];
-  List<bool> mistingSelectedDays = [false, false, false, false, false, false, false];
-  List<bool> feedingSelectedDays = [false, false, false, false, false, false, false];
+  List<bool> wateringDays = [false, false, false, false, false, false, false];
+  List<bool> mistingDays = [false, false, false, false, false, false, false];
+  List<bool> feedingDays = [false, false, false, false, false, false, false];
   List<String> recurranceOptions = ['1 week', '2 weeks', '3 weeks', '4 weeks'];
-  late String wateringRecurrance;
-  late String mistingRecurrance;
-  late String feedingRecurrance;
+  late String wateringRecurrence;
+  late String mistingRecurrence;
+  late String feedingRecurrence;
   bool showMisting = false;
   bool showFood = false;
   File? _image;
@@ -37,9 +35,9 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
   @override
   void initState() {
     super.initState();
-    wateringRecurrance = recurranceOptions[0];
-    mistingRecurrance = recurranceOptions[0];
-    feedingRecurrance = recurranceOptions[0];
+    wateringRecurrence = recurranceOptions[0];
+    mistingRecurrence = recurranceOptions[0];
+    feedingRecurrence = recurranceOptions[0];
   }
 
   void _handleImageFromGallery() async {
@@ -97,9 +95,9 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
           const SizedBox(height: 15),
           Text('Watering'),
           WeekToggleButtons(
-            isSelected: wateringSelectedDays,
+            isSelected: wateringDays,
             onPressed: (index) => setState(() {
-              wateringSelectedDays[index] = !wateringSelectedDays[index];
+              wateringDays[index] = !wateringDays[index];
             }),
           ),
           Row(
@@ -120,7 +118,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
                 ],
               ),
               DropdownButton(
-                value: wateringRecurrance,
+                value: wateringRecurrence,
                 items: recurranceOptions.map((String item) {
                   return DropdownMenuItem(
                     value: item,
@@ -132,7 +130,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
                 }).toList(),
                 onChanged: (item) {
                   setState(() {
-                    wateringRecurrance = item as String;
+                    wateringRecurrence = item as String;
                   });
                 },
               )
@@ -165,9 +163,9 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
           const SizedBox(height: 15),
           Text('Misting (optional)'),
           WeekToggleButtons(
-            isSelected: mistingSelectedDays,
+            isSelected: mistingDays,
             onPressed: (index) => setState(() {
-              mistingSelectedDays[index] = !mistingSelectedDays[index];
+              mistingDays[index] = !mistingDays[index];
             }),
           ),
           Row(
@@ -188,7 +186,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
                 ],
               ),
               DropdownButton(
-                value: mistingRecurrance,
+                value: mistingRecurrence,
                 items: recurranceOptions.map((String item) {
                   return DropdownMenuItem(
                     value: item,
@@ -200,7 +198,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
                 }).toList(),
                 onChanged: (item) {
                   setState(() {
-                    mistingRecurrance = item as String;
+                    mistingRecurrence = item as String;
                   });
                 },
               )
@@ -233,9 +231,9 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
           const SizedBox(height: 15),
           Text('Feeding (optional)'),
           WeekToggleButtons(
-            isSelected: feedingSelectedDays,
+            isSelected: feedingDays,
             onPressed: (index) => setState(() {
-              feedingSelectedDays[index] = !feedingSelectedDays[index];
+              feedingDays[index] = !feedingDays[index];
             }),
           ),
           Row(
@@ -256,7 +254,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
                 ],
               ),
               DropdownButton(
-                value: feedingRecurrance,
+                value: feedingRecurrence,
                 items: recurranceOptions.map((String item) {
                   return DropdownMenuItem(
                     value: item,
@@ -268,7 +266,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
                 }).toList(),
                 onChanged: (item) {
                   setState(() {
-                    feedingRecurrance = item as String;
+                    feedingRecurrence = item as String;
                   });
                 },
               )
@@ -299,13 +297,20 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     _formKey.currentState!.save();
 
     // Check selected watering days
-    if (!wateringSelectedDays.contains(true)) {
+    if (!wateringDays.contains(true)) {
       showErrorDialog(context, 'Please select a day to water your plant');
       return;
     }
 
     // Save plant
-    PlantService.create(context, name: _nameController.text.trim(), image: _image);
+    PlantService.create(
+      context,
+      name: _nameController.text.trim(),
+      image: _image,
+      wateringDays: wateringDays,
+      wateringRecurrence: wateringRecurrence,
+      wateringNotes: wateringNotesText,
+    );
   }
 
   @override

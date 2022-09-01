@@ -39,6 +39,9 @@ class MyApp extends StatelessWidget {
             darkMode: prefs.getBool('darkMode') ?? false,
           ),
         ),
+        ChangeNotifierProvider<EventNotifier>(
+          create: (_) => EventNotifier(),
+        ),
       ],
       child: MaterialApp(
         title: 'Plant Care',

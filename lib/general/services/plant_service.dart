@@ -1,13 +1,21 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:plant_care/general/models/models.dart';
-import 'package:plant_care/general/services/plant_database.dart';
-import 'package:plant_care/general/services/storage_service.dart';
+import 'package:plant_care/general/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 
 class PlantService {
-  static Future create(BuildContext context, {required String name, required File? image}) async {
+  static Future create(
+    BuildContext context, {
+    required String name,
+    required File? image,
+    required List<bool> wateringDays,
+    required String wateringRecurrence,
+    required String? wateringNotes,
+  }) async {
     showCircularProgressOverlay(context);
     // Upload image
     String? photoURL;
@@ -18,10 +26,20 @@ class PlantService {
     // Create plant
     Plant plant = Plant(name: name, photoURL: photoURL);
 
+    //TODO: include rough event details in plant to make it easier to view when not in the calendar
+
     // Upload plant
-    PlantDatabase.create(context, plant: plant);
+    await PlantDatabase.create(context, plant: plant);
 
     // Create Events
+    await EventService.create(
+      context,
+      days: wateringDays,
+      recurrence: wateringRecurrence,
+      notes: wateringNotes,
+      type: 'water',
+      subject: '$name - water',
+    );
 
     // Upload events
 

@@ -17,7 +17,7 @@ class Plant {
     };
   }
 
-  Plant fromJson(json) {
+  static Plant fromJson(json) {
     return Plant(
       uid: json[PlantFeilds.uid] as String?,
       name: json[PlantFeilds.name] as String,

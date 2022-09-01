@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:plant_care/general/models/models.dart';
+import 'package:plant_care/general/notifiers/notifiers.dart';
+import 'package:plant_care/general/services/services.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -12,7 +16,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
   List<Appointment> selectedDateAppointments = [];
 
   @override
+  void initState() {
+    super.initState();
+    EventDatabase.readAllEvents(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    EventNotifier eventNotifier = Provider.of<EventNotifier>(context, listen: true);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -33,15 +44,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   }
                   setState(() {});
                 },
-                // allowedViews: const [
-                //   CalendarView.day,
-                //   CalendarView.month,
-                // ],
                 firstDayOfWeek: 1,
                 initialDisplayDate: DateTime.now(),
                 showDatePickerButton: true,
                 showNavigationArrow: false,
-                dataSource: MeetingDataSource(getAppointments()),
+                dataSource: MeetingDataSource(eventNotifier.allAppointments),
               ),
             ),
             Expanded(
@@ -58,42 +65,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
       ),
     );
   }
-}
-
-List<Appointment> getAppointments() {
-  List<Appointment> meetings = [];
-  final DateTime today = DateTime.now();
-  final DateTime startTime = DateTime(today.year, today.month, today.day, 9, 0, 0);
-  final DateTime endTime = DateTime(today.year, today.month, today.day, 10, 0, 0);
-  meetings.add(
-    Appointment(
-      startTime: startTime,
-      endTime: endTime,
-      color: Colors.lightBlueAccent,
-      subject: 'Plant Name - Mist',
-      recurrenceRule: "FREQ=DAILY;INTERVAL=2",
-    ),
-  );
-  meetings.add(
-    Appointment(
-      startTime: startTime,
-      endTime: endTime,
-      color: Colors.greenAccent,
-      subject: 'Plant Name - Food',
-      recurrenceRule: "FREQ=DAILY;INTERVAL=2",
-    ),
-  );
-  meetings.add(
-    Appointment(
-      startTime: startTime,
-      endTime: endTime,
-      color: Colors.blueAccent,
-      subject: 'Plant Name - Water',
-      recurrenceRule: "FREQ=DAILY;INTERVAL=2",
-    ),
-  );
-
-  return meetings;
 }
 
 class MeetingDataSource extends CalendarDataSource {
