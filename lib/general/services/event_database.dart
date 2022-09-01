@@ -33,15 +33,12 @@ class EventDatabase {
       // Find all events
       QuerySnapshot snapshot = await _eventRef.get();
 
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         Event event = Event.fromJson(doc.data());
-        Appointment appointment = EventService.eventToAppointment(event);
         _eventList.add(event);
-        _appointmentList.add(appointment);
-      });
+      }
 
       eventNotifier.setAllEvents = _eventList;
-      eventNotifier.setAllAppointments = _appointmentList;
     } on FirebaseException catch (error) {
       showErrorDialog(context, error.message!);
     }

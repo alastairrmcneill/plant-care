@@ -48,7 +48,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 initialDisplayDate: DateTime.now(),
                 showDatePickerButton: true,
                 showNavigationArrow: false,
-                dataSource: MeetingDataSource(eventNotifier.allAppointments),
+                dataSource: MeetingDataSource(eventNotifier.allEvents),
               ),
             ),
             Expanded(
@@ -68,7 +68,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
 }
 
 class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Appointment> source) {
-    appointments = source;
+  MeetingDataSource(List<Event> source) {
+    List<Appointment> _appointmentList = [];
+    for (var event in source) {
+      _appointmentList.add(EventService.eventToAppointment(event));
+    }
+    appointments = _appointmentList;
   }
 }
