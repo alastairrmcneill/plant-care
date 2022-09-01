@@ -31,9 +31,17 @@ class PlantService {
     }
 
     // Create plant
-    Plant plant = Plant(name: name, photoURL: photoURL);
+    Map<String, Object?> wateringDetails = {'wateringDays': wateringDays, 'wateringRecurrence': wateringRecurrence, 'wateringNotes': wateringNotes};
+    Map<String, Object?> mistingDetails = {'mistingDays': mistingDays, 'mistingRecurrence': mistingRecurrence, 'mistingNotes': mistingNotes};
+    Map<String, Object?> feedingDetails = {'feedingDays': feedingDays, 'feedingRecurrence': feedingRecurrence, 'feedingNotes': feedingNotes};
 
-    //TODO: include rough event details in plant to make it easier to view when not in the calendar
+    Plant plant = Plant(
+      name: name,
+      photoURL: photoURL,
+      wateringDetails: wateringDetails,
+      mistingDetails: mistingDetails,
+      feedingDetails: feedingDetails,
+    );
 
     // Upload plant
     await PlantDatabase.create(context, householdID: household.uid!, plant: plant);
