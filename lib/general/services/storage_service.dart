@@ -43,4 +43,17 @@ class StorageService {
     );
     return downloadUrl;
   }
+
+  static Future<String> uploadPlantImage(File imageFile) async {
+    String imageId = Uuid().v4();
+
+    File image = await _compressImage(imageId, imageFile);
+
+    String downloadUrl = await _uploadImage(
+      'images/plants/plant_$imageId.jpg',
+      imageId,
+      image,
+    );
+    return downloadUrl;
+  }
 }

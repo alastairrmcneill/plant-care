@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:plant_care/features/home/plants/widgets/widgets.dart';
+import 'package:plant_care/general/services/plant_service.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:plant_care/support/theme.dart';
 
@@ -19,6 +20,9 @@ class CreatePlantScreen extends StatefulWidget {
 class _CreatePlantScreenState extends State<CreatePlantScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
+  String? wateringNotesText;
+  String? mistingNotesText;
+  String? feedingNotesText;
   List<bool> wateringSelectedDays = [false, false, false, false, false, false, false];
   List<bool> mistingSelectedDays = [false, false, false, false, false, false, false];
   List<bool> feedingSelectedDays = [false, false, false, false, false, false, false];
@@ -83,7 +87,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     );
   }
 
-  Widget _displayWateringDetails(String title, TextEditingController controller) {
+  Widget _displayWateringDetails() {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -91,7 +95,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
         children: [
           const Divider(),
           const SizedBox(height: 15),
-          Text(title),
+          Text('Watering'),
           WeekToggleButtons(
             isSelected: wateringSelectedDays,
             onPressed: (index) => setState(() {
@@ -136,14 +140,13 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
           ),
           const SizedBox(height: 10),
           TextFormField(
-            controller: controller,
             decoration: const InputDecoration(
               hintText: 'Notes',
             ),
             maxLines: 2,
             keyboardType: TextInputType.name,
             onSaved: (value) {
-              print(value);
+              wateringNotesText = value?.trim();
             },
           ),
           const SizedBox(height: 10),
@@ -211,7 +214,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
             maxLines: 2,
             keyboardType: TextInputType.name,
             onSaved: (value) {
-              print(value);
+              mistingNotesText = value?.trim();
             },
           ),
           const SizedBox(height: 10),
@@ -279,7 +282,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
             maxLines: 2,
             keyboardType: TextInputType.name,
             onSaved: (value) {
-              print(value);
+              feedingNotesText = value?.trim();
             },
           ),
           const SizedBox(height: 10),
@@ -301,7 +304,8 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
       return;
     }
 
-    // Save
+    // Save plant
+    PlantService.create(context, name: _nameController.text.trim(), image: _image);
   }
 
   @override
@@ -332,7 +336,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
                       Expanded(child: PlantNameFormField(textEditingController: _nameController)),
                     ],
                   ),
-                  _displayWateringDetails('Watering', TextEditingController()),
+                  _displayWateringDetails(),
                   showMisting ? _displayMistingDetails() : Container(),
                   showFood ? _displayFeedingDetails() : Container(),
                   Column(
@@ -348,9 +352,10 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
                           ? Container()
                           : ElevatedButton(
                               onPressed: () => setState(() {
-                                    showFood = true;
-                                  }),
-                              child: Text('Add food')),
+                                showFood = true;
+                              }),
+                              child: Text('Add food'),
+                            ),
                     ],
                   )
                 ],

@@ -9,6 +9,5 @@ showCircularProgressOverlay(BuildContext context) {
 }
 
 stopCircularProgressOverlay(BuildContext context) {
-  // Navigator.of(context).popUntil((route) => route.isFirst);
-  Navigator.pop(context);
+  Navigator.of(context, rootNavigator: true).pop();
 }
