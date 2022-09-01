@@ -38,6 +38,7 @@ class EventService {
       subject: subject,
       recurrenceRule: recurrenceRule,
       type: type,
+      notes: notes,
     );
 
     // Save event

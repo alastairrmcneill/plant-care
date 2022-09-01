@@ -310,6 +310,12 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
       wateringDays: wateringDays,
       wateringRecurrence: wateringRecurrence,
       wateringNotes: wateringNotesText,
+      mistingDays: mistingDays,
+      mistingRecurrence: mistingRecurrence,
+      mistingNotes: mistingNotesText,
+      feedingDays: feedingDays,
+      feedingRecurrence: feedingRecurrence,
+      feedingNotes: feedingNotesText,
     );
   }
 

@@ -15,6 +15,12 @@ class PlantService {
     required List<bool> wateringDays,
     required String wateringRecurrence,
     required String? wateringNotes,
+    required List<bool> mistingDays,
+    required String mistingRecurrence,
+    required String? mistingNotes,
+    required List<bool> feedingDays,
+    required String feedingRecurrence,
+    required String? feedingNotes,
   }) async {
     showCircularProgressOverlay(context);
     // Upload image
@@ -41,8 +47,32 @@ class PlantService {
       subject: '$name - water',
     );
 
-    // Upload events
+    if (mistingDays.contains(true)) {
+      await EventService.create(
+        context,
+        days: mistingDays,
+        recurrence: mistingRecurrence,
+        notes: mistingNotes,
+        type: 'misting',
+        subject: '$name - misting',
+      );
+    }
+
+    if (feedingDays.contains(true)) {
+      await EventService.create(
+        context,
+        days: feedingDays,
+        recurrence: feedingRecurrence,
+        notes: feedingNotes,
+        type: 'feeding',
+        subject: '$name - feeding',
+      );
+    }
+
+    // Update notifiers
+    EventDatabase.readAllEvents(context);
 
     stopCircularProgressOverlay(context);
+    Navigator.of(context).pop();
   }
 }

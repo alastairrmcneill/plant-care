@@ -69,6 +69,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
 class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(List<Event> source) {
+    // convert list of events to list of appointments for calendar
     List<Appointment> _appointmentList = [];
     for (var event in source) {
       _appointmentList.add(EventService.eventToAppointment(event));

@@ -7,6 +7,7 @@ class Event {
   final String subject;
   final String recurrenceRule;
   final String type;
+  final String? notes;
 
   Event({
     this.uid,
@@ -15,6 +16,7 @@ class Event {
     required this.subject,
     required this.recurrenceRule,
     required this.type,
+    required this.notes,
   });
 
   Map<String, Object?> toJson() {
@@ -25,6 +27,7 @@ class Event {
       EventFields.subject: subject,
       EventFields.recurrenceRule: recurrenceRule,
       EventFields.type: type,
+      EventFields.notes: notes,
     };
   }
 
@@ -36,6 +39,7 @@ class Event {
       subject: json[EventFields.subject] as String,
       recurrenceRule: json[EventFields.recurrenceRule] as String,
       type: json[EventFields.type] as String,
+      notes: json[EventFields.notes] as String?,
     );
   }
 
@@ -46,6 +50,7 @@ class Event {
     String? subject,
     String? recurrenceRule,
     String? type,
+    String? notes,
   }) =>
       Event(
         uid: uid ?? this.uid,
@@ -54,6 +59,7 @@ class Event {
         subject: subject ?? this.subject,
         recurrenceRule: recurrenceRule ?? this.recurrenceRule,
         type: type ?? this.type,
+        notes: notes ?? this.notes,
       );
 }
 
@@ -64,4 +70,5 @@ class EventFields {
   static String subject = 'subject';
   static String recurrenceRule = 'recurrenceRule';
   static String type = 'type';
+  static String notes = 'notes';
 }
