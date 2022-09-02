@@ -105,7 +105,15 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     String? householdSelected;
     Widget button = TextButton(
       onPressed: () {
-        showCreateHouseholdDialog(context);
+        showCreateHouseholdDialog(
+          context,
+          body: 'Please enter the name of the household:',
+          hintText: 'Household name',
+          function: (name) async {
+            await HouseholdService.create(context, name: name);
+            await HouseholdDatabase.readAllHouseholds(context);
+          },
+        );
       },
       child: Text(households.isEmpty ? 'New Household' : 'New'),
     );

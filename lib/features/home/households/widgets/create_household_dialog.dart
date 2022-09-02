@@ -1,8 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/services/services.dart';
 
-showCreateHouseholdDialog(BuildContext context) {
+showCreateHouseholdDialog(BuildContext context, {required String body, required String hintText, required Function(String value) function}) {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? name;
   Dialog alert = Dialog(
@@ -16,8 +17,8 @@ showCreateHouseholdDialog(BuildContext context) {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const AutoSizeText(
-            'Please enter the name of the household',
+          AutoSizeText(
+            body,
             textAlign: TextAlign.center,
             maxLines: 4,
           ),
@@ -25,8 +26,8 @@ showCreateHouseholdDialog(BuildContext context) {
           Form(
             key: _formKey,
             child: TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Household name',
+              decoration: InputDecoration(
+                hintText: hintText,
               ),
               maxLines: 1,
               keyboardType: TextInputType.name,
@@ -51,8 +52,7 @@ showCreateHouseholdDialog(BuildContext context) {
                 }
                 _formKey.currentState!.save();
 
-                await HouseholdService.create(context, name: name!);
-                await HouseholdDatabase.readAllHouseholds(context);
+                await function(name!);
                 Navigator.of(context, rootNavigator: true).pop();
               },
               child: Text('OK'),

@@ -15,6 +15,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<NavigatorState> firstTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> secondTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> thirdTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> fourthTabNavKey = GlobalKey<NavigatorState>();
+  CupertinoTabController _tabController = CupertinoTabController();
   int _currentIndex = 0;
   List<Widget> screens = [
     PlantsScreen(),
@@ -29,58 +34,103 @@ class _HomeScreenState extends State<HomeScreen> {
     UserDatabase.readCurrentUser(context);
   }
 
+  GlobalKey<NavigatorState>? currentNavigatorKey() {
+    switch (_tabController.index) {
+      case 0:
+        return firstTabNavKey;
+        break;
+      case 1:
+        return secondTabNavKey;
+        break;
+      case 2:
+        return thirdTabNavKey;
+        break;
+      case 3:
+        return fourthTabNavKey;
+        break;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        backgroundColor: Colors.teal,
-        activeColor: Theme.of(context).scaffoldBackgroundColor,
-        inactiveColor: Colors.white54,
-        iconSize: 22,
-        border: Border.all(color: Colors.transparent),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.seedling),
-            label: 'Plants',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.house),
-            label: 'Households',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.calendarDays),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.solidUser),
-            label: 'Profile',
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        return !await currentNavigatorKey()!.currentState!.maybePop();
+      },
+      child: CupertinoTabScaffold(
+        controller: _tabController,
+        tabBar: CupertinoTabBar(
+          backgroundColor: Colors.teal,
+          activeColor: Theme.of(context).scaffoldBackgroundColor,
+          inactiveColor: Colors.white54,
+          height: 60,
+          iconSize: 22,
+          border: Border.all(color: Colors.transparent),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.seedling),
+              label: 'Plants',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.house),
+              label: 'Households',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.calendarDays),
+              label: 'Calendar',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.solidUser),
+              label: 'Profile',
+            ),
+          ],
+        ),
+        tabBuilder: ((context, index) {
+          switch (index) {
+            case 0:
+              return CupertinoTabView(
+                  navigatorKey: firstTabNavKey,
+                  builder: (context) {
+                    return CupertinoPageScaffold(
+                      child: PlantsScreen(),
+                    );
+                  });
+            case 1:
+              return CupertinoTabView(
+                  navigatorKey: secondTabNavKey,
+                  builder: (context) {
+                    return CupertinoPageScaffold(
+                      child: HouseholdsScreen(),
+                    );
+                  });
+            case 2:
+              return CupertinoTabView(
+                  navigatorKey: thirdTabNavKey,
+                  builder: (context) {
+                    return CupertinoPageScaffold(
+                      child: CalendarScreen(),
+                    );
+                  });
+            case 3:
+              return CupertinoTabView(
+                  navigatorKey: fourthTabNavKey,
+                  builder: (context) {
+                    return CupertinoPageScaffold(
+                      child: ProfileScreen(),
+                    );
+                  });
+            default:
+              return CupertinoTabView(
+                  navigatorKey: firstTabNavKey,
+                  builder: (context) {
+                    return CupertinoPageScaffold(
+                      child: PlantsScreen(),
+                    );
+                  });
+          }
+        }),
       ),
-      tabBuilder: ((context, index) {
-        switch (index) {
-          case 0:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(child: PlantsScreen());
-            });
-          case 1:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(child: HouseholdsScreen());
-            });
-          case 2:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(child: CalendarScreen());
-            });
-          case 3:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(child: ProfileScreen());
-            });
-          default:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(child: PlantsScreen());
-            });
-        }
-      }),
     );
   }
 }

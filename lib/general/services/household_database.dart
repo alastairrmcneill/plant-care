@@ -42,4 +42,19 @@ class HouseholdDatabase {
       showErrorDialog(context, error.message!);
     }
   }
+
+  static Future<Household?> getHouseholdFromCode(BuildContext context, {required String code}) async {
+    Household? household;
+    try {
+      Query query = _db.collection('households').where(HouseholdFields.code, isEqualTo: code);
+      QuerySnapshot querySnapshot = await query.get();
+      if (querySnapshot.docs.isEmpty) return household;
+
+      household = Household.fromJson(querySnapshot.docs[0].data());
+      return household;
+    } on FirebaseException catch (error) {
+      showErrorDialog(context, error.message!);
+      return household;
+    }
+  }
 }
