@@ -22,9 +22,9 @@ class HouseholdsScreen extends StatelessWidget {
               body: 'Enter the household sharing code to be added to it: ',
               hintText: 'Code',
               function: (code) async {
-                print('Adding household');
-                // await HouseholdService.add(context, code: code);
-                // await HouseholdDatabase.readAllHouseholds(context);
+                // Maybe don't have these as async so that the pop up closes straight away. Add the spinning loading screen and then show a pop up depending on the result.
+                HouseholdService.add(context, code: code);
+                HouseholdDatabase.readAllHouseholds(context);
               },
             ),
           ),

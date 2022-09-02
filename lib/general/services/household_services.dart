@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
+import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class HouseholdService {
@@ -25,21 +26,24 @@ class HouseholdService {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
     String userId = userNotifier.currentUser!.uid!;
 
-    // // Get household
-    // TODO: check it exists, if it doesn't then exit with message, if it does then carry on
-    // Household household = await HouseholdDatabaseService.getHouseholdFromCode(code);
+    // // Get household or cancel if it doesn't exist
+    Household? household = await HouseholdDatabase.getHouseholdFromCode(context, code: code);
+    if (household == null) {
+      // household doesn't exist.
+      showErrorDialog(context, 'Household doesn\'t exist');
+      return;
+    }
+
+    // Update household
+    household.members.add(userId);
+    await HouseholdDatabase.updateHousehold(context, household: household);
+
+    await HouseholdDatabase.readAllHouseholds(context);
 
     // // Update user
     // AppUser user = await UserDatabaseService.getUser(userID: userID);
     // user.households.add(household.uid!);
     // await UserDatabaseService.updateUser(userNotifier, user);
-
-    // // Update household
-    // household.members.add(userID);
-    // household.memberCount++;
-    // await HouseholdDatabaseService.updateHousehold(householdNotifier, household);
-
-    // return household.name;
   }
 
   static String _randomString(int length) {
