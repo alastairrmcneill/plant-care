@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/models/models.dart';
+import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class PlantDatabase {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -14,6 +17,27 @@ class PlantDatabase {
       Plant newPlant = plant.copy(uid: _ref.id);
 
       _ref.set(newPlant.toJson());
+    } on FirebaseException catch (error) {
+      showErrorDialog(context, error.message!);
+    }
+  }
+
+  static Future<void> readMyPlants(BuildContext context) async {
+    final String userId = Provider.of<User?>(context, listen: false)!.uid;
+    PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context, listen: false);
+
+    List<Plant> _plantList = [];
+
+    try {
+      // // Find all events
+      // QuerySnapshot snapshot = await _householdRef.where(HouseholdFields.members, arrayContains: userId).get();
+
+      // for (var doc in snapshot.docs) {
+      //   Household household = Household.fromJson(doc.data());
+      //   _plantList.add(household);
+      // }
+
+      plantNotifier.setMyPlants = _plantList;
     } on FirebaseException catch (error) {
       showErrorDialog(context, error.message!);
     }

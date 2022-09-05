@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
@@ -24,10 +25,8 @@ class HouseholdDatabase {
   }
 
   static Future readMyHouseholds(BuildContext context) async {
-    UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
+    final String userId = Provider.of<User?>(context, listen: false)!.uid;
     HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: false);
-
-    String userId = userNotifier.currentUser!.uid!;
     List<Household> _householdList = [];
 
     try {

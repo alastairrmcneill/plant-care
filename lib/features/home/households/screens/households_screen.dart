@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:plant_care/features/home/households/widgets/widgets.dart';
-import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/services/services.dart';
 
 class HouseholdsScreen extends StatelessWidget {
@@ -22,7 +20,6 @@ class HouseholdsScreen extends StatelessWidget {
                 body: 'Enter the household sharing code to be added to it: ',
                 hintText: 'Code',
                 function: (code) async {
-                  // Maybe don't have these as async so that the pop up closes straight away. Add the spinning loading screen and then show a pop up depending on the result.
                   HouseholdService.add(context, code: code);
                 },
               ),
@@ -42,6 +39,6 @@ class HouseholdsScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: SafeArea(child: const HouseholdBody()));
+        body: const SafeArea(child: HouseholdBody()));
   }
 }

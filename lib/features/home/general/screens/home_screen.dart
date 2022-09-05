@@ -5,7 +5,8 @@ import 'package:plant_care/features/home/calendar/screens/screens.dart';
 import 'package:plant_care/features/home/households/screens/screens.dart';
 import 'package:plant_care/features/home/plants/screens/screens.dart';
 import 'package:plant_care/features/home/profile/screens/screens.dart';
-import 'package:plant_care/general/services/user_database.dart';
+
+import 'package:plant_care/general/services/services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -31,7 +32,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    UserDatabase.readCurrentUser(context);
+    _loadData();
+  }
+
+  Future _loadData() async {
+    await UserDatabase.readCurrentUser(context);
+    await PlantDatabase.readMyPlants(context);
+    await HouseholdDatabase.readMyHouseholds(context);
   }
 
   GlobalKey<NavigatorState>? currentNavigatorKey() {
