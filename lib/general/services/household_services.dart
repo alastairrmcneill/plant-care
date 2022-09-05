@@ -38,7 +38,7 @@ class HouseholdService {
     household.members.add(userId);
     await HouseholdDatabase.updateHousehold(context, household: household);
 
-    await HouseholdDatabase.readAllHouseholds(context);
+    await HouseholdDatabase.readMyHouseholds(context);
 
     // // Update user
     // AppUser user = await UserDatabaseService.getUser(userID: userID);

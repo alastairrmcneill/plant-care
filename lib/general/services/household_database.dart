@@ -23,21 +23,23 @@ class HouseholdDatabase {
     }
   }
 
-  static Future readAllHouseholds(BuildContext context) async {
+  static Future readMyHouseholds(BuildContext context) async {
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
     HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: false);
 
+    String userId = userNotifier.currentUser!.uid!;
     List<Household> _householdList = [];
 
     try {
       // Find all events
-      QuerySnapshot snapshot = await _householdRef.get();
+      QuerySnapshot snapshot = await _householdRef.where(HouseholdFields.members, arrayContains: userId).get();
 
       for (var doc in snapshot.docs) {
         Household household = Household.fromJson(doc.data());
         _householdList.add(household);
       }
 
-      householdNotifier.setAllHouseholds = _householdList;
+      householdNotifier.setMyHouseholds = _householdList;
     } on FirebaseException catch (error) {
       showErrorDialog(context, error.message!);
     }

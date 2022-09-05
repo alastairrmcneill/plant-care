@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:plant_care/general/models/models.dart';
 
 class HouseholdNotifier extends ChangeNotifier {
-  List<Household> _allHouseholds = [];
+  List<Household>? _myHouseholds;
 
-  List<Household> get allHouseholds => _allHouseholds;
+  List<Household>? get myHouseholds => _myHouseholds;
 
-  set setAllHouseholds(List<Household> allHouseholds) {
-    _allHouseholds = allHouseholds;
+  set setMyHouseholds(List<Household> myHouseholds) {
+    _myHouseholds = myHouseholds;
     notifyListeners();
   }
 }

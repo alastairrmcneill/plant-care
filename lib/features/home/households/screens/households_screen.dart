@@ -11,6 +11,7 @@ class HouseholdsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: HouseholdListView(),
       floatingActionButton: SpeedDial(
         icon: Icons.add,
         children: [
@@ -24,7 +25,6 @@ class HouseholdsScreen extends StatelessWidget {
               function: (code) async {
                 // Maybe don't have these as async so that the pop up closes straight away. Add the spinning loading screen and then show a pop up depending on the result.
                 HouseholdService.add(context, code: code);
-                HouseholdDatabase.readAllHouseholds(context);
               },
             ),
           ),
@@ -37,7 +37,7 @@ class HouseholdsScreen extends StatelessWidget {
               hintText: 'Household name',
               function: (name) async {
                 await HouseholdService.create(context, name: name);
-                await HouseholdDatabase.readAllHouseholds(context);
+                await HouseholdDatabase.readMyHouseholds(context);
               },
             ),
           ),

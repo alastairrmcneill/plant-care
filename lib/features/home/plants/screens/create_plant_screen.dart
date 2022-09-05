@@ -44,7 +44,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     wateringRecurrence = recurranceOptions[0];
     mistingRecurrence = recurranceOptions[0];
     feedingRecurrence = recurranceOptions[0];
-    HouseholdDatabase.readAllHouseholds(context);
+    HouseholdDatabase.readMyHouseholds(context);
   }
 
   void _handleImageFromGallery() async {
@@ -94,7 +94,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
 
   Widget _displayHouseholdDetails() {
     HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: false);
-    households = householdNotifier.allHouseholds;
+    households = householdNotifier.myHouseholds!;
 
     List<String> items = [];
     if (households.isNotEmpty) {
@@ -111,7 +111,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
           hintText: 'Household name',
           function: (name) async {
             await HouseholdService.create(context, name: name);
-            await HouseholdDatabase.readAllHouseholds(context);
+            await HouseholdDatabase.readMyHouseholds(context);
           },
         );
       },
