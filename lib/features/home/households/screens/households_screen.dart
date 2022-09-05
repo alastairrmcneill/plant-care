@@ -11,38 +11,37 @@ class HouseholdsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: HouseholdListView(),
-      floatingActionButton: SpeedDial(
-        icon: Icons.add,
-        children: [
-          SpeedDialChild(
-            child: const Icon(Icons.add),
-            label: 'Add Existing',
-            onTap: () => showCreateHouseholdDialog(
-              context,
-              body: 'Enter the household sharing code to be added to it: ',
-              hintText: 'Code',
-              function: (code) async {
-                // Maybe don't have these as async so that the pop up closes straight away. Add the spinning loading screen and then show a pop up depending on the result.
-                HouseholdService.add(context, code: code);
-              },
+        floatingActionButton: SpeedDial(
+          icon: Icons.add,
+          children: [
+            SpeedDialChild(
+              child: const Icon(Icons.add),
+              label: 'Add Existing',
+              onTap: () => showCreateHouseholdDialog(
+                context,
+                body: 'Enter the household sharing code to be added to it: ',
+                hintText: 'Code',
+                function: (code) async {
+                  // Maybe don't have these as async so that the pop up closes straight away. Add the spinning loading screen and then show a pop up depending on the result.
+                  HouseholdService.add(context, code: code);
+                },
+              ),
             ),
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.create),
-            label: 'Create new',
-            onTap: () => showCreateHouseholdDialog(
-              context,
-              body: 'Please enter the name of the household:',
-              hintText: 'Household name',
-              function: (name) async {
-                await HouseholdService.create(context, name: name);
-                await HouseholdDatabase.readMyHouseholds(context);
-              },
+            SpeedDialChild(
+              child: const Icon(Icons.create),
+              label: 'Create new',
+              onTap: () => showCreateHouseholdDialog(
+                context,
+                body: 'Please enter the name of the household:',
+                hintText: 'Household name',
+                function: (name) async {
+                  await HouseholdService.create(context, name: name);
+                  await HouseholdDatabase.readMyHouseholds(context);
+                },
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+        body: SafeArea(child: const HouseholdBody()));
   }
 }
