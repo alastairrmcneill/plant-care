@@ -80,6 +80,8 @@ class PlantService {
 
     // Update notifiers
     EventDatabase.readAllEvents(context);
+    HouseholdDatabase.readMyHouseholds(context);
+    PlantDatabase.readMyPlants(context);
 
     stopCircularProgressOverlay(context);
     Navigator.of(context).pop();

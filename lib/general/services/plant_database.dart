@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
+import 'package:plant_care/general/services/household_database.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -29,13 +30,17 @@ class PlantDatabase {
     List<Plant> _plantList = [];
 
     try {
-      // // Find all events
-      // QuerySnapshot snapshot = await _householdRef.where(HouseholdFields.members, arrayContains: userId).get();
+      // Find all households that we are a part of
+      QuerySnapshot householdSnapshot = await _db.collection('households').where(HouseholdFields.members, arrayContains: userId).get();
 
-      // for (var doc in snapshot.docs) {
-      //   Household household = Household.fromJson(doc.data());
-      //   _plantList.add(household);
-      // }
+      for (var household in householdSnapshot.docs) {
+        // Find all the plants in that household
+        QuerySnapshot plantSnapshot = await _db.collection('households').doc(household.id).collection('plants').get();
+        for (var doc in plantSnapshot.docs) {
+          Plant plant = Plant.fromJson(doc.data());
+          _plantList.add(plant);
+        }
+      }
 
       plantNotifier.setMyPlants = _plantList;
     } on FirebaseException catch (error) {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:plant_care/features/home/plants/screens/screens.dart';
 import 'package:plant_care/general/models/models.dart';
+import 'package:plant_care/general/notifiers/notifiers.dart';
+import 'package:provider/provider.dart';
 
 class PlantListTile extends StatelessWidget {
   final Plant plant;
@@ -7,10 +10,11 @@ class PlantListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context);
     return GestureDetector(
       onTap: () {
-        // householdNotifier.setCurrentHousehold = household;
-        // Navigator.push(context, MaterialPageRoute(builder: (_) => const HouseholdDetailScreen()));
+        plantNotifier.setCurrentPlant = plant;
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const PlantDetailScreen()));
       },
       child: Container(
         height: 100,

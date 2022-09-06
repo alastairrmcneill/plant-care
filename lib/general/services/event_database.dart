@@ -24,6 +24,8 @@ class EventDatabase {
   }
 
   static Future readAllEvents(BuildContext context) async {
+    // TODO: update to reading my events rather than all events
+
     EventNotifier eventNotifier = Provider.of<EventNotifier>(context, listen: false);
 
     List<Event> _eventList = [];
