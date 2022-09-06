@@ -1,16 +1,10 @@
-# plant_care
+# Plant Care
 
-A new Flutter project.
+Do you find yourself forgetting to water the plants? Well Plant Care is the app for you! Log your plants, share them with others in your household, get reminders when to water, mist or feed them. 
 
-## Getting Started
+## About
 
-This project is a starting point for a Flutter application.
+This project is a cross-platform mobile application written in Dart with the Flutter Framework. It uses a Firebase backend for authentication, storage and a database.  
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+App Store: coming soon
+Play Store: coming soon 
