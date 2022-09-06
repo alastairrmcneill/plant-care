@@ -3,9 +3,11 @@
 import 'dart:io';
 
 import 'package:plant_care/general/models/models.dart';
+import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class PlantService {
   static Future create(
@@ -44,11 +46,13 @@ class PlantService {
     );
 
     // Upload plant
-    await PlantDatabase.create(context, householdID: household.uid!, plant: plant);
+    String? plantUid = await PlantDatabase.create(context, householdID: household.uid!, plant: plant);
+    if (plantUid == null) return;
 
     // Create Events
     await EventService.create(
       context,
+      plantUid: plantUid,
       days: wateringDays,
       recurrence: wateringRecurrence,
       notes: wateringNotes,
@@ -59,6 +63,7 @@ class PlantService {
     if (mistingDays.contains(true)) {
       await EventService.create(
         context,
+        plantUid: plantUid,
         days: mistingDays,
         recurrence: mistingRecurrence,
         notes: mistingNotes,
@@ -70,6 +75,7 @@ class PlantService {
     if (feedingDays.contains(true)) {
       await EventService.create(
         context,
+        plantUid: plantUid,
         days: feedingDays,
         recurrence: feedingRecurrence,
         notes: feedingNotes,
@@ -78,8 +84,13 @@ class PlantService {
       );
     }
 
+    // Update user
+    AppUser user = Provider.of<UserNotifier>(context, listen: false).currentUser!;
+    user.plantUids.add(plantUid);
+    UserDatabase.updateUser(context, user);
+
     // Update notifiers
-    EventDatabase.readAllEvents(context);
+    EventDatabase.readMyEvents(context);
     HouseholdDatabase.readMyHouseholds(context);
     PlantDatabase.readMyPlants(context);
 

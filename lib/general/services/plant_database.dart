@@ -11,13 +11,14 @@ class PlantDatabase {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
   // static final CollectionReference _plantRef = _db.collection('plants');
 
-  static create(BuildContext context, {required String householdID, required Plant plant}) async {
+  static Future<String?> create(BuildContext context, {required String householdID, required Plant plant}) async {
     try {
       DocumentReference _ref = _db.collection('households').doc(householdID).collection('plants').doc();
 
       Plant newPlant = plant.copy(uid: _ref.id);
 
       _ref.set(newPlant.toJson());
+      return newPlant.uid!;
     } on FirebaseException catch (error) {
       showErrorDialog(context, error.message!);
     }

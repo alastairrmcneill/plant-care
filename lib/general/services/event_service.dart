@@ -6,6 +6,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 class EventService {
   static Future create(
     BuildContext context, {
+    required String plantUid,
     required List<bool> days,
     required String recurrence,
     required String? notes,
@@ -33,6 +34,7 @@ class EventService {
 
     // Create Event
     Event event = Event(
+      plantUid: plantUid,
       startTime: startTime,
       endTime: endTime,
       subject: subject,

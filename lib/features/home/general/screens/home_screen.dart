@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await UserDatabase.readCurrentUser(context);
     await PlantDatabase.readMyPlants(context);
     await HouseholdDatabase.readMyHouseholds(context);
-    await EventDatabase.readAllEvents(context);
+    await EventDatabase.readMyEvents(context);
   }
 
   GlobalKey<NavigatorState>? currentNavigatorKey() {

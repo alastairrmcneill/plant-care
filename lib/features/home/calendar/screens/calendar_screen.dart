@@ -18,7 +18,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   void initState() {
     super.initState();
-    EventDatabase.readAllEvents(context);
+    EventDatabase.readMyEvents(context);
   }
 
   @override

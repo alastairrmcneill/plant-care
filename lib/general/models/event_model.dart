@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Event {
   final String? uid;
+  final String plantUid;
   final DateTime startTime;
   final DateTime endTime;
   final String subject;
@@ -11,6 +12,7 @@ class Event {
 
   Event({
     this.uid,
+    required this.plantUid,
     required this.startTime,
     required this.endTime,
     required this.subject,
@@ -22,6 +24,7 @@ class Event {
   Map<String, Object?> toJson() {
     return {
       EventFields.uid: uid,
+      EventFields.plantUid: plantUid,
       EventFields.startTime: startTime,
       EventFields.endTime: endTime,
       EventFields.subject: subject,
@@ -34,6 +37,7 @@ class Event {
   static Event fromJson(json) {
     return Event(
       uid: json[EventFields.uid] as String?,
+      plantUid: json[EventFields.plantUid] as String,
       startTime: (json[EventFields.startTime] as Timestamp).toDate(),
       endTime: (json[EventFields.endTime] as Timestamp).toDate(),
       subject: json[EventFields.subject] as String,
@@ -45,6 +49,7 @@ class Event {
 
   Event copy({
     String? uid,
+    String? plantUid,
     DateTime? startTime,
     DateTime? endTime,
     String? subject,
@@ -54,6 +59,7 @@ class Event {
   }) =>
       Event(
         uid: uid ?? this.uid,
+        plantUid: plantUid ?? this.plantUid,
         startTime: startTime ?? this.startTime,
         endTime: endTime ?? this.endTime,
         subject: subject ?? this.subject,
@@ -65,6 +71,7 @@ class Event {
 
 class EventFields {
   static String uid = 'uid';
+  static String plantUid = 'plantUid';
   static String startTime = 'startTime';
   static String endTime = 'endTime';
   static String subject = 'subject';

@@ -23,17 +23,17 @@ class EventDatabase {
     }
   }
 
-  static Future readAllEvents(BuildContext context) async {
-    // TODO: update to reading my events rather than all events
-
+  static Future readMyEvents(BuildContext context) async {
     EventNotifier eventNotifier = Provider.of<EventNotifier>(context, listen: false);
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
+    AppUser? user = userNotifier.currentUser;
+    if (user == null) return;
 
     List<Event> _eventList = [];
-    List<Appointment> _appointmentList = [];
 
     try {
       // Find all events
-      QuerySnapshot snapshot = await _eventRef.get();
+      QuerySnapshot snapshot = await _eventRef.where(EventFields.plantUid, whereIn: user.plantUids).get();
 
       for (var doc in snapshot.docs) {
         Event event = Event.fromJson(doc.data());
