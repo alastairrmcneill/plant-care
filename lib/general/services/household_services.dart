@@ -16,7 +16,7 @@ class HouseholdService {
     String code = _randomString(8);
     // TODO: check if household exists with this string. If it does then repeat.
 
-    Household household = Household(name: name, code: code, members: [userId]);
+    Household household = Household(name: name, code: code, members: [userId], plantsInfo: {});
 
     await HouseholdDatabase.create(context, household: household);
   }
@@ -39,7 +39,6 @@ class HouseholdService {
     await HouseholdDatabase.updateHousehold(context, household: household);
 
     await HouseholdDatabase.readMyHouseholds(context);
-    await PlantDatabase.readMyPlants(context);
     await EventDatabase.readMyEvents(context);
   }
 
