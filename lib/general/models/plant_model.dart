@@ -1,5 +1,5 @@
 class Plant {
-  final String? uid;
+  final String uid;
   final String name;
   final String? photoURL;
   final Map<String, Object?> wateringDetails;
@@ -7,7 +7,7 @@ class Plant {
   final Map<String, Object?> feedingDetails;
 
   Plant({
-    this.uid,
+    required this.uid,
     required this.name,
     required this.photoURL,
     required this.wateringDetails,
@@ -28,7 +28,7 @@ class Plant {
 
   static Plant fromJson(json) {
     return Plant(
-      uid: json[PlantFields.uid] as String?,
+      uid: json[PlantFields.uid] as String,
       name: json[PlantFields.name] as String,
       photoURL: json[PlantFields.photoURL] as String?,
       wateringDetails: json[PlantFields.wateringDetails] as Map<String, Object?>,

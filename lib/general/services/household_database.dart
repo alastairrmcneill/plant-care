@@ -27,18 +27,29 @@ class HouseholdDatabase {
   static Future readMyHouseholds(BuildContext context) async {
     final String userId = Provider.of<User?>(context, listen: false)!.uid;
     HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: false);
+    PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context, listen: false);
     List<Household> _householdList = [];
+    List<Plant> _plantList = [];
 
     try {
-      // Find all events
+      // Find all households
       QuerySnapshot snapshot = await _householdRef.where(HouseholdFields.members, arrayContains: userId).get();
 
       for (var doc in snapshot.docs) {
         Household household = Household.fromJson(doc.data());
+
+        // create all plants
+        if (household.plantsInfo.isNotEmpty) {
+          household.plantsInfo.forEach((key, value) {
+            Plant plant = Plant.fromJson(value);
+            _plantList.add(plant);
+          });
+        }
         _householdList.add(household);
       }
 
       householdNotifier.setMyHouseholds = _householdList;
+      plantNotifier.setMyPlants = _plantList;
     } on FirebaseException catch (error) {
       showErrorDialog(context, error.message!);
     }

@@ -37,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future _loadData() async {
     await UserDatabase.readCurrentUser(context);
-    await PlantDatabase.readMyPlants(context);
     await HouseholdDatabase.readMyHouseholds(context);
     await EventDatabase.readMyEvents(context);
   }

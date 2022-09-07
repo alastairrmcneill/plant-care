@@ -8,6 +8,7 @@ import 'package:plant_care/general/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class PlantService {
   static Future create(
@@ -38,6 +39,7 @@ class PlantService {
     Map<String, Object?> feedingDetails = {'feedingDays': feedingDays, 'feedingRecurrence': feedingRecurrence, 'feedingNotes': feedingNotes};
 
     Plant plant = Plant(
+      uid: Uuid().v4(),
       name: name,
       photoURL: photoURL,
       wateringDetails: wateringDetails,
@@ -45,14 +47,14 @@ class PlantService {
       feedingDetails: feedingDetails,
     );
 
-    // Upload plant
-    String? plantUid = await PlantDatabase.create(context, householdID: household.uid!, plant: plant);
-    if (plantUid == null) return;
+    // Update household
+    household.plantsInfo[plant.uid] = plant.toJson();
+    HouseholdDatabase.updateHousehold(context, household: household);
 
     // Create Events
     await EventService.create(
       context,
-      plantUid: plantUid,
+      plantUid: plant.uid,
       days: wateringDays,
       recurrence: wateringRecurrence,
       notes: wateringNotes,
@@ -63,7 +65,7 @@ class PlantService {
     if (mistingDays.contains(true)) {
       await EventService.create(
         context,
-        plantUid: plantUid,
+        plantUid: plant.uid,
         days: mistingDays,
         recurrence: mistingRecurrence,
         notes: mistingNotes,
@@ -75,7 +77,7 @@ class PlantService {
     if (feedingDays.contains(true)) {
       await EventService.create(
         context,
-        plantUid: plantUid,
+        plantUid: plant.uid,
         days: feedingDays,
         recurrence: feedingRecurrence,
         notes: feedingNotes,
@@ -85,9 +87,8 @@ class PlantService {
     }
 
     // Update notifiers
-    EventDatabase.readMyEvents(context);
-    HouseholdDatabase.readMyHouseholds(context);
-    PlantDatabase.readMyPlants(context);
+    await EventDatabase.readMyEvents(context);
+    await HouseholdDatabase.readMyHouseholds(context);
 
     stopCircularProgressOverlay(context);
     Navigator.of(context).pop();

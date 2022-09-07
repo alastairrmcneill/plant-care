@@ -37,10 +37,12 @@ class EventDatabase {
       QuerySnapshot householdSnapshot = await _db.collection('households').where(HouseholdFields.members, arrayContains: userId).get();
 
       for (var household in householdSnapshot.docs) {
-        // Find all the plants in that household
-        QuerySnapshot plantSnapshot = await _db.collection('households').doc(household.id).collection('plants').get();
-        for (var doc in plantSnapshot.docs) {
-          _plantUids.add(doc.id);
+        Household _household = Household.fromJson(household.data());
+
+        if (_household.plantsInfo.isNotEmpty) {
+          _household.plantsInfo.forEach((key, value) {
+            _plantUids.add(key);
+          });
         }
       }
 

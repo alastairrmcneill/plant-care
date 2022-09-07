@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plant_care/features/home/plants/widgets/widgets.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
-import 'package:plant_care/general/services/plant_database.dart';
+import 'package:plant_care/general/services/services.dart';
 import 'package:provider/provider.dart';
 
 class PlantBody extends StatefulWidget {
@@ -13,7 +13,7 @@ class PlantBody extends StatefulWidget {
 
 class _PlantBodyState extends State<PlantBody> {
   Future _refresh() async {
-    await PlantDatabase.readMyPlants(context);
+    await HouseholdDatabase.readMyHouseholds(context);
   }
 
   Widget _buildBody() {
