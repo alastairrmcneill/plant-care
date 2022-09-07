@@ -40,7 +40,6 @@ class AuthService {
           email: email,
           photoUrl: null,
           initials: initials,
-          plantUids: [],
         );
 
         // Add user to database
@@ -95,7 +94,6 @@ class AuthService {
           email: user.email!,
           photoUrl: user.photoURL,
           initials: initials,
-          plantUids: [],
         );
         // Add user to database
         await UserDatabase.updateUser(context, appUser);

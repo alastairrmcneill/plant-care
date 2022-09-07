@@ -27,7 +27,17 @@ class _HouseholdBodyState extends State<HouseholdBody> {
     if (householdNotifier.myHouseholds == null) {
       return const Center(child: CircularProgressIndicator());
     } else if (householdNotifier.myHouseholds!.isEmpty) {
-      return const Center(child: Text('Empty'));
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.all(30.0),
+          child: Text(
+            'Press the + button to create or join a household!',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 20),
+          ),
+        ),
+      );
+      ;
     } else if (householdNotifier.myHouseholds!.isNotEmpty) {
       return const HouseholdListView();
     } else {

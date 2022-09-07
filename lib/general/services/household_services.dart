@@ -39,11 +39,8 @@ class HouseholdService {
     await HouseholdDatabase.updateHousehold(context, household: household);
 
     await HouseholdDatabase.readMyHouseholds(context);
-
-    // // Update user
-    // AppUser user = await UserDatabaseService.getUser(userID: userID);
-    // user.households.add(household.uid!);
-    // await UserDatabaseService.updateUser(userNotifier, user);
+    await PlantDatabase.readMyPlants(context);
+    await EventDatabase.readMyEvents(context);
   }
 
   static String _randomString(int length) {

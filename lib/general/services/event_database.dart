@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
-import 'package:plant_care/general/services/services.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventDatabase {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -25,15 +23,30 @@ class EventDatabase {
 
   static Future readMyEvents(BuildContext context) async {
     EventNotifier eventNotifier = Provider.of<EventNotifier>(context, listen: false);
+    List<Event> _eventList = [];
+    List<String> _plantUids = [];
+
+    // Get curent user
     UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
     AppUser? user = userNotifier.currentUser;
     if (user == null) return;
-
-    List<Event> _eventList = [];
+    String userId = user.uid!;
 
     try {
+      // Find all households that we are a part of
+      QuerySnapshot householdSnapshot = await _db.collection('households').where(HouseholdFields.members, arrayContains: userId).get();
+
+      for (var household in householdSnapshot.docs) {
+        // Find all the plants in that household
+        QuerySnapshot plantSnapshot = await _db.collection('households').doc(household.id).collection('plants').get();
+        for (var doc in plantSnapshot.docs) {
+          _plantUids.add(doc.id);
+        }
+      }
+
+      if (_plantUids.isEmpty) return;
       // Find all events
-      QuerySnapshot snapshot = await _eventRef.where(EventFields.plantUid, whereIn: user.plantUids).get();
+      QuerySnapshot snapshot = await _eventRef.where(EventFields.plantUid, whereIn: _plantUids).get();
 
       for (var doc in snapshot.docs) {
         Event event = Event.fromJson(doc.data());

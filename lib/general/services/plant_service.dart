@@ -84,11 +84,6 @@ class PlantService {
       );
     }
 
-    // Update user
-    AppUser user = Provider.of<UserNotifier>(context, listen: false).currentUser!;
-    user.plantUids.add(plantUid);
-    UserDatabase.updateUser(context, user);
-
     // Update notifiers
     EventDatabase.readMyEvents(context);
     HouseholdDatabase.readMyHouseholds(context);
