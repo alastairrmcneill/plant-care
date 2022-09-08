@@ -1,5 +1,8 @@
+import 'package:plant_care/general/models/models.dart';
+
 class Plant {
   final String uid;
+  final String householdUid;
   final String name;
   final String? photoURL;
   final Map<String, Object?> wateringDetails;
@@ -8,6 +11,7 @@ class Plant {
 
   Plant({
     required this.uid,
+    required this.householdUid,
     required this.name,
     required this.photoURL,
     required this.wateringDetails,
@@ -18,6 +22,7 @@ class Plant {
   Map<String, Object?> toJson() {
     return {
       PlantFields.uid: uid,
+      PlantFields.householdUid: householdUid,
       PlantFields.name: name,
       PlantFields.photoURL: photoURL,
       PlantFields.wateringDetails: wateringDetails,
@@ -29,6 +34,7 @@ class Plant {
   static Plant fromJson(json) {
     return Plant(
       uid: json[PlantFields.uid] as String,
+      householdUid: json[PlantFields.householdUid] as String,
       name: json[PlantFields.name] as String,
       photoURL: json[PlantFields.photoURL] as String?,
       wateringDetails: json[PlantFields.wateringDetails] as Map<String, Object?>,
@@ -39,6 +45,7 @@ class Plant {
 
   Plant copy({
     String? uid,
+    String? householdUid,
     String? name,
     String? photoURL,
     Map<String, Object>? wateringDetails,
@@ -47,6 +54,7 @@ class Plant {
   }) =>
       Plant(
         uid: uid ?? this.uid,
+        householdUid: householdUid ?? this.householdUid,
         name: name ?? this.name,
         photoURL: photoURL ?? this.photoURL,
         wateringDetails: wateringDetails ?? this.wateringDetails,
@@ -57,6 +65,7 @@ class Plant {
 
 class PlantFields {
   static String uid = 'uid';
+  static String householdUid = 'householdUid';
   static String name = 'name';
   static String photoURL = 'photoURL';
   static String wateringDetails = 'wateringDetails';

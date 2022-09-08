@@ -65,6 +65,33 @@ class HouseholdDatabase {
     }
   }
 
+  static Future removeUserFromHousehold(BuildContext context, {required Household household, required String userUid}) async {
+    try {
+      DocumentReference ref = _householdRef.doc(household.uid);
+      await ref.update({
+        HouseholdFields.members: FieldValue.arrayRemove([userUid]),
+      });
+    } on FirebaseException catch (error) {
+      showErrorDialog(context, error.message!);
+    }
+  }
+
+  static Future removePlant(BuildContext context, {required String householdUid, required String plantUid}) async {
+    try {
+      DocumentReference ref = _householdRef.doc(householdUid);
+
+      DocumentSnapshot snapshot = await ref.get();
+
+      if (snapshot.exists) {
+        Household household = Household.fromJson(snapshot.data());
+        household.plantsInfo.remove(plantUid);
+        await HouseholdDatabase.updateHousehold(context, household: household);
+      }
+    } on FirebaseException catch (error) {
+      showErrorDialog(context, error.message!);
+    }
+  }
+
   static Future<Household?> getHouseholdFromCode(BuildContext context, {required String code}) async {
     Household? household;
     try {

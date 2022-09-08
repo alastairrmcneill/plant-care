@@ -40,6 +40,7 @@ class PlantService {
 
     Plant plant = Plant(
       uid: Uuid().v4(),
+      householdUid: household.uid!,
       name: name,
       photoURL: photoURL,
       wateringDetails: wateringDetails,
@@ -92,5 +93,23 @@ class PlantService {
 
     stopCircularProgressOverlay(context);
     Navigator.of(context).pop();
+  }
+
+  static Future removePlantFromHousehold(BuildContext context, {required Plant plant}) async {
+    showTwoButtonDialog(
+      context,
+      'Are you sure you want to delete your ${plant.name}?',
+      'OK',
+      () async {
+        showCircularProgressOverlay(context);
+
+        await HouseholdDatabase.removePlant(context, householdUid: plant.householdUid, plantUid: plant.uid);
+        await HouseholdDatabase.readMyHouseholds(context);
+        stopCircularProgressOverlay(context);
+        Navigator.of(context).pop();
+      },
+      'Cancel',
+      () {},
+    );
   }
 }

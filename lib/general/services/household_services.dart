@@ -42,6 +42,26 @@ class HouseholdService {
     await EventDatabase.readMyEvents(context);
   }
 
+  static Future removeCurrentUser(BuildContext context, {required Household household}) async {
+    showTwoButtonDialog(
+      context,
+      'Are you sure you want to leave ${household.name}?',
+      'OK',
+      () async {
+        showCircularProgressOverlay(context);
+        UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
+        String userId = userNotifier.currentUser!.uid!;
+
+        await HouseholdDatabase.removeUserFromHousehold(context, household: household, userUid: userId);
+        await HouseholdDatabase.readMyHouseholds(context);
+        stopCircularProgressOverlay(context);
+        Navigator.of(context).pop();
+      },
+      'Cancel',
+      () {},
+    );
+  }
+
   static String _randomString(int length) {
     const ch = 'AaBbCcDdEeFfGgHhJjKkMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
     Random r = Random();

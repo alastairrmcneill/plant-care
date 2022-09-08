@@ -3,3 +3,4 @@ export 'household_list_view.dart';
 export 'household_body.dart';
 export 'household_list_tile.dart';
 export 'picture_row.dart';
+export 'circular_picture.dart';
