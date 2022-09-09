@@ -7,6 +7,8 @@ import 'package:plant_care/general/services/services.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../../features/home/households/widgets/widgets.dart';
+
 class HouseholdService {
   static Future create(BuildContext context, {required String name}) async {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
@@ -59,6 +61,21 @@ class HouseholdService {
       },
       'Cancel',
       () {},
+    );
+  }
+
+  static Future editHousehold(BuildContext context, {required Household household}) async {
+    HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: false);
+    showCreateHouseholdDialog(
+      context,
+      body: 'Please enter the new name of the household:',
+      hintText: household.name,
+      function: (name) async {
+        Household newhousehold = household.copy(name: name);
+        await HouseholdDatabase.updateHousehold(context, household: newhousehold);
+        await HouseholdDatabase.readMyHouseholds(context);
+        householdNotifier.setCurrentHousehold = newhousehold;
+      },
     );
   }
 

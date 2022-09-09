@@ -28,9 +28,22 @@ class PictureRow extends StatelessWidget {
       text = '+ more';
     }
 
+    if (circularPicutres.length == 0) {
+      String output = '';
+      if (photoUrls.length == 1) {
+        output = '${photoUrls.length} plant';
+      } else {
+        output = '${photoUrls.length} plants';
+      }
+      return Text(
+        output,
+        style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.white70, fontSize: 15),
+      );
+    }
+
     return Row(
       children: [
-        Stack(
+        Row(
           children: [
             ...circularPicutres,
           ],

@@ -19,7 +19,7 @@ class _HouseholdBodyState extends State<HouseholdBody> {
   }
 
   Future _refresh() async {
-    HouseholdDatabase.readMyHouseholds(context);
+    await HouseholdDatabase.readMyHouseholds(context);
   }
 
   Widget _buildBody() {

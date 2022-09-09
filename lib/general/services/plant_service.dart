@@ -95,6 +95,74 @@ class PlantService {
     Navigator.of(context).pop();
   }
 
+  static Future updatePlant(
+    BuildContext context, {
+    required Plant originalPlant,
+    required String name,
+    required List<bool> wateringDays,
+    required String wateringRecurrence,
+    required String? wateringNotes,
+    required List<bool> mistingDays,
+    required String mistingRecurrence,
+    required String? mistingNotes,
+    required List<bool> feedingDays,
+    required String feedingRecurrence,
+    required String? feedingNotes,
+  }) async {
+    // Delete existing events for this plant
+    await EventDatabase.deletePlantEvents(context, plantUid: originalPlant.uid);
+
+    // Creat new plant
+    Map<String, Object?> wateringDetails = {'wateringDays': wateringDays, 'wateringRecurrence': wateringRecurrence, 'wateringNotes': wateringNotes};
+    Map<String, Object?> mistingDetails = {'mistingDays': mistingDays, 'mistingRecurrence': mistingRecurrence, 'mistingNotes': mistingNotes};
+    Map<String, Object?> feedingDetails = {'feedingDays': feedingDays, 'feedingRecurrence': feedingRecurrence, 'feedingNotes': feedingNotes};
+
+    Plant newPlant = originalPlant.copy(
+      name: name,
+      wateringDetails: wateringDetails,
+      mistingDetails: mistingDetails,
+      feedingDetails: feedingDetails,
+    );
+
+    // Update household with new plant data
+    await HouseholdDatabase.updatePlant(context, householdUid: originalPlant.householdUid, plant: newPlant);
+
+    // Create Events
+    await EventService.create(
+      context,
+      plantUid: originalPlant.uid,
+      days: wateringDays,
+      recurrence: wateringRecurrence,
+      notes: wateringNotes,
+      type: 'water',
+      subject: '${newPlant.name} - water',
+    );
+
+    if (mistingDays.contains(true)) {
+      await EventService.create(
+        context,
+        plantUid: originalPlant.uid,
+        days: mistingDays,
+        recurrence: mistingRecurrence,
+        notes: mistingNotes,
+        type: 'misting',
+        subject: '${newPlant.name} - misting',
+      );
+    }
+
+    if (feedingDays.contains(true)) {
+      await EventService.create(
+        context,
+        plantUid: originalPlant.uid,
+        days: feedingDays,
+        recurrence: feedingRecurrence,
+        notes: feedingNotes,
+        type: 'feeding',
+        subject: '${newPlant.name} - feeding',
+      );
+    }
+  }
+
   static Future removePlantFromHousehold(BuildContext context, {required Plant plant}) async {
     showTwoButtonDialog(
       context,
@@ -104,7 +172,9 @@ class PlantService {
         showCircularProgressOverlay(context);
 
         await HouseholdDatabase.removePlant(context, householdUid: plant.householdUid, plantUid: plant.uid);
+        await EventDatabase.deletePlantEvents(context, plantUid: plant.uid);
         await HouseholdDatabase.readMyHouseholds(context);
+        await EventDatabase.readMyEvents(context);
         stopCircularProgressOverlay(context);
         Navigator.of(context).pop();
       },

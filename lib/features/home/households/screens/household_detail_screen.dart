@@ -24,6 +24,12 @@ class HouseholdDetailScreen extends StatelessWidget {
               },
               child: Text('Leave'),
             ),
+            ElevatedButton(
+              onPressed: () async {
+                await HouseholdService.editHousehold(context, household: household);
+              },
+              child: Text('Edit'),
+            ),
           ],
         ),
       ),

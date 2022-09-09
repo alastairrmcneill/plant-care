@@ -60,4 +60,16 @@ class EventDatabase {
       showErrorDialog(context, error.message!);
     }
   }
+
+  static Future deletePlantEvents(BuildContext context, {required String plantUid}) async {
+    try {
+      QuerySnapshot querySnapshot = await _eventRef.where(EventFields.plantUid, isEqualTo: plantUid).get();
+
+      for (var doc in querySnapshot.docs) {
+        await _eventRef.doc(doc.id).delete();
+      }
+    } on FirebaseException catch (error) {
+      showErrorDialog(context, error.message!);
+    }
+  }
 }

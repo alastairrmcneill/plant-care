@@ -48,9 +48,9 @@ class Plant {
     String? householdUid,
     String? name,
     String? photoURL,
-    Map<String, Object>? wateringDetails,
-    Map<String, Object>? mistingDetails,
-    Map<String, Object>? feedingDetails,
+    Map<String, Object?>? wateringDetails,
+    Map<String, Object?>? mistingDetails,
+    Map<String, Object?>? feedingDetails,
   }) =>
       Plant(
         uid: uid ?? this.uid,

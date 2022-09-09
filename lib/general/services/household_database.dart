@@ -92,6 +92,16 @@ class HouseholdDatabase {
     }
   }
 
+  static Future updatePlant(BuildContext context, {required String householdUid, required Plant plant}) async {
+    try {
+      DocumentReference ref = _householdRef.doc(householdUid);
+
+      await ref.update({'${HouseholdFields.plantsInfo}.${plant.uid}': plant.toJson()});
+    } on FirebaseException catch (error) {
+      showErrorDialog(context, error.message!);
+    }
+  }
+
   static Future<Household?> getHouseholdFromCode(BuildContext context, {required String code}) async {
     Household? household;
     try {
