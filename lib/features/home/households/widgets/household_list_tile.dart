@@ -3,6 +3,8 @@ import 'package:plant_care/features/home/households/screens/screens.dart';
 import 'package:plant_care/features/home/households/widgets/widgets.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/household_notifier.dart';
+import 'package:plant_care/general/notifiers/notifiers.dart';
+import 'package:plant_care/general/services/event_service.dart';
 import 'package:plant_care/general/services/user_database.dart';
 import 'package:provider/provider.dart';
 
@@ -38,6 +40,7 @@ class HouseholdListTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         householdNotifier.setCurrentHousehold = household;
+        EventService.getCurrentHouseholdEvents(context);
         Navigator.push(context, MaterialPageRoute(builder: (_) => const HouseholdDetailScreen()));
       },
       child: Container(

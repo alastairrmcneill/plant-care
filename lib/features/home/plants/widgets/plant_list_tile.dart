@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plant_care/features/home/plants/screens/screens.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
+import 'package:plant_care/general/services/event_service.dart';
 import 'package:provider/provider.dart';
 
 class PlantListTile extends StatelessWidget {
@@ -14,6 +15,7 @@ class PlantListTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         plantNotifier.setCurrentPlant = plant;
+        EventService.getCurrentPlantEvents(context);
         Navigator.push(context, MaterialPageRoute(builder: (_) => const PlantDetailScreen()));
       },
       child: Container(

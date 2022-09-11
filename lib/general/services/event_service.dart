@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/models/models.dart';
+import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventService {
@@ -47,6 +49,44 @@ class EventService {
     await EventDatabase.create(context, event: event);
   }
 
+  static getCurrentPlantEvents(BuildContext context) {
+    PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context, listen: false);
+    EventNotifier eventNotifier = Provider.of<EventNotifier>(context, listen: false);
+
+    List<Event> allEvents = eventNotifier.allEvents;
+    List<Event> currentPlantEvents = [];
+
+    Plant? plant = plantNotifier.currentPlant;
+    if (plant != null && allEvents.isNotEmpty) {
+      for (var event in allEvents) {
+        if (event.plantUid == plant.uid) {
+          currentPlantEvents.add(event);
+        }
+      }
+    }
+
+    eventNotifier.setCurrentPlantEvents = currentPlantEvents;
+  }
+
+  static getCurrentHouseholdEvents(BuildContext context) {
+    HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: false);
+    EventNotifier eventNotifier = Provider.of<EventNotifier>(context, listen: false);
+
+    List<Event> allEvents = eventNotifier.allEvents;
+    List<Event> currentHouseholdEvents = [];
+
+    Household? household = householdNotifier.currentHousehold;
+    if (household != null && allEvents.isNotEmpty) {
+      for (var event in allEvents) {
+        if (household.plantsInfo.keys.contains(event.plantUid)) {
+          currentHouseholdEvents.add(event);
+        }
+      }
+    }
+
+    eventNotifier.setCurrentHouseholdEvents = currentHouseholdEvents;
+  }
+
   static Appointment eventToAppointment(Event event) {
     Color color = Colors.blue;
     if (event.type == 'water') {
@@ -66,4 +106,15 @@ class EventService {
   }
 
   static appintmentToEvent() {}
+}
+
+class MeetingDataSource extends CalendarDataSource {
+  MeetingDataSource(List<Event> source) {
+    // convert list of events to list of appointments for calendar
+    List<Appointment> _appointmentList = [];
+    for (var event in source) {
+      _appointmentList.add(EventService.eventToAppointment(event));
+    }
+    appointments = _appointmentList;
+  }
 }
