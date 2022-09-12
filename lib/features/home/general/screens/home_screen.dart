@@ -68,9 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: CupertinoTabScaffold(
         controller: _tabController,
         tabBar: CupertinoTabBar(
-          backgroundColor: Colors.teal,
-          activeColor: Theme.of(context).scaffoldBackgroundColor,
-          inactiveColor: Colors.white54,
+          backgroundColor: Colors.white,
+          activeColor: Colors.teal,
+          inactiveColor: Colors.grey[300]!,
           height: 60,
           iconSize: 22,
           border: Border.all(color: Colors.transparent),

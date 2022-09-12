@@ -100,12 +100,10 @@ class EventService {
       startTime: event.startTime,
       endTime: event.endTime,
       color: color,
-      subject: event.subject,
+      subject: event.uid!,
       recurrenceRule: event.recurrenceRule,
     );
   }
-
-  static appintmentToEvent() {}
 }
 
 class MeetingDataSource extends CalendarDataSource {

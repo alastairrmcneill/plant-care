@@ -5,6 +5,9 @@ class MyThemes {
     return ThemeData(
       scaffoldBackgroundColor: MyColors.appBackgroundColor,
       primarySwatch: Colors.teal,
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: Colors.orange[700],
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           // backgroundColor: MaterialStateProperty.all<Color?>(const Color(0xFF466443)),
@@ -49,5 +52,5 @@ class MyThemes {
 class MyColors {
   static const Color darkGreen = Color(0xFF466443);
   static const Color textColor = Color(0xFF0A2D31);
-  static const Color appBackgroundColor = Color(0xFFF9F9F9);
+  static const Color appBackgroundColor = Color(0xFFF2F2F2);
 }

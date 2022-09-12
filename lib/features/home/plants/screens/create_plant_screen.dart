@@ -410,7 +410,9 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
         actions: [
           IconButton(
             onPressed: () => submit(),
-            icon: Icon(Icons.save_rounded),
+            icon: Icon(
+              Icons.save_rounded,
+            ),
           )
         ],
       ),

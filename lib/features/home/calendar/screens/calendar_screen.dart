@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plant_care/features/home/calendar/widgets/widgets.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
@@ -14,12 +15,6 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
   List<Appointment> selectedDateAppointments = [];
-
-  @override
-  void initState() {
-    super.initState();
-    EventDatabase.readMyEvents(context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +34,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     // Loop through appointments and store them as Appointment
                     for (var appointment in calendarTapDetails.appointments!) {
                       Appointment app = appointment as Appointment;
+
                       selectedDateAppointments.add(app);
                     }
                   }
@@ -53,7 +49,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
             Expanded(
               child: ListView(
-                children: selectedDateAppointments.map((e) => Text(e.subject)).toList(),
+                children: selectedDateAppointments.map((appointment) {
+                  return OccuranceTile(appointment: appointment);
+                }).toList(),
               ),
             ),
           ],
