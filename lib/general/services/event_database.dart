@@ -46,13 +46,14 @@ class EventDatabase {
         }
       }
 
-      if (_plantUids.isEmpty) return;
-      // Find all events
-      QuerySnapshot snapshot = await _eventRef.where(EventFields.plantUid, whereIn: _plantUids).get();
+      if (_plantUids.isNotEmpty) {
+        // Find all events
+        QuerySnapshot snapshot = await _eventRef.where(EventFields.plantUid, whereIn: _plantUids).get();
 
-      for (var doc in snapshot.docs) {
-        Event event = Event.fromJson(doc.data());
-        _eventList.add(event);
+        for (var doc in snapshot.docs) {
+          Event event = Event.fromJson(doc.data());
+          _eventList.add(event);
+        }
       }
 
       eventNotifier.setAllEvents = _eventList;

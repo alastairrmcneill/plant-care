@@ -113,6 +113,7 @@ class MeetingDataSource extends CalendarDataSource {
     for (var event in source) {
       _appointmentList.add(EventService.eventToAppointment(event));
     }
+
     appointments = _appointmentList;
   }
 }

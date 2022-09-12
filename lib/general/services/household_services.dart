@@ -56,6 +56,7 @@ class HouseholdService {
 
         await HouseholdDatabase.removeUserFromHousehold(context, household: household, userUid: userId);
         await HouseholdDatabase.readMyHouseholds(context);
+        await EventDatabase.readMyEvents(context);
         stopCircularProgressOverlay(context);
         Navigator.of(context).pop();
       },

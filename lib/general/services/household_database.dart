@@ -34,7 +34,10 @@ class HouseholdDatabase {
     try {
       // Find all households
       QuerySnapshot snapshot = await _householdRef
-          .where(HouseholdFields.members, arrayContains: userId)
+          .where(
+            HouseholdFields.members,
+            arrayContains: userId,
+          )
           .orderBy(
             HouseholdFields.name,
             descending: false,
