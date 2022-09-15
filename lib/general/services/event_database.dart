@@ -47,12 +47,20 @@ class EventDatabase {
       }
 
       if (_plantUids.isNotEmpty) {
-        // Find all events
-        QuerySnapshot snapshot = await _eventRef.where(EventFields.plantUid, whereIn: _plantUids).get();
+        var chunks = [];
+        int chunkSize = 2;
+        for (var i = 0; i < _plantUids.length; i += chunkSize) {
+          chunks.add(_plantUids.sublist(i, i + chunkSize > _plantUids.length ? _plantUids.length : i + chunkSize));
+        }
 
-        for (var doc in snapshot.docs) {
-          Event event = Event.fromJson(doc.data());
-          _eventList.add(event);
+        for (var chunk in chunks) {
+          // Find all events
+          QuerySnapshot snapshot = await _eventRef.where(EventFields.plantUid, whereIn: chunk).get();
+
+          for (var doc in snapshot.docs) {
+            Event event = Event.fromJson(doc.data());
+            _eventList.add(event);
+          }
         }
       }
 

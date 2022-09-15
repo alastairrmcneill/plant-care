@@ -45,16 +45,25 @@ class HouseholdDatabase {
           .get();
 
       for (var doc in snapshot.docs) {
+        // Add households
         Household household = Household.fromJson(doc.data());
+        _householdList.add(household);
 
-        // create all plants
+        // add all plants
         if (household.plantsInfo.isNotEmpty) {
           household.plantsInfo.forEach((key, value) {
             Plant plant = Plant.fromJson(value);
             _plantList.add(plant);
           });
         }
-        _householdList.add(household);
+
+        // Add all members
+        for (var uid in household.members) {
+          AppUser? appUser = await UserDatabase.readUser(context, uid: uid);
+          if (appUser != null) {
+            householdNotifier.addHouseholdMember = appUser;
+          }
+        }
       }
 
       householdNotifier.setMyHouseholds = _householdList;

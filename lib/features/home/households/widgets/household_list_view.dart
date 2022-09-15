@@ -12,8 +12,11 @@ class HouseholdListView extends StatelessWidget {
   Widget build(BuildContext context) {
     HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context);
     List<Household> households = householdNotifier.myHouseholds!;
-    return ListView(
-      children: households.map((household) => HouseholdListTile(household: household)).toList(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      child: ListView(
+        children: households.map((household) => HouseholdListTile(household: household)).toList(),
+      ),
     );
   }
 }

@@ -31,7 +31,7 @@ class PlantListTile extends StatelessWidget {
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF24BAAC), Color(0xFF109C8E)],
+                colors: [Color(0xFF15CAB8), Color(0xFF109C8E)],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
