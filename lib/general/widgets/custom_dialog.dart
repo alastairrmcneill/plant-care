@@ -28,7 +28,7 @@ showTwoButtonDialog(BuildContext context, String text, String option1, AsyncCall
                 Navigator.of(context, rootNavigator: true).pop();
                 function1();
               },
-              child: Text('OK'),
+              child: Text(option1),
             ),
           ),
           SizedBox(
@@ -40,7 +40,7 @@ showTwoButtonDialog(BuildContext context, String text, String option1, AsyncCall
 
                 function2();
               },
-              child: Text('Cancel'),
+              child: Text(option2),
             ),
           ),
         ],

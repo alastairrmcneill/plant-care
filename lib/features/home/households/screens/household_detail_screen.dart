@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
+import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -16,6 +19,30 @@ class HouseholdDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(household.name),
+        actions: [
+          IconButton(
+            onPressed: () {
+              print('Edit');
+            },
+            icon: Icon(Icons.edit),
+          ),
+          IconButton(
+            onPressed: () async {
+              showTwoButtonDialog(context, "Share this code: ${household.code}", 'Copy', () async {
+                Clipboard.setData(ClipboardData(text: household.code));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Household code copied to clipboard",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                );
+              }, 'Cancel', () {});
+            },
+            icon: Icon(Icons.share),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
