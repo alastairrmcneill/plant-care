@@ -28,17 +28,24 @@ class HouseholdDetailScreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: () async {
-              showTwoButtonDialog(context, "Share this code: ${household.code}", 'Copy', () async {
-                Clipboard.setData(ClipboardData(text: household.code));
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      "Household code copied to clipboard",
-                      textAlign: TextAlign.center,
+              showTwoButtonDialog(
+                context,
+                "Share this code: ${household.code}",
+                'Copy',
+                () async {
+                  Clipboard.setData(ClipboardData(text: household.code));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Household code copied to clipboard",
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                );
-              }, 'Cancel', () {});
+                  );
+                },
+                'Cancel',
+                () {},
+              );
             },
             icon: Icon(Icons.share),
           ),

@@ -20,7 +20,7 @@ class HouseholdsScreen extends StatelessWidget {
                 body: 'Enter the household sharing code to be added to it: ',
                 hintText: 'Code',
                 function: (code) async {
-                  HouseholdService.add(context, code: code);
+                  HouseholdService.addCurrentUserToHousehold(context, code: code);
                 },
               ),
             ),

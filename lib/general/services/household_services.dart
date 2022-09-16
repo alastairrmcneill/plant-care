@@ -24,7 +24,7 @@ class HouseholdService {
     await HouseholdDatabase.create(context, household: household);
   }
 
-  static Future add(BuildContext context, {required String code}) async {
+  static Future addCurrentUserToHousehold(BuildContext context, {required String code}) async {
     // Get current User ID
     UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
     String userId = userNotifier.currentUser!.uid!;
@@ -38,6 +38,12 @@ class HouseholdService {
     }
 
     // Update household
+    if (household.members.contains(userId)) {
+      // user already in household
+      showErrorDialog(context, 'You are already part of this household');
+      return;
+    }
+
     household.members.add(userId);
     await HouseholdDatabase.updateHousehold(context, household: household);
 
