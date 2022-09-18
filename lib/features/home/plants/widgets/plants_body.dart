@@ -21,13 +21,17 @@ class _PlantBodyState extends State<PlantBody> {
     if (plantNotifier.myPlants == null) {
       return const Center(child: CircularProgressIndicator());
     } else if (plantNotifier.myPlants!.isEmpty) {
-      return Center(
+      return const Center(
         child: Padding(
           padding: EdgeInsets.all(30.0),
           child: Text(
             'Press the + button to get started with your first plant!',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 20),
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w200,
+              fontSize: 24,
+            ),
           ),
         ),
       );

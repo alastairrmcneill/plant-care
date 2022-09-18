@@ -11,33 +11,33 @@ class HouseholdsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context);
 
     return Scaffold(
-        // appBar: AppBar(
-        //   systemOverlayStyle: const SystemUiOverlayStyle(
-        //     statusBarColor: Colors.transparent, // <-- SEE HERE
-        //     statusBarIconBrightness: Brightness.dark, //<-- For Android SEE HERE (dark icons)
-        //     statusBarBrightness: Brightness.light, //<-- For iOS SEE HERE (dark icons)
-        //   ),
-        //   title: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Text(
-        //         'Hello ${userNotifier.currentUser?.name.split(' ')[0]}! 👋',
-        //         style: const TextStyle(fontWeight: FontWeight.w400),
-        //       ),
-        //       const Text(
-        //         'Your households:',
-        //         style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
-        //       ),
-        //     ],
-        //   ),
-        //   centerTitle: false,
-        //   backgroundColor: Colors.transparent,
-        //   foregroundColor: Colors.black,
-        //   shadowColor: Colors.transparent,
-        // ),
+        appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent, // <-- SEE HERE
+            statusBarIconBrightness: Brightness.dark, //<-- For Android SEE HERE (dark icons)
+            statusBarBrightness: Brightness.light, //<-- For iOS SEE HERE (dark icons)
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Hello ${userNotifier.currentUser?.name.split(' ')[0]}! 👋',
+                style: const TextStyle(fontWeight: FontWeight.w400),
+              ),
+              const Text(
+                'Your households:',
+                style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
+              ),
+            ],
+          ),
+          centerTitle: false,
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.black,
+          shadowColor: Colors.transparent,
+        ),
         floatingActionButton: SpeedDial(
           icon: Icons.add,
           children: [
