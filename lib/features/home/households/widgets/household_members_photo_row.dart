@@ -25,8 +25,6 @@ class HouseholdMembersPhotosRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<AppUser> members = getMembers(context);
-    print(members[0].toJSON());
-    print(members);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),

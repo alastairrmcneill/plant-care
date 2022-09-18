@@ -23,29 +23,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(
-              height: 300,
-              child: SfCalendar(
-                view: CalendarView.month,
-                initialSelectedDate: DateTime.now(),
-                onTap: (calendarTapDetails) {
-                  selectedDateAppointments = [];
-                  if (calendarTapDetails.appointments != null && calendarTapDetails.appointments!.isNotEmpty) {
-                    // Loop through appointments and store them as Appointment
-                    for (var appointment in calendarTapDetails.appointments!) {
-                      Appointment app = appointment as Appointment;
+            Calendar(
+              events: eventNotifier.allEvents,
+              onTap: (calendarTapDetails) {
+                selectedDateAppointments = [];
+                if (calendarTapDetails.appointments != null && calendarTapDetails.appointments!.isNotEmpty) {
+                  // Loop through appointments and store them as Appointment
+                  for (var appointment in calendarTapDetails.appointments!) {
+                    Appointment app = appointment as Appointment;
 
-                      selectedDateAppointments.add(app);
-                    }
+                    selectedDateAppointments.add(app);
                   }
-                  setState(() {});
-                },
-                firstDayOfWeek: 1,
-                initialDisplayDate: DateTime.now(),
-                showDatePickerButton: true,
-                showNavigationArrow: false,
-                dataSource: MeetingDataSource(eventNotifier.allEvents),
-              ),
+                }
+                setState(() {});
+              },
             ),
             Expanded(
               child: ListView(
