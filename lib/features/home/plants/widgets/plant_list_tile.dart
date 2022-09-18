@@ -23,7 +23,7 @@ class PlantListTile extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(builder: (_) => const PlantDetailScreen()));
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Container(

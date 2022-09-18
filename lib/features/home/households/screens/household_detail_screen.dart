@@ -21,8 +21,8 @@ class HouseholdDetailScreen extends StatelessWidget {
         title: Text(household.name),
         actions: [
           IconButton(
-            onPressed: () {
-              print('Edit');
+            onPressed: () async {
+              await HouseholdService.editHousehold(context, household: household);
             },
             icon: Icon(Icons.edit),
           ),

@@ -11,9 +11,8 @@ class PlantListView extends StatelessWidget {
   Widget build(BuildContext context) {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context);
     List<Plant> plants = plantNotifier.myPlants!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: ListView(
+    return SingleChildScrollView(
+      child: Column(
         children: plants.map((plant) => PlantListTile(plant: plant)).toList(),
       ),
     );

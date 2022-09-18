@@ -8,23 +8,37 @@ class PlantsPhotoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      physics: const ClampingScrollPhysics(),
-      child: Stack(
-        children: household.plantsInfo.values.toList().asMap().entries.map((value) {
-          int index = value.key;
-          Plant plant = Plant.fromJson(value.value);
-          double offset = index * 25;
-          return Padding(
-            padding: EdgeInsets.only(left: offset),
-            child: CircularPicture(
-              photoUrl: plant.photoURL,
-              text: plant.name[0],
-            ),
-          );
-        }).toList(),
-      ),
-    );
+    if (household.plantsInfo.isNotEmpty) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const ClampingScrollPhysics(),
+        child: Stack(
+          children: household.plantsInfo.values.toList().asMap().entries.map((value) {
+            int index = value.key;
+            Plant plant = Plant.fromJson(value.value);
+            double offset = index * 25;
+            return Padding(
+              padding: EdgeInsets.only(left: offset),
+              child: CircularPicture(
+                photoUrl: plant.photoURL,
+                text: plant.name[0],
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    } else {
+      return const SizedBox(
+        child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            child: Text(
+              'No plants',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w300,
+              ),
+            )),
+      );
+    }
   }
 }
