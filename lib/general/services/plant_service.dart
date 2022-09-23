@@ -3,11 +3,9 @@
 import 'dart:io';
 
 import 'package:plant_care/general/models/models.dart';
-import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class PlantService {
@@ -35,73 +33,26 @@ class PlantService {
 
     // Create plant
     // Watering
-    int daysUntil = 0;
-    DateTime now = DateTime.now();
-    DateTime? nextAction;
-
-    int dayOfWeek = now.weekday - 1;
-    int result = wateringDays.indexOf(true, dayOfWeek);
-
-    if (result == -1) {
-      // next day is next week
-      int daysUntilNextWeek = 6 - dayOfWeek;
-      int dayNextWeek = wateringDays.indexOf(true);
-      daysUntil = daysUntilNextWeek + dayNextWeek + 1;
-    } else {
-      daysUntil = result - dayOfWeek;
-    }
-
-    nextAction = DateTime(now.year, now.month, now.day).add(Duration(days: daysUntil));
-
     Map<String, Object?> wateringDetails = {
       PlantFields.days: wateringDays,
       PlantFields.recurrence: wateringRecurrence,
       PlantFields.notes: wateringNotes,
-      PlantFields.nextAction: nextAction,
     };
 
     // Misting
-    nextAction = null;
-    if (mistingDays.contains(true)) {
-      result = mistingDays.indexOf(true, dayOfWeek);
 
-      if (result == -1) {
-        // next day is next week
-        int daysUntilNextWeek = 6 - dayOfWeek;
-        int dayNextWeek = mistingDays.indexOf(true);
-        daysUntil = daysUntilNextWeek + dayNextWeek + 1;
-      } else {
-        daysUntil = result - dayOfWeek;
-      }
-      nextAction = DateTime(now.year, now.month, now.day).add(Duration(days: daysUntil));
-    }
     Map<String, Object?> mistingDetails = {
       PlantFields.days: mistingDays,
       PlantFields.recurrence: mistingRecurrence,
       PlantFields.notes: mistingNotes,
-      PlantFields.nextAction: nextAction,
     };
 
     // Feeding
-    nextAction = null;
-    if (feedingDays.contains(true)) {
-      result = feedingDays.indexOf(true, dayOfWeek);
 
-      if (result == -1) {
-        // next day is next week
-        int daysUntilNextWeek = 6 - dayOfWeek;
-        int dayNextWeek = feedingDays.indexOf(true);
-        daysUntil = daysUntilNextWeek + dayNextWeek + 1;
-      } else {
-        daysUntil = result - dayOfWeek;
-      }
-      nextAction = DateTime(now.year, now.month, now.day).add(Duration(days: daysUntil));
-    }
     Map<String, Object?> feedingDetails = {
       PlantFields.days: feedingDays,
       PlantFields.recurrence: feedingRecurrence,
       PlantFields.notes: feedingNotes,
-      PlantFields.nextAction: nextAction,
     };
 
     Plant plant = Plant(
@@ -125,7 +76,7 @@ class PlantService {
       days: wateringDays,
       recurrence: wateringRecurrence,
       notes: wateringNotes,
-      type: 'water',
+      type: EventFields.watering,
       subject: '$name - water',
     );
 
@@ -136,8 +87,8 @@ class PlantService {
         days: mistingDays,
         recurrence: mistingRecurrence,
         notes: mistingNotes,
-        type: 'misting',
-        subject: '$name - misting',
+        type: EventFields.misting,
+        subject: '$name - mist',
       );
     }
 
@@ -148,8 +99,8 @@ class PlantService {
         days: feedingDays,
         recurrence: feedingRecurrence,
         notes: feedingNotes,
-        type: 'feeding',
-        subject: '$name - feeding',
+        type: EventFields.feeding,
+        subject: '$name - feed',
       );
     }
 

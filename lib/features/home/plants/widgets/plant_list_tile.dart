@@ -6,6 +6,7 @@ import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/event_service.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class PlantListTile extends StatelessWidget {
   final Plant plant;
@@ -15,30 +16,43 @@ class PlantListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context);
     HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context);
+    EventNotifier eventNotifier = Provider.of<EventNotifier>(context);
+
     List<Household> myHouseholds = householdNotifier.myHouseholds!;
     Household household = myHouseholds.where((household) => household.uid == plant.householdUid).first;
+    List<Event> events = eventNotifier.allEvents.where((event) => event.plantUid == plant.uid).toList();
 
-    Widget _buildWatering() {
+    Widget _buildActionEntry(String type) {
       String dueString = '';
       DateTime now = DateTime.now();
       now = DateTime(now.year, now.month, now.day);
-      DateTime nextAction = (plant.wateringDetails["nextAction"] as Timestamp).toDate();
 
-      int daysUntil = nextAction.difference(now).inDays;
+      if (events.isNotEmpty) {
+        List<Event> actionEvents = events.where((event) => event.type == type).toList();
+        if (actionEvents.isEmpty) return Container();
 
-      if (daysUntil == 0) {
-        dueString = 'Due today';
-      } else if (daysUntil == 1) {
-        dueString = 'Due in $daysUntil day';
-      } else {
-        dueString = 'Due in $daysUntil days';
+        Event event = actionEvents.first;
+
+        if (event.nextAction.isAtSameMomentAs(now)) {
+          dueString = 'Due today';
+        } else if (event.nextAction.isBefore(now)) {
+          dueString = 'Overdue';
+        } else if (event.nextAction.isAfter(now)) {
+          int daysUntil = event.nextAction.difference(now).inDays;
+          if (daysUntil == 1) {
+            dueString = 'Due in 1 day';
+          } else {
+            dueString = 'Due in $daysUntil days';
+          }
+        }
       }
+
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            '- Water',
-            style: TextStyle(
+          Text(
+            '- $type',
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 14,
               fontWeight: FontWeight.w400,
@@ -47,61 +61,6 @@ class PlantListTile extends StatelessWidget {
           Text(
             dueString,
             style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          )
-        ],
-      );
-    }
-
-    Widget _buildMisting() {
-      List<dynamic> mistingDays = plant.mistingDetails[PlantFields.days] as List<dynamic>;
-      List<bool> newMistingDays = List<bool>.from(mistingDays);
-      if (!newMistingDays.contains(true)) return Container();
-
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text(
-            '- Misting',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          Text(
-            'Due in 1 day',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          )
-        ],
-      );
-    }
-
-    Widget _buildFeeding() {
-      List<dynamic> feedingDays = plant.feedingDetails[PlantFields.days] as List<dynamic>;
-      List<bool> newFeedingDays = List<bool>.from(feedingDays);
-      if (!newFeedingDays.contains(true)) return Container();
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text(
-            '- Misting',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          Text(
-            'Due in 1 day',
-            style: TextStyle(
               color: Colors.white,
               fontSize: 14,
               fontWeight: FontWeight.w400,
@@ -175,9 +134,9 @@ class PlantListTile extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                _buildWatering(),
-                _buildMisting(),
-                _buildFeeding(),
+                _buildActionEntry(EventFields.watering),
+                _buildActionEntry(EventFields.misting),
+                _buildActionEntry(EventFields.feeding),
                 const SizedBox(height: 10),
                 const Text(
                   'Household',

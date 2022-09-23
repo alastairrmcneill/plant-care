@@ -63,6 +63,7 @@ class Calendar extends StatelessWidget {
             shape: BoxShape.circle,
             border: Border.all(color: Colors.teal, width: 1),
           ),
+          todayHighlightColor: Colors.teal.withAlpha(128),
           dataSource: MeetingDataSource(events),
         ),
       ),

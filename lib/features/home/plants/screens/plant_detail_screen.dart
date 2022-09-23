@@ -61,21 +61,29 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
               child: Text('Delete plant'),
             ),
             ElevatedButton(
-              onPressed: () async {
-                await PlantService.updatePlant(
-                  context,
-                  originalPlant: plant,
-                  name: 'New name',
-                  wateringDays: [true],
-                  wateringRecurrence: '1 week',
-                  wateringNotes: 'Hello',
-                  mistingDays: [false],
-                  mistingRecurrence: '1 weeks',
-                  mistingNotes: '',
-                  feedingDays: [false],
-                  feedingRecurrence: '1 week',
-                  feedingNotes: '',
-                );
+              onPressed: () {
+                List<dynamic> wateringDays = plant.wateringDetails[PlantFields.days] as List<dynamic>;
+                List<bool> newFeedingDays = List<bool>.from(wateringDays);
+
+                int daysUntil = 0;
+                DateTime now = DateTime.now().subtract(Duration(days: 2));
+                DateTime? nextAction;
+
+                int dayOfWeek = now.weekday - 1;
+                int result = wateringDays.indexOf(true, dayOfWeek);
+
+                if (result == -1) {
+                  // next day is next week
+                  int daysUntilNextWeek = 6 - dayOfWeek;
+                  int dayNextWeek = wateringDays.indexOf(true);
+                  daysUntil = daysUntilNextWeek + dayNextWeek + 1;
+                } else {
+                  daysUntil = result - dayOfWeek;
+                }
+
+                nextAction = DateTime(now.year, now.month, now.day).add(Duration(days: daysUntil));
+                print("Event start date : $now");
+                print("Next action: $nextAction");
               },
               child: Text('Update plant'),
             ),

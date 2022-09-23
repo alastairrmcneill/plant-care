@@ -34,11 +34,21 @@ class EventService {
 
     recurrenceRule += ';$byDay;$interval';
 
+    List<DateTime> futureAppointments = SfCalendar.getRecurrenceDateTimeCollection(
+      '$recurrenceRule;COUNT=1000',
+      startTime,
+      specificStartDate: today,
+      specificEndDate: today.add(const Duration(days: 50)),
+    );
+    DateTime nextAction = futureAppointments.first;
+
     // Create Event
     Event event = Event(
       plantUid: plantUid,
       startTime: startTime,
       endTime: endTime,
+      lastAction: DateTime(today.year, today.month, today.day),
+      nextAction: DateTime(nextAction.year, nextAction.month, nextAction.day),
       subject: subject,
       recurrenceRule: recurrenceRule,
       type: type,

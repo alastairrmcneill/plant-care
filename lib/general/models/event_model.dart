@@ -5,6 +5,8 @@ class Event {
   final String plantUid;
   final DateTime startTime;
   final DateTime endTime;
+  final DateTime lastAction;
+  final DateTime nextAction;
   final String subject;
   final String recurrenceRule;
   final String type;
@@ -15,6 +17,8 @@ class Event {
     required this.plantUid,
     required this.startTime,
     required this.endTime,
+    required this.lastAction,
+    required this.nextAction,
     required this.subject,
     required this.recurrenceRule,
     required this.type,
@@ -27,6 +31,8 @@ class Event {
       EventFields.plantUid: plantUid,
       EventFields.startTime: startTime,
       EventFields.endTime: endTime,
+      EventFields.lastAction: lastAction,
+      EventFields.nextAction: nextAction,
       EventFields.subject: subject,
       EventFields.recurrenceRule: recurrenceRule,
       EventFields.type: type,
@@ -40,6 +46,8 @@ class Event {
       plantUid: json[EventFields.plantUid] as String,
       startTime: (json[EventFields.startTime] as Timestamp).toDate(),
       endTime: (json[EventFields.endTime] as Timestamp).toDate(),
+      lastAction: (json[EventFields.lastAction] as Timestamp).toDate(),
+      nextAction: (json[EventFields.nextAction] as Timestamp).toDate(),
       subject: json[EventFields.subject] as String,
       recurrenceRule: json[EventFields.recurrenceRule] as String,
       type: json[EventFields.type] as String,
@@ -52,6 +60,8 @@ class Event {
     String? plantUid,
     DateTime? startTime,
     DateTime? endTime,
+    DateTime? lastAction,
+    DateTime? nextAction,
     String? subject,
     String? recurrenceRule,
     String? type,
@@ -62,6 +72,8 @@ class Event {
         plantUid: plantUid ?? this.plantUid,
         startTime: startTime ?? this.startTime,
         endTime: endTime ?? this.endTime,
+        lastAction: lastAction ?? this.lastAction,
+        nextAction: nextAction ?? this.nextAction,
         subject: subject ?? this.subject,
         recurrenceRule: recurrenceRule ?? this.recurrenceRule,
         type: type ?? this.type,
@@ -74,8 +86,13 @@ class EventFields {
   static String plantUid = 'plantUid';
   static String startTime = 'startTime';
   static String endTime = 'endTime';
+  static String lastAction = 'lastAction';
+  static String nextAction = 'nextAction';
   static String subject = 'subject';
   static String recurrenceRule = 'recurrenceRule';
   static String type = 'type';
   static String notes = 'notes';
+  static String watering = 'Watering';
+  static String misting = 'Misting';
+  static String feeding = 'Feeding';
 }
