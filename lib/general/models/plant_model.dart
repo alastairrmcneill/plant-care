@@ -71,4 +71,8 @@ class PlantFields {
   static String wateringDetails = 'wateringDetails';
   static String mistingDetails = 'mistingDetails';
   static String feedingDetails = 'feedingDetails';
+  static String days = 'days';
+  static String recurrence = 'recurrence';
+  static String notes = 'notes';
+  static String nextAction = 'nextAction';
 }

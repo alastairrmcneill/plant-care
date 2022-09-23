@@ -34,9 +34,75 @@ class PlantService {
     }
 
     // Create plant
-    Map<String, Object?> wateringDetails = {'wateringDays': wateringDays, 'wateringRecurrence': wateringRecurrence, 'wateringNotes': wateringNotes};
-    Map<String, Object?> mistingDetails = {'mistingDays': mistingDays, 'mistingRecurrence': mistingRecurrence, 'mistingNotes': mistingNotes};
-    Map<String, Object?> feedingDetails = {'feedingDays': feedingDays, 'feedingRecurrence': feedingRecurrence, 'feedingNotes': feedingNotes};
+    // Watering
+    int daysUntil = 0;
+    DateTime now = DateTime.now();
+    DateTime? nextAction;
+
+    int dayOfWeek = now.weekday - 1;
+    int result = wateringDays.indexOf(true, dayOfWeek);
+
+    if (result == -1) {
+      // next day is next week
+      int daysUntilNextWeek = 6 - dayOfWeek;
+      int dayNextWeek = wateringDays.indexOf(true);
+      daysUntil = daysUntilNextWeek + dayNextWeek + 1;
+    } else {
+      daysUntil = result - dayOfWeek;
+    }
+
+    nextAction = DateTime(now.year, now.month, now.day).add(Duration(days: daysUntil));
+
+    Map<String, Object?> wateringDetails = {
+      PlantFields.days: wateringDays,
+      PlantFields.recurrence: wateringRecurrence,
+      PlantFields.notes: wateringNotes,
+      PlantFields.nextAction: nextAction,
+    };
+
+    // Misting
+    nextAction = null;
+    if (mistingDays.contains(true)) {
+      result = mistingDays.indexOf(true, dayOfWeek);
+
+      if (result == -1) {
+        // next day is next week
+        int daysUntilNextWeek = 6 - dayOfWeek;
+        int dayNextWeek = mistingDays.indexOf(true);
+        daysUntil = daysUntilNextWeek + dayNextWeek + 1;
+      } else {
+        daysUntil = result - dayOfWeek;
+      }
+      nextAction = DateTime(now.year, now.month, now.day).add(Duration(days: daysUntil));
+    }
+    Map<String, Object?> mistingDetails = {
+      PlantFields.days: mistingDays,
+      PlantFields.recurrence: mistingRecurrence,
+      PlantFields.notes: mistingNotes,
+      PlantFields.nextAction: nextAction,
+    };
+
+    // Feeding
+    nextAction = null;
+    if (feedingDays.contains(true)) {
+      result = feedingDays.indexOf(true, dayOfWeek);
+
+      if (result == -1) {
+        // next day is next week
+        int daysUntilNextWeek = 6 - dayOfWeek;
+        int dayNextWeek = feedingDays.indexOf(true);
+        daysUntil = daysUntilNextWeek + dayNextWeek + 1;
+      } else {
+        daysUntil = result - dayOfWeek;
+      }
+      nextAction = DateTime(now.year, now.month, now.day).add(Duration(days: daysUntil));
+    }
+    Map<String, Object?> feedingDetails = {
+      PlantFields.days: feedingDays,
+      PlantFields.recurrence: feedingRecurrence,
+      PlantFields.notes: feedingNotes,
+      PlantFields.nextAction: nextAction,
+    };
 
     Plant plant = Plant(
       uid: Uuid().v4(),
@@ -113,9 +179,37 @@ class PlantService {
     await EventDatabase.deletePlantEvents(context, plantUid: originalPlant.uid);
 
     // Creat new plant
-    Map<String, Object?> wateringDetails = {'wateringDays': wateringDays, 'wateringRecurrence': wateringRecurrence, 'wateringNotes': wateringNotes};
-    Map<String, Object?> mistingDetails = {'mistingDays': mistingDays, 'mistingRecurrence': mistingRecurrence, 'mistingNotes': mistingNotes};
-    Map<String, Object?> feedingDetails = {'feedingDays': feedingDays, 'feedingRecurrence': feedingRecurrence, 'feedingNotes': feedingNotes};
+    int daysUntil = 0;
+    DateTime now = DateTime.now();
+
+    int dayOfWeek = now.weekday - 1;
+    int result = wateringDays.indexOf(true, dayOfWeek);
+
+    if (result == -1) {
+      // next day is next week
+      int daysUntilNextWeek = 6 - dayOfWeek;
+      int dayNextWeek = wateringDays.indexOf(true);
+      daysUntil = daysUntilNextWeek + dayNextWeek + 1;
+    } else {
+      daysUntil = result - dayOfWeek;
+    }
+
+    Map<String, Object?> wateringDetails = {
+      PlantFields.days: wateringDays,
+      PlantFields.recurrence: wateringRecurrence,
+      PlantFields.notes: wateringNotes,
+      "nextAction": now.add(Duration(days: daysUntil))
+    };
+    Map<String, Object?> mistingDetails = {
+      PlantFields.days: mistingDays,
+      PlantFields.recurrence: mistingRecurrence,
+      PlantFields.notes: mistingNotes,
+    };
+    Map<String, Object?> feedingDetails = {
+      PlantFields.days: feedingDays,
+      PlantFields.recurrence: feedingRecurrence,
+      PlantFields.notes: feedingNotes,
+    };
 
     Plant newPlant = originalPlant.copy(
       name: name,

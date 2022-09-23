@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/features/home/plants/screens/screens.dart';
 import 'package:plant_care/general/models/models.dart';
@@ -16,6 +17,100 @@ class PlantListTile extends StatelessWidget {
     HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context);
     List<Household> myHouseholds = householdNotifier.myHouseholds!;
     Household household = myHouseholds.where((household) => household.uid == plant.householdUid).first;
+
+    Widget _buildWatering() {
+      String dueString = '';
+      DateTime now = DateTime.now();
+      now = DateTime(now.year, now.month, now.day);
+      DateTime nextAction = (plant.wateringDetails["nextAction"] as Timestamp).toDate();
+
+      int daysUntil = nextAction.difference(now).inDays;
+
+      if (daysUntil == 0) {
+        dueString = 'Due today';
+      } else if (daysUntil == 1) {
+        dueString = 'Due in $daysUntil day';
+      } else {
+        dueString = 'Due in $daysUntil days';
+      }
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            '- Water',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Text(
+            dueString,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          )
+        ],
+      );
+    }
+
+    Widget _buildMisting() {
+      List<dynamic> mistingDays = plant.mistingDetails[PlantFields.days] as List<dynamic>;
+      List<bool> newMistingDays = List<bool>.from(mistingDays);
+      if (!newMistingDays.contains(true)) return Container();
+
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const [
+          Text(
+            '- Misting',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Text(
+            'Due in 1 day',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          )
+        ],
+      );
+    }
+
+    Widget _buildFeeding() {
+      List<dynamic> feedingDays = plant.feedingDetails[PlantFields.days] as List<dynamic>;
+      List<bool> newFeedingDays = List<bool>.from(feedingDays);
+      if (!newFeedingDays.contains(true)) return Container();
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const [
+          Text(
+            '- Misting',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Text(
+            'Due in 1 day',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          )
+        ],
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         plantNotifier.setCurrentPlant = plant;
@@ -27,7 +122,7 @@ class PlantListTile extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -80,48 +175,9 @@ class PlantListTile extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      '- Water',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Text(
-                      'Due in 3 days',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      '- Misting',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Text(
-                      'Due in 1 day',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    )
-                  ],
-                ),
+                _buildWatering(),
+                _buildMisting(),
+                _buildFeeding(),
                 const SizedBox(height: 10),
                 const Text(
                   'Household',
