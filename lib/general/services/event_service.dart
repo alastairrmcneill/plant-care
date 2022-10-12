@@ -16,8 +16,8 @@ class EventService {
     required String subject,
   }) async {
     final DateTime today = DateTime.now();
-    final DateTime startTime = DateTime(today.year, today.month, today.day, 9, 0, 0);
-    final DateTime endTime = DateTime(today.year, today.month, today.day, 10, 0, 0);
+    final DateTime startTime = DateTime(today.year, today.month, today.day, 0, 0, 0);
+    final DateTime endTime = DateTime(today.year, today.month, today.day, 0, 0, 1);
 
     String recurrenceRule = 'FREQ=WEEKLY';
     String byDay = 'BYDAY=';
@@ -47,6 +47,7 @@ class EventService {
       plantUid: plantUid,
       startTime: startTime,
       endTime: endTime,
+      previousLastAction: null,
       lastAction: DateTime(today.year, today.month, today.day),
       nextAction: DateTime(nextAction.year, nextAction.month, nextAction.day),
       subject: subject,
@@ -113,6 +114,32 @@ class EventService {
       subject: event.uid!,
       recurrenceRule: event.recurrenceRule,
     );
+  }
+
+  static Future markAsDone(BuildContext context, Event event, Appointment appointment) async {
+    DateTime now = appointment.startTime;
+    DateTime lastAction = DateTime(now.year, now.month, now.day);
+    DateTime previousLastAction = event.lastAction;
+    List<DateTime> futureDates = SfCalendar.getRecurrenceDateTimeCollection(
+      '${event.recurrenceRule};COUNT=1000',
+      event.startTime,
+      specificStartDate: now,
+      specificEndDate: now.add(Duration(days: 100)),
+    );
+    DateTime nextAction = futureDates[1];
+
+    Event newEvent = event.copy(
+      previousLastAction: previousLastAction,
+      lastAction: lastAction,
+      nextAction: nextAction,
+    );
+
+    // Update database
+    await EventDatabase.updateEvent(context, event: newEvent);
+  }
+
+  static markAsUndone(BuildContext context) {
+    print('marking as un done');
   }
 }
 

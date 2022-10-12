@@ -70,6 +70,17 @@ class EventDatabase {
     }
   }
 
+  static Future updateEvent(BuildContext context, {required Event event}) async {
+    try {
+      DocumentReference ref = _eventRef.doc(event.uid);
+
+      await ref.update(event.toJson());
+      await readMyEvents(context);
+    } on FirebaseException catch (error) {
+      showErrorDialog(context, error.message!);
+    }
+  }
+
   static Future deletePlantEvents(BuildContext context, {required String plantUid}) async {
     try {
       QuerySnapshot querySnapshot = await _eventRef.where(EventFields.plantUid, isEqualTo: plantUid).get();

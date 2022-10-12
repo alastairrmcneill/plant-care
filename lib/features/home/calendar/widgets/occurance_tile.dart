@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
+import 'package:plant_care/general/services/event_service.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -20,11 +21,10 @@ class OccuranceTile extends StatelessWidget {
     Iterable<Plant> plants = plantList.where((element) => (element.uid == event.plantUid));
     Plant plant = plants.first;
 
-    bool done = DateTime.now().isAfter(appointment.startTime);
+    bool done = appointment.startTime.isBefore(event.lastAction) || appointment.startTime.isAtSameMomentAs(event.lastAction);
 
-    return Container(
+    return SizedBox(
       height: 100,
-      color: Colors.blue,
       child: Row(
         children: [
           Expanded(
@@ -34,13 +34,18 @@ class OccuranceTile extends StatelessWidget {
               children: [
                 Text(plant.name),
                 Text(event.type),
+                Text(event.nextAction.toString()),
               ],
             ),
           ),
           Checkbox(
             value: done,
-            onChanged: (value) {
-              done = value!;
+            onChanged: (value) async {
+              if (value!) {
+                await EventService.markAsDone(context, event, appointment);
+              } else {
+                EventService.markAsUndone(context);
+              }
             },
           )
         ],
