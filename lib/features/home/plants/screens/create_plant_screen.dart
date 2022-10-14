@@ -22,9 +22,9 @@ class CreatePlantScreen extends StatefulWidget {
 class _CreatePlantScreenState extends State<CreatePlantScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
-  String? wateringNotesText;
-  String? mistingNotesText;
-  String? feedingNotesText;
+  String wateringNotesText = "";
+  String mistingNotesText = "";
+  String feedingNotesText = "";
   List<bool> wateringDays = [false, false, false, false, false, false, false];
   List<bool> mistingDays = [false, false, false, false, false, false, false];
   List<bool> feedingDays = [false, false, false, false, false, false, false];
@@ -221,7 +221,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
             maxLines: 2,
             keyboardType: TextInputType.name,
             onSaved: (value) {
-              wateringNotesText = value?.trim();
+              wateringNotesText = value?.trim() ?? "";
             },
           ),
           const SizedBox(height: 10),
@@ -289,7 +289,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
             maxLines: 2,
             keyboardType: TextInputType.name,
             onSaved: (value) {
-              mistingNotesText = value?.trim();
+              mistingNotesText = value?.trim() ?? "";
             },
           ),
           const SizedBox(height: 10),
@@ -357,7 +357,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
             maxLines: 2,
             keyboardType: TextInputType.name,
             onSaved: (value) {
-              feedingNotesText = value?.trim();
+              feedingNotesText = value?.trim() ?? "";
             },
           ),
           const SizedBox(height: 10),

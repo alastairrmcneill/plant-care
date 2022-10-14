@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/event_service.dart';
+import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -23,32 +24,38 @@ class OccuranceTile extends StatelessWidget {
 
     bool done = appointment.startTime.isBefore(event.lastAction) || appointment.startTime.isAtSameMomentAs(event.lastAction);
 
-    return SizedBox(
-      height: 100,
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(plant.name),
-                Text(event.type),
-                Text(event.nextAction.toString()),
-              ],
+    return GestureDetector(
+      onTap: () {
+        if (event.notes != "") {
+          showOneButtonDialog(context, event.notes, "Done", () async {});
+        }
+      },
+      child: Container(
+        height: 100,
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(plant.name),
+                  Text(event.type),
+                ],
+              ),
             ),
-          ),
-          Checkbox(
-            value: done,
-            onChanged: (value) async {
-              if (value!) {
-                await EventService.markAsDone(context, event, appointment);
-              } else {
-                EventService.markAsUndone(context, event, appointment);
-              }
-            },
-          )
-        ],
+            Checkbox(
+              value: done,
+              onChanged: (value) async {
+                if (value!) {
+                  await EventService.markAsDone(context, event, appointment);
+                } else {
+                  EventService.markAsUndone(context, event, appointment);
+                }
+              },
+            )
+          ],
+        ),
       ),
     );
   }

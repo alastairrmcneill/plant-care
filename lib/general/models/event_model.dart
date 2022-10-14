@@ -10,7 +10,7 @@ class Event {
   final String subject;
   final String recurrenceRule;
   final String type;
-  final String? notes;
+  final String notes;
 
   Event({
     this.uid,
@@ -51,7 +51,7 @@ class Event {
       subject: json[EventFields.subject] as String,
       recurrenceRule: json[EventFields.recurrenceRule] as String,
       type: json[EventFields.type] as String,
-      notes: json[EventFields.notes] as String?,
+      notes: json[EventFields.notes] as String,
     );
   }
 

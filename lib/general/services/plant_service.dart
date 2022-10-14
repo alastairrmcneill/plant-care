@@ -16,13 +16,13 @@ class PlantService {
     required File? image,
     required List<bool> wateringDays,
     required String wateringRecurrence,
-    required String? wateringNotes,
+    required String wateringNotes,
     required List<bool> mistingDays,
     required String mistingRecurrence,
-    required String? mistingNotes,
+    required String mistingNotes,
     required List<bool> feedingDays,
     required String feedingRecurrence,
-    required String? feedingNotes,
+    required String feedingNotes,
   }) async {
     showCircularProgressOverlay(context);
     // Upload image
@@ -118,13 +118,13 @@ class PlantService {
     required String name,
     required List<bool> wateringDays,
     required String wateringRecurrence,
-    required String? wateringNotes,
+    required String wateringNotes,
     required List<bool> mistingDays,
     required String mistingRecurrence,
-    required String? mistingNotes,
+    required String mistingNotes,
     required List<bool> feedingDays,
     required String feedingRecurrence,
-    required String? feedingNotes,
+    required String feedingNotes,
   }) async {
     // Delete existing events for this plant
     await EventDatabase.deletePlantEvents(context, plantUid: originalPlant.uid);

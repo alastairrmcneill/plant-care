@@ -13,7 +13,7 @@ class EventService {
     required String plantUid,
     required List<bool> days,
     required String recurrence,
-    required String? notes,
+    required String notes,
     required String type,
     required String subject,
   }) async {
