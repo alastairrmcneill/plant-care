@@ -5,6 +5,7 @@ import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
+import 'package:plant_care/support/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -20,34 +21,48 @@ class HouseholdDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(household.name),
         actions: [
-          IconButton(
-            onPressed: () async {
-              await HouseholdService.editHousehold(context, household: household);
-            },
-            icon: Icon(Icons.edit),
-          ),
-          IconButton(
-            onPressed: () async {
-              showTwoButtonDialog(
-                context,
-                "Share this code: ${household.code}",
-                'Copy',
-                () async {
-                  Clipboard.setData(ClipboardData(text: household.code));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "Household code copied to clipboard",
-                        textAlign: TextAlign.center,
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert_rounded),
+            onSelected: (value) async {
+              if (value == MenuItems.item1) {
+                showTwoButtonDialog(
+                  context,
+                  "Share this code: ${household.code}",
+                  'Copy',
+                  () async {
+                    Clipboard.setData(ClipboardData(text: household.code));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          "Household code copied to clipboard",
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                'Cancel',
-                () {},
-              );
+                    );
+                  },
+                  'Cancel',
+                  () {},
+                );
+              } else if (value == MenuItems.item2) {
+                await HouseholdService.editHousehold(context, household: household);
+              } else if (value == MenuItems.item3) {
+                await HouseholdService.removeCurrentUser(context, household: household);
+              }
             },
-            icon: Icon(Icons.share),
+            itemBuilder: (context) => const [
+              PopupMenuItem(
+                value: MenuItems.item1,
+                child: Text('Share'),
+              ),
+              PopupMenuItem(
+                value: MenuItems.item2,
+                child: Text('Edit'),
+              ),
+              PopupMenuItem(
+                value: MenuItems.item3,
+                child: Text('Leave'),
+              ),
+            ],
           ),
         ],
       ),

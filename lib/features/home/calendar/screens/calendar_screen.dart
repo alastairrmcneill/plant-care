@@ -18,7 +18,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    EventNotifier eventNotifier = Provider.of<EventNotifier>(context, listen: true);
+    EventNotifier eventNotifier = Provider.of<EventNotifier>(context);
     return Scaffold(
       body: SafeArea(
         child: Column(

@@ -212,7 +212,7 @@ class PlantService {
     showTwoButtonDialog(
       context,
       'Are you sure you want to delete your ${plant.name}?',
-      'OK',
+      'Yes',
       () async {
         showCircularProgressOverlay(context);
 

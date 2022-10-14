@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:plant_care/features/home/plants/widgets/plant_header_photo.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
+import 'package:plant_care/support/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -24,13 +26,37 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context);
     EventNotifier eventNotifier = Provider.of<EventNotifier>(context);
     Plant plant = plantNotifier.currentPlant!;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(plant.name),
+        actions: [
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert_rounded),
+            onSelected: (value) async {
+              if (value == MenuItems.item1) {
+                print("Edit");
+              } else if (value == MenuItems.item2) {
+                await PlantService.removePlantFromHousehold(context, plant: plant);
+              }
+            },
+            itemBuilder: (context) => const [
+              PopupMenuItem(
+                value: MenuItems.item1,
+                child: Text('Edit'),
+              ),
+              PopupMenuItem(
+                value: MenuItems.item2,
+                child: Text('Delete'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Center(
         child: Column(
           children: [
+            PlantHeaderPhoto(photoURL: plant.photoURL, initials: plant.name[0]),
             SizedBox(
               height: 300,
               child: SfCalendar(
@@ -53,39 +79,6 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                 showNavigationArrow: false,
                 dataSource: MeetingDataSource(eventNotifier.currentPlantEvents),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await PlantService.removePlantFromHousehold(context, plant: plant);
-              },
-              child: Text('Delete plant'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                List<dynamic> wateringDays = plant.wateringDetails[PlantFields.days] as List<dynamic>;
-                List<bool> newFeedingDays = List<bool>.from(wateringDays);
-
-                int daysUntil = 0;
-                DateTime now = DateTime.now().subtract(Duration(days: 2));
-                DateTime? nextAction;
-
-                int dayOfWeek = now.weekday - 1;
-                int result = wateringDays.indexOf(true, dayOfWeek);
-
-                if (result == -1) {
-                  // next day is next week
-                  int daysUntilNextWeek = 6 - dayOfWeek;
-                  int dayNextWeek = wateringDays.indexOf(true);
-                  daysUntil = daysUntilNextWeek + dayNextWeek + 1;
-                } else {
-                  daysUntil = result - dayOfWeek;
-                }
-
-                nextAction = DateTime(now.year, now.month, now.day).add(Duration(days: daysUntil));
-                print("Event start date : $now");
-                print("Next action: $nextAction");
-              },
-              child: Text('Update plant'),
             ),
           ],
         ),
