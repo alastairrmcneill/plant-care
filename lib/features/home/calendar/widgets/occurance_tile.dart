@@ -44,7 +44,7 @@ class OccuranceTile extends StatelessWidget {
               if (value!) {
                 await EventService.markAsDone(context, event, appointment);
               } else {
-                EventService.markAsUndone(context);
+                EventService.markAsUndone(context, event, appointment);
               }
             },
           )

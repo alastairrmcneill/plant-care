@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
@@ -47,7 +49,6 @@ class EventService {
       plantUid: plantUid,
       startTime: startTime,
       endTime: endTime,
-      previousLastAction: null,
       lastAction: DateTime(today.year, today.month, today.day),
       nextAction: DateTime(nextAction.year, nextAction.month, nextAction.day),
       subject: subject,
@@ -119,7 +120,6 @@ class EventService {
   static Future markAsDone(BuildContext context, Event event, Appointment appointment) async {
     DateTime now = appointment.startTime;
     DateTime lastAction = DateTime(now.year, now.month, now.day);
-    DateTime previousLastAction = event.lastAction;
     List<DateTime> futureDates = SfCalendar.getRecurrenceDateTimeCollection(
       '${event.recurrenceRule};COUNT=1000',
       event.startTime,
@@ -129,7 +129,6 @@ class EventService {
     DateTime nextAction = futureDates[1];
 
     Event newEvent = event.copy(
-      previousLastAction: previousLastAction,
       lastAction: lastAction,
       nextAction: nextAction,
     );
@@ -138,8 +137,27 @@ class EventService {
     await EventDatabase.updateEvent(context, event: newEvent);
   }
 
-  static markAsUndone(BuildContext context) {
-    print('marking as un done');
+  static Future markAsUndone(BuildContext context, Event event, Appointment appointment) async {
+    DateTime lastAction = event.startTime;
+    DateTime nextAction = appointment.startTime;
+
+    List<DateTime> futureDates = SfCalendar.getRecurrenceDateTimeCollection(
+      '${event.recurrenceRule};COUNT=1000',
+      event.startTime,
+    );
+    int index = futureDates.indexOf(appointment.startTime);
+
+    if (index != 0) {
+      lastAction = futureDates[index - 1];
+    }
+
+    Event newEvent = event.copy(
+      lastAction: lastAction,
+      nextAction: nextAction,
+    );
+
+    // Update database
+    await EventDatabase.updateEvent(context, event: newEvent);
   }
 }
 
