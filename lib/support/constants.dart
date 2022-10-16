@@ -6,9 +6,3 @@ enum MenuItems {
   item2,
   item3;
 }
-
-Map<String, Color> eventColors = {
-  EventTypes.water: Color.fromARGB(255, 118, 179, 245),
-  EventTypes.mist: Color.fromARGB(255, 213, 131, 227),
-  EventTypes.feed: Color.fromARGB(255, 132, 187, 135),
-};

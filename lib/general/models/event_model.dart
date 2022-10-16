@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:plant_care/general/models/models.dart';
 
 class Event {
   final String? uid;
@@ -102,3 +105,14 @@ class EventTypes {
   static String feed = 'Feed';
   static String mist = 'Mist';
 }
+
+Map<String, IconData> eventIcons = {
+  EventTypes.water: Icons.water_drop_outlined,
+  EventTypes.feed: FontAwesomeIcons.bowlFood,
+  EventTypes.mist: FontAwesomeIcons.sprayCan,
+};
+Map<String, Color> eventColors = {
+  EventTypes.water: Color.fromARGB(255, 118, 179, 245),
+  EventTypes.mist: Color.fromARGB(255, 213, 131, 227),
+  EventTypes.feed: Color.fromARGB(255, 132, 187, 135),
+};

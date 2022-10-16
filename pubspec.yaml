@@ -40,6 +40,7 @@ dependencies:
   customtogglebuttons: ^0.0.5
   expandable: ^5.0.1
   flutter_speed_dial: ^6.0.0
+  fluentui_icons: ^1.0.0
 
 
 
