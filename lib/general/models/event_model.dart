@@ -96,3 +96,9 @@ class EventFields {
   static String misting = 'Misting';
   static String feeding = 'Feeding';
 }
+
+class EventTypes {
+  static String water = 'Water';
+  static String feed = 'Feed';
+  static String mist = 'Mist';
+}

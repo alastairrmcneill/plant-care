@@ -219,7 +219,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
               hintText: 'Notes',
             ),
             maxLines: 2,
-            keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.sentences,
             onSaved: (value) {
               wateringNotesText = value?.trim() ?? "";
             },
@@ -287,7 +287,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
               hintText: 'Notes',
             ),
             maxLines: 2,
-            keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.sentences,
             onSaved: (value) {
               mistingNotesText = value?.trim() ?? "";
             },
@@ -355,7 +355,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
               hintText: 'Notes',
             ),
             maxLines: 2,
-            keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.sentences,
             onSaved: (value) {
               feedingNotesText = value?.trim() ?? "";
             },

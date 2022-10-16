@@ -134,9 +134,9 @@ class PlantListTile extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                _buildActionEntry(EventFields.watering),
-                _buildActionEntry(EventFields.misting),
-                _buildActionEntry(EventFields.feeding),
+                _buildActionEntry(EventTypes.water),
+                _buildActionEntry(EventTypes.mist),
+                _buildActionEntry(EventTypes.feed),
                 const SizedBox(height: 10),
                 const Text(
                   'Household',

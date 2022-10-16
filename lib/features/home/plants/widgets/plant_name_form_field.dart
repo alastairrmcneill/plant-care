@@ -12,7 +12,7 @@ class PlantNameFormField extends StatelessWidget {
         hintText: 'Plant name',
       ),
       maxLines: 1,
-      keyboardType: TextInputType.name,
+      textCapitalization: TextCapitalization.words,
       validator: (value) {
         if (value == null || value.trim().isEmpty) {
           return 'Required';

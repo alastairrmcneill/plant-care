@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:plant_care/features/home/calendar/widgets/widgets.dart';
-import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
-import 'package:plant_care/general/services/services.dart';
+import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -19,7 +19,32 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     EventNotifier eventNotifier = Provider.of<EventNotifier>(context);
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context);
     return Scaffold(
+      appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent, // <-- SEE HERE
+          statusBarIconBrightness: Brightness.dark, //<-- For Android SEE HERE (dark icons)
+          statusBarBrightness: Brightness.light, //<-- For iOS SEE HERE (dark icons)
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Hello ${userNotifier.currentUser?.name.split(' ')[0]}! 👋',
+              style: const TextStyle(fontWeight: FontWeight.w400),
+            ),
+            const Text(
+              'Your calendar:',
+              style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
+            ),
+          ],
+        ),
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+        shadowColor: Colors.transparent,
+      ),
       body: SafeArea(
         child: Column(
           children: [

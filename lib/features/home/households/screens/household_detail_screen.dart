@@ -69,41 +69,8 @@ class HouseholdDetailScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            SizedBox(
-              height: 300,
-              child: SfCalendar(
-                view: CalendarView.month,
-                initialSelectedDate: DateTime.now(),
-                // onTap: (calendarTapDetails) {
-                //   selectedDateAppointments = [];
-                //   if (calendarTapDetails.appointments != null && calendarTapDetails.appointments!.isNotEmpty) {
-                //     // Loop through appointments and store them as Appointment
-                //     for (var appointment in calendarTapDetails.appointments!) {
-                //       Appointment app = appointment as Appointment;
-                //       selectedDateAppointments.add(app);
-                //     }
-                //   }
-                //   setState(() {});
-                // },
-                firstDayOfWeek: 1,
-                initialDisplayDate: DateTime.now(),
-                showDatePickerButton: true,
-                showNavigationArrow: false,
-                dataSource: MeetingDataSource(eventNotifier.currentHouseholdEvents),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await HouseholdService.removeCurrentUser(context, household: household);
-              },
-              child: Text('Leave'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await HouseholdService.editHousehold(context, household: household);
-              },
-              child: Text('Edit'),
-            ),
+            Calendar(onTap: (details) {}, events: eventNotifier.currentHouseholdEvents),
+            const Text("Upcoming tasks"),
           ],
         ),
       ),

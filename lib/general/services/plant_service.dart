@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:plant_care/general/models/event_model.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/services/services.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,7 @@ class PlantService {
       days: wateringDays,
       recurrence: wateringRecurrence,
       notes: wateringNotes,
-      type: EventFields.watering,
+      type: EventTypes.water,
       subject: '$name - water',
     );
 
@@ -87,7 +88,7 @@ class PlantService {
         days: mistingDays,
         recurrence: mistingRecurrence,
         notes: mistingNotes,
-        type: EventFields.misting,
+        type: EventTypes.mist,
         subject: '$name - mist',
       );
     }
@@ -99,7 +100,7 @@ class PlantService {
         days: feedingDays,
         recurrence: feedingRecurrence,
         notes: feedingNotes,
-        type: EventFields.feeding,
+        type: EventTypes.feed,
         subject: '$name - feed',
       );
     }
@@ -179,7 +180,7 @@ class PlantService {
       days: wateringDays,
       recurrence: wateringRecurrence,
       notes: wateringNotes,
-      type: 'water',
+      type: EventTypes.water,
       subject: '${newPlant.name} - water',
     );
 
@@ -190,7 +191,7 @@ class PlantService {
         days: mistingDays,
         recurrence: mistingRecurrence,
         notes: mistingNotes,
-        type: 'misting',
+        type: EventTypes.mist,
         subject: '${newPlant.name} - misting',
       );
     }
@@ -202,7 +203,7 @@ class PlantService {
         days: feedingDays,
         recurrence: feedingRecurrence,
         notes: feedingNotes,
-        type: 'feeding',
+        type: EventTypes.feed,
         subject: '${newPlant.name} - feeding',
       );
     }

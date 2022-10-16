@@ -4,3 +4,5 @@ export 'week_toggle_buttons.dart';
 export 'plants_body.dart';
 export 'plant_list_view.dart';
 export 'plant_list_tile.dart';
+export 'plant_header_photo.dart';
+export 'task_tile.dart';
