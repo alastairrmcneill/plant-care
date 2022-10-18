@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-              const ProfilePhoto(),
+              CircularHeaderImage(photoURL: user.photoUrl, initials: user.initials),
               const SizedBox(height: 10),
               AutoSizeText(
                 user.name,
