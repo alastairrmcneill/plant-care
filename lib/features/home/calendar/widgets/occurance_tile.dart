@@ -31,6 +31,7 @@ class OccuranceTile extends StatelessWidget {
         }
       },
       child: Container(
+        color: Colors.red,
         height: 100,
         child: Row(
           children: [

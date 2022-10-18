@@ -4,9 +4,9 @@ import 'package:plant_care/features/home/plants/widgets/widgets.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
-import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:plant_care/support/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class PlantDetailScreen extends StatefulWidget {
   const PlantDetailScreen({Key? key}) : super(key: key);
@@ -38,63 +38,69 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> with SingleTicker
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          SliverAppBar(
-            expandedHeight: 240,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(plant.name),
-              background: plant.photoURL == null
-                  ? null
-                  : CachedNetworkImage(
-                      imageUrl: plant.photoURL!,
-                      fit: BoxFit.cover,
-                      progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(value: downloadProgress.progress),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+          SliverOverlapAbsorber(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: MultiSliver(
+              children: [
+                SliverAppBar(
+                  expandedHeight: 200,
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text(plant.name),
+                    background: plant.photoURL == null
+                        ? null
+                        : CachedNetworkImage(
+                            imageUrl: plant.photoURL!,
+                            fit: BoxFit.cover,
+                            progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(value: downloadProgress.progress),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                          ),
+                  ),
+                  floating: true,
+                  snap: false,
+                  pinned: true,
+                  actions: [
+                    PopupMenuButton(
+                      icon: Icon(Icons.more_vert_rounded),
+                      onSelected: (value) async {
+                        if (value == MenuItems.item1) {
+                          print("Edit");
+                        } else if (value == MenuItems.item2) {
+                          await PlantService.removePlantFromHousehold(context, plant: plant);
+                        }
+                      },
+                      itemBuilder: (context) => const [
+                        PopupMenuItem(
+                          value: MenuItems.item1,
+                          child: Text('Edit'),
+                        ),
+                        PopupMenuItem(
+                          value: MenuItems.item2,
+                          child: Text('Delete'),
+                        ),
+                      ],
                     ),
-            ),
-            floating: true,
-            snap: false,
-            pinned: true,
-            actions: [
-              PopupMenuButton(
-                icon: Icon(Icons.more_vert_rounded),
-                onSelected: (value) async {
-                  if (value == MenuItems.item1) {
-                    print("Edit");
-                  } else if (value == MenuItems.item2) {
-                    await PlantService.removePlantFromHousehold(context, plant: plant);
-                  }
-                },
-                itemBuilder: (context) => const [
-                  PopupMenuItem(
-                    value: MenuItems.item1,
-                    child: Text('Edit'),
-                  ),
-                  PopupMenuItem(
-                    value: MenuItems.item2,
-                    child: Text('Delete'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SliverPersistentHeader(
-            delegate: _SliverAppBarDelegate(
-              TabBar(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
-                controller: tabController,
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25.0),
-                  color: Theme.of(context).primaryColor,
+                  ],
                 ),
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.black,
-                tabs: const [
-                  Tab(text: 'Overview'),
-                  Tab(text: 'Schedule'),
-                ],
-              ),
+                SliverPersistentHeader(
+                  delegate: _SliverAppBarDelegate(
+                    TabBar(
+                      controller: tabController,
+                      indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25.0),
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.black,
+                      tabs: const [
+                        Tab(text: 'Overview'),
+                        Tab(text: 'Schedule'),
+                      ],
+                    ),
+                  ),
+                  pinned: true,
+                ),
+              ],
             ),
-            pinned: true,
           ),
         ],
         body: TabBarView(
@@ -121,7 +127,16 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(child: _tabBar);
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(
+          25.0,
+        ),
+      ),
+      child: _tabBar,
+    );
   }
 
   @override
