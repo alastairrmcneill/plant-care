@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/cil.dart';
 import 'package:plant_care/general/models/models.dart';
 
 class Event {
@@ -106,13 +109,31 @@ class EventTypes {
   static String mist = 'Mist';
 }
 
-Map<String, IconData> eventIcons = {
-  EventTypes.water: Icons.water_drop_outlined,
-  EventTypes.feed: FontAwesomeIcons.bowlFood,
-  EventTypes.mist: FontAwesomeIcons.sprayCan,
+Map<String, Widget> eventIcons = {
+  EventTypes.water: Icon(
+    Icons.water_drop_outlined,
+    color: eventAccentColors[EventTypes.water],
+    size: 30,
+  ),
+  EventTypes.mist: Iconify(
+    Cil.grain,
+    color: eventAccentColors[EventTypes.mist],
+    size: 25,
+  ),
+  EventTypes.feed: Icon(
+    FluentSystemIcons.ic_fluent_food_regular,
+    color: eventAccentColors[EventTypes.feed],
+    size: 30,
+  ),
 };
 Map<String, Color> eventColors = {
   EventTypes.water: Color.fromARGB(255, 118, 179, 245),
   EventTypes.mist: Color.fromARGB(255, 213, 131, 227),
   EventTypes.feed: Color.fromARGB(255, 132, 187, 135),
+};
+
+Map<String, Color> eventAccentColors = {
+  EventTypes.water: Color.fromARGB(255, 0, 59, 122),
+  EventTypes.mist: Color.fromARGB(255, 88, 0, 103),
+  EventTypes.feed: Color.fromARGB(255, 0, 84, 4),
 };

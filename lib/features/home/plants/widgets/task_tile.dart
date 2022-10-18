@@ -42,8 +42,8 @@ class TaskTile extends StatelessWidget {
           theme: const ExpandableThemeData(headerAlignment: ExpandablePanelHeaderAlignment.center),
           header: Row(
             children: [
-              Icon(eventIcons[event.type]),
-              const SizedBox(width: 15),
+              eventIcons[event.type]!,
+              const SizedBox(width: 25),
               Text(event.type),
             ],
           ),

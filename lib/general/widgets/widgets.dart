@@ -6,3 +6,4 @@ export 'custom_dialog.dart';
 export 'calendar.dart';
 export 'full_screen_image.dart';
 export 'circular_header_image.dart';
+export 'event_tile.dart';

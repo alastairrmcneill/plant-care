@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:plant_care/features/home/calendar/widgets/widgets.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +41,7 @@ class _CalendarTabState extends State<CalendarTab> {
           child: SingleChildScrollView(
             child: Column(
               children: selectedDateAppointments.map((appointment) {
-                return OccuranceTile(appointment: appointment);
+                return EventTile(appointment: appointment);
               }).toList(),
             ),
           ),
