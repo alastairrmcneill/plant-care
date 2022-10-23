@@ -7,3 +7,4 @@ export 'plant_list_tile.dart';
 export 'task_tile.dart';
 export 'calendar_tab.dart';
 export 'overview_tab.dart';
+export 'days_row.dart';

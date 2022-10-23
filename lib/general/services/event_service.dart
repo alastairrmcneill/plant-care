@@ -51,6 +51,8 @@ class EventService {
       nextAction: DateTime(nextAction.year, nextAction.month, nextAction.day),
       subject: subject,
       recurrenceRule: recurrenceRule,
+      days: days,
+      repeats: recurrence,
       type: type,
       notes: notes,
     );

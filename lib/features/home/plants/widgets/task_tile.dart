@@ -1,5 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_care/features/home/plants/widgets/widgets.dart';
 import 'package:plant_care/general/models/models.dart';
 
 class TaskTile extends StatelessWidget {
@@ -40,12 +42,39 @@ class TaskTile extends StatelessWidget {
         width: double.infinity,
         child: ExpandablePanel(
           theme: const ExpandableThemeData(headerAlignment: ExpandablePanelHeaderAlignment.center),
-          header: Row(
-            children: [
-              eventIcons[event.type]!,
-              const SizedBox(width: 25),
-              Text(event.type),
-            ],
+          header: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Row(
+              children: [
+                // Icon
+                SizedBox(
+                  width: 30,
+                  child: eventIcons[event.type]!,
+                ),
+                const SizedBox(width: 10),
+                // Name and type
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AutoSizeText(
+                        event.type,
+                        maxLines: 1,
+                        maxFontSize: 25,
+                        minFontSize: 16,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: eventAccentColors[event.type], fontWeight: FontWeight.w300, fontSize: 25),
+                      ),
+                      Text(
+                        _buildDueString(),
+                        style: TextStyle(color: eventAccentColors[event.type], fontWeight: FontWeight.w300, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           collapsed: const SizedBox(),
           expanded: Padding(
@@ -53,8 +82,36 @@ class TaskTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_buildDueString()),
-                event.notes != "" ? Text('Note: ${event.notes}') : const SizedBox(),
+                const Divider(),
+                Text('Days',
+                    style: TextStyle(
+                      color: eventAccentColors[event.type],
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    )),
+                DaysRow(
+                  days: event.days,
+                  color: eventAccentColors[event.type]!,
+                ),
+                Text('Repeats every ${event.repeats}'),
+                event.notes != ""
+                    ? Text(
+                        'Note:',
+                        style: TextStyle(
+                          color: eventAccentColors[event.type],
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      )
+                    : const SizedBox(),
+                event.notes != ""
+                    ? Text(event.notes,
+                        style: TextStyle(
+                          color: eventAccentColors[event.type],
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14,
+                        ))
+                    : const SizedBox(),
               ],
             ),
           ),

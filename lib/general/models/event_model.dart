@@ -15,6 +15,8 @@ class Event {
   final DateTime nextAction;
   final String subject;
   final String recurrenceRule;
+  final List<bool> days;
+  final String repeats;
   final String type;
   final String notes;
 
@@ -27,6 +29,8 @@ class Event {
     required this.nextAction,
     required this.subject,
     required this.recurrenceRule,
+    required this.days,
+    required this.repeats,
     required this.type,
     required this.notes,
   });
@@ -41,12 +45,16 @@ class Event {
       EventFields.nextAction: nextAction,
       EventFields.subject: subject,
       EventFields.recurrenceRule: recurrenceRule,
+      EventFields.days: days,
+      EventFields.repeats: repeats,
       EventFields.type: type,
       EventFields.notes: notes,
     };
   }
 
   static Event fromJson(json) {
+    List<dynamic> days = json[EventFields.days];
+    List<bool> newDays = List<bool>.from(days);
     return Event(
       uid: json[EventFields.uid] as String?,
       plantUid: json[EventFields.plantUid] as String,
@@ -56,6 +64,8 @@ class Event {
       nextAction: (json[EventFields.nextAction] as Timestamp).toDate(),
       subject: json[EventFields.subject] as String,
       recurrenceRule: json[EventFields.recurrenceRule] as String,
+      days: newDays,
+      repeats: json[EventFields.repeats] as String,
       type: json[EventFields.type] as String,
       notes: json[EventFields.notes] as String,
     );
@@ -70,6 +80,8 @@ class Event {
     DateTime? nextAction,
     String? subject,
     String? recurrenceRule,
+    List<bool>? days,
+    String? repeats,
     String? type,
     String? notes,
   }) =>
@@ -82,6 +94,8 @@ class Event {
         nextAction: nextAction ?? this.nextAction,
         subject: subject ?? this.subject,
         recurrenceRule: recurrenceRule ?? this.recurrenceRule,
+        days: days ?? this.days,
+        repeats: repeats ?? this.repeats,
         type: type ?? this.type,
         notes: notes ?? this.notes,
       );
@@ -101,6 +115,8 @@ class EventFields {
   static String watering = 'Watering';
   static String misting = 'Misting';
   static String feeding = 'Feeding';
+  static String days = 'days';
+  static String repeats = 'repeats';
 }
 
 class EventTypes {
