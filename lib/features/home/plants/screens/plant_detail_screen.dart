@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_care/features/home/plants/screens/screens.dart';
 import 'package:plant_care/features/home/plants/widgets/widgets.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
@@ -71,7 +72,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> with SingleTicker
                       icon: Icon(Icons.more_vert_rounded),
                       onSelected: (value) async {
                         if (value == MenuItems.item1) {
-                          print("Edit");
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => CreatePlantScreenTest(plant: plant)));
                         } else if (value == MenuItems.item2) {
                           await PlantService.removePlantFromHousehold(context, plant: plant);
                         }

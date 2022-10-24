@@ -38,7 +38,7 @@ class PlantsScreen extends StatelessWidget {
         shadowColor: Colors.transparent,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CreatePlantScreen())),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CreatePlantScreenTest())),
         child: const Icon(Icons.add),
       ),
       body: const SafeArea(child: PlantBody()),

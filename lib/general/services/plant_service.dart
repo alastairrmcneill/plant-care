@@ -4,9 +4,11 @@ import 'dart:io';
 
 import 'package:plant_care/general/models/event_model.dart';
 import 'package:plant_care/general/models/models.dart';
+import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class PlantService {
@@ -127,6 +129,7 @@ class PlantService {
     required String feedingRecurrence,
     required String feedingNotes,
   }) async {
+    showCircularProgressOverlay(context);
     // Delete existing events for this plant
     await EventDatabase.deletePlantEvents(context, plantUid: originalPlant.uid);
 
@@ -207,6 +210,15 @@ class PlantService {
         subject: '${newPlant.name} - feeding',
       );
     }
+
+    // Update notifiers
+    await EventDatabase.readMyEvents(context);
+    await HouseholdDatabase.readMyHouseholds(context);
+    PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context, listen: false);
+    plantNotifier.setCurrentPlant = newPlant;
+
+    stopCircularProgressOverlay(context);
+    Navigator.of(context).pop();
   }
 
   static Future removePlantFromHousehold(BuildContext context, {required Plant plant}) async {
