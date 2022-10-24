@@ -4,6 +4,7 @@ import 'package:plant_care/features/home/plants/widgets/widgets.dart';
 import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
 import 'package:plant_care/general/services/services.dart';
+import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:plant_care/support/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -44,16 +45,23 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> with SingleTicker
               children: [
                 SliverAppBar(
                   expandedHeight: 200,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Text(plant.name),
-                    background: plant.photoURL == null
-                        ? null
-                        : CachedNetworkImage(
-                            imageUrl: plant.photoURL!,
-                            fit: BoxFit.cover,
-                            progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(value: downloadProgress.progress),
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                          ),
+                  flexibleSpace: GestureDetector(
+                    onTap: () {
+                      if (plant.photoURL != null) {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => FullScreenImage(photoURL: plant.photoURL!)));
+                      }
+                    },
+                    child: FlexibleSpaceBar(
+                      title: Text(plant.name, style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20)),
+                      background: plant.photoURL == null
+                          ? null
+                          : CachedNetworkImage(
+                              imageUrl: plant.photoURL!,
+                              fit: BoxFit.cover,
+                              progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(value: downloadProgress.progress),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                            ),
+                    ),
                   ),
                   floating: true,
                   snap: false,
@@ -91,8 +99,11 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> with SingleTicker
                       ),
                       labelColor: Colors.white,
                       unselectedLabelColor: Colors.black,
+                      labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w300, fontSize: 14),
                       tabs: const [
-                        Tab(text: 'Overview'),
+                        Tab(
+                          text: 'Overview',
+                        ),
                         Tab(text: 'Schedule'),
                       ],
                     ),

@@ -12,7 +12,7 @@ class CircularPicture extends StatelessWidget {
       radius: 18,
       backgroundColor: Colors.white,
       child: CircleAvatar(
-        radius: 16,
+        radius: 16.5,
         backgroundColor: Colors.grey[300],
         backgroundImage: photoUrl != null ? CachedNetworkImageProvider(photoUrl!) : null,
         child: photoUrl != null

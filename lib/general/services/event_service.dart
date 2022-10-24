@@ -127,6 +127,7 @@ class EventService {
 
     // Update database
     await EventDatabase.updateEvent(context, event: newEvent);
+    getCurrentPlantEvents(context);
   }
 
   static Future markAsUndone(BuildContext context, Event event, Appointment appointment) async {
@@ -150,6 +151,7 @@ class EventService {
 
     // Update database
     await EventDatabase.updateEvent(context, event: newEvent);
+    getCurrentPlantEvents(context);
   }
 }
 

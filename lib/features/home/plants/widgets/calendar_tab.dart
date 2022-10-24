@@ -22,7 +22,7 @@ class _CalendarTabState extends State<CalendarTab> {
       children: [
         const SizedBox(height: 150),
         Calendar(
-          events: eventNotifier.allEvents,
+          events: eventNotifier.currentPlantEvents,
           onTap: (calendarTapDetails) {
             selectedDateAppointments = [];
             if (calendarTapDetails.appointments != null && calendarTapDetails.appointments!.isNotEmpty) {

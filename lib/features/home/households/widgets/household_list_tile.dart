@@ -41,7 +41,7 @@ class HouseholdListTile extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 const Divider(color: Colors.white, thickness: 1),
@@ -50,7 +50,7 @@ class HouseholdListTile extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 HouseholdMembersPhotosRow(household: household),
@@ -60,7 +60,7 @@ class HouseholdListTile extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 PlantsPhotoRow(household: household),

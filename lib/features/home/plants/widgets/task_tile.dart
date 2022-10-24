@@ -83,34 +83,32 @@ class TaskTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Divider(),
-                Text('Days',
-                    style: TextStyle(
-                      color: eventAccentColors[event.type],
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                    )),
+                Text(
+                  'Days',
+                  style: TextStyle(color: eventAccentColors[event.type], fontWeight: FontWeight.w500, fontSize: 14),
+                ),
                 DaysRow(
                   days: event.days,
                   color: eventAccentColors[event.type]!,
                 ),
-                Text('Repeats every ${event.repeats}'),
+                Text(
+                  'Repeats every ${event.repeats}',
+                  style: TextStyle(color: eventAccentColors[event.type], fontWeight: FontWeight.w300, fontSize: 14),
+                ),
                 event.notes != ""
-                    ? Text(
-                        'Note:',
-                        style: TextStyle(
-                          color: eventAccentColors[event.type],
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          'Note:',
+                          style: TextStyle(color: eventAccentColors[event.type], fontWeight: FontWeight.w500, fontSize: 14),
                         ),
                       )
                     : const SizedBox(),
                 event.notes != ""
-                    ? Text(event.notes,
-                        style: TextStyle(
-                          color: eventAccentColors[event.type],
-                          fontWeight: FontWeight.w300,
-                          fontSize: 14,
-                        ))
+                    ? Text(
+                        event.notes,
+                        style: TextStyle(color: eventAccentColors[event.type], fontWeight: FontWeight.w300, fontSize: 14),
+                      )
                     : const SizedBox(),
               ],
             ),
