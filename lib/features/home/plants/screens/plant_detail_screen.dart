@@ -72,7 +72,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> with SingleTicker
                       icon: Icon(Icons.more_vert_rounded),
                       onSelected: (value) async {
                         if (value == MenuItems.item1) {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => CreatePlantScreenTest(plant: plant)));
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => CreatePlantScreen(plant: plant)));
                         } else if (value == MenuItems.item2) {
                           await PlantService.removePlantFromHousehold(context, plant: plant);
                         }

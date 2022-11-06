@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,15 +14,19 @@ import 'package:plant_care/support/theme.dart';
 import 'package:provider/provider.dart';
 
 class CreatePlantScreen extends StatefulWidget {
-  const CreatePlantScreen({Key? key}) : super(key: key);
+  final Plant? plant;
+  const CreatePlantScreen({Key? key, this.plant}) : super(key: key);
 
   @override
-  State<CreatePlantScreen> createState() => _CreatePlantScreenState();
+  State<CreatePlantScreen> createState() => _CreatePlantScreenTestState();
 }
 
-class _CreatePlantScreenState extends State<CreatePlantScreen> {
+class _CreatePlantScreenTestState extends State<CreatePlantScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
+  TextEditingController _wateringNotesController = TextEditingController();
+  TextEditingController _mistingNotesController = TextEditingController();
+  TextEditingController _feedingNotesController = TextEditingController();
   String wateringNotesText = "";
   String mistingNotesText = "";
   String feedingNotesText = "";
@@ -35,16 +40,36 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
   bool showMisting = false;
   bool showFood = false;
   int? householdIndex;
+  String? householdSelected;
   List<Household> households = [];
   File? _image;
 
   @override
   void initState() {
     super.initState();
-    wateringRecurrence = recurranceOptions[0];
-    mistingRecurrence = recurranceOptions[0];
-    feedingRecurrence = recurranceOptions[0];
-    HouseholdDatabase.readMyHouseholds(context);
+
+    if (widget.plant != null) {
+      // editing plant
+      _nameController.text = widget.plant!.name;
+      wateringDays = List<bool>.from(widget.plant!.wateringDetails[PlantFields.days] as List<dynamic>);
+      mistingDays = List<bool>.from(widget.plant!.mistingDetails[PlantFields.days] as List<dynamic>);
+      showMisting = mistingDays.contains(true);
+      feedingDays = List<bool>.from(widget.plant!.feedingDetails[PlantFields.days] as List<dynamic>);
+      showFood = feedingDays.contains(true);
+
+      wateringRecurrence = widget.plant!.wateringDetails[PlantFields.recurrence] as String;
+      mistingRecurrence = widget.plant!.mistingDetails[PlantFields.recurrence] as String;
+      feedingRecurrence = widget.plant!.feedingDetails[PlantFields.recurrence] as String;
+
+      _wateringNotesController.text = widget.plant!.wateringDetails[PlantFields.notes] as String;
+      _mistingNotesController.text = widget.plant!.mistingDetails[PlantFields.notes] as String;
+      _feedingNotesController.text = widget.plant!.feedingDetails[PlantFields.notes] as String;
+    } else {
+      // Creating new plant
+      wateringRecurrence = recurranceOptions[0];
+      mistingRecurrence = recurranceOptions[0];
+      feedingRecurrence = recurranceOptions[0];
+    }
   }
 
   void _handleImageFromGallery() async {
@@ -57,42 +82,84 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
   }
 
   Widget _displayPlantImage() {
-    return GestureDetector(
-      onTap: _handleImageFromGallery,
-      child: CircleAvatar(
-        radius: 35,
-        backgroundColor: Colors.grey[200],
-        backgroundImage: _image != null ? FileImage(_image!) : null,
-        child: _image == null
-            ? Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Icon(
-                      FontAwesomeIcons.seedling,
-                      size: 40,
-                      color: Colors.grey[350],
-                    ),
-                  ),
-                  const Align(
-                    alignment: Alignment.topRight,
-                    child: CircleAvatar(
-                      radius: 10,
+    if (widget.plant == null) {
+      return GestureDetector(
+        onTap: _handleImageFromGallery,
+        child: CircleAvatar(
+          radius: 35,
+          backgroundColor: Colors.grey[200],
+          backgroundImage: _image == null ? null : FileImage(_image!),
+          child: _image == null
+              ? Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
                       child: Icon(
-                        Icons.add,
-                        size: 16,
-                        color: MyColors.appBackgroundColor,
+                        FontAwesomeIcons.seedling,
+                        size: 40,
+                        color: Colors.grey[350],
                       ),
                     ),
+                    const Align(
+                      alignment: Alignment.topRight,
+                      child: CircleAvatar(
+                        radius: 10,
+                        child: Icon(
+                          Icons.add,
+                          size: 16,
+                          color: MyColors.appBackgroundColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : null,
+        ),
+      );
+    } else {
+      return GestureDetector(
+        onTap: _handleImageFromGallery,
+        child: CircleAvatar(
+          radius: 35,
+          child: Stack(
+            children: [
+              Align(
+                  alignment: Alignment.center,
+                  child: _image == null
+                      ? CircleAvatar(
+                          radius: 35,
+                          backgroundColor: Colors.grey[200],
+                          backgroundImage: widget.plant!.photoURL != null ? CachedNetworkImageProvider(widget.plant!.photoURL!) : null,
+                          child: widget.plant!.photoURL != null
+                              ? null
+                              : Text(
+                                  widget.plant!.name[0],
+                                  style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                                ),
+                        )
+                      : CircleAvatar(
+                          radius: 35,
+                          backgroundImage: FileImage(_image!),
+                        )),
+              const Align(
+                alignment: Alignment.topRight,
+                child: CircleAvatar(
+                  radius: 10,
+                  child: Icon(
+                    Icons.edit,
+                    size: 12,
+                    color: MyColors.appBackgroundColor,
                   ),
-                ],
-              )
-            : null,
-      ),
-    );
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 
-  Widget _displayHouseholdDetails() {
+  Widget _displayHouseholdDetails(BuildContext context) {
     HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: false);
     households = householdNotifier.myHouseholds!;
 
@@ -103,6 +170,18 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
       }
     }
     String? householdSelected;
+
+    // If editing a plant
+    if (widget.plant != null) {
+      if (households.isNotEmpty) {
+        for (var household in households) {
+          if (household.uid == widget.plant!.householdUid) {
+            householdSelected = household.name;
+          }
+        }
+      }
+    }
+
     Widget button = TextButton(
       onPressed: () {
         showCreateHouseholdDialog(
@@ -162,7 +241,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     );
   }
 
-  Widget _displayWateringDetails() {
+  Widget _displayWateringDetails(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -215,6 +294,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            controller: _wateringNotesController,
             decoration: const InputDecoration(
               hintText: 'Notes',
             ),
@@ -230,7 +310,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     );
   }
 
-  Widget _displayMistingDetails() {
+  Widget _displayMistingDetails(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -283,6 +363,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            controller: _mistingNotesController,
             decoration: const InputDecoration(
               hintText: 'Notes',
             ),
@@ -298,7 +379,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     );
   }
 
-  Widget _displayFeedingDetails() {
+  Widget _displayFeedingDetails(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -351,6 +432,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            controller: _feedingNotesController,
             decoration: const InputDecoration(
               hintText: 'Notes',
             ),
@@ -366,7 +448,7 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     );
   }
 
-  void submit() {
+  void submit(BuildContext context) {
     // Check name
     if (!_formKey.currentState!.validate()) {
       return;
@@ -383,22 +465,41 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
       return;
     }
 
-    // // Save plant
-    PlantService.create(
-      context,
-      household: households[householdIndex!],
-      name: _nameController.text.trim(),
-      image: _image,
-      wateringDays: wateringDays,
-      wateringRecurrence: wateringRecurrence,
-      wateringNotes: wateringNotesText,
-      mistingDays: mistingDays,
-      mistingRecurrence: mistingRecurrence,
-      mistingNotes: mistingNotesText,
-      feedingDays: feedingDays,
-      feedingRecurrence: feedingRecurrence,
-      feedingNotes: feedingNotesText,
-    );
+    if (widget.plant == null) {
+      // Save plant
+      PlantService.create(
+        context,
+        household: households[householdIndex!],
+        name: _nameController.text.trim(),
+        image: _image,
+        wateringDays: wateringDays,
+        wateringRecurrence: wateringRecurrence,
+        wateringNotes: wateringNotesText,
+        mistingDays: mistingDays,
+        mistingRecurrence: mistingRecurrence,
+        mistingNotes: mistingNotesText,
+        feedingDays: feedingDays,
+        feedingRecurrence: feedingRecurrence,
+        feedingNotes: feedingNotesText,
+      );
+    } else {
+      // Update plant
+      PlantService.updatePlant(
+        context,
+        originalPlant: widget.plant!,
+        name: _nameController.text.trim(),
+        image: _image,
+        wateringDays: wateringDays,
+        wateringRecurrence: wateringRecurrence,
+        wateringNotes: wateringNotesText,
+        mistingDays: mistingDays,
+        mistingRecurrence: mistingRecurrence,
+        mistingNotes: mistingNotesText,
+        feedingDays: feedingDays,
+        feedingRecurrence: feedingRecurrence,
+        feedingNotes: feedingNotesText,
+      );
+    }
   }
 
   @override
@@ -406,10 +507,10 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
     HouseholdNotifier householdNotifier = Provider.of<HouseholdNotifier>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add new plant'),
+        title: widget.plant == null ? Text('Add new plant') : Text('Edit'),
         actions: [
           IconButton(
-            onPressed: () => submit(),
+            onPressed: () => submit(context),
             icon: Icon(
               Icons.save_rounded,
             ),
@@ -432,10 +533,10 @@ class _CreatePlantScreenState extends State<CreatePlantScreen> {
                       Expanded(child: PlantNameFormField(textEditingController: _nameController)),
                     ],
                   ),
-                  _displayHouseholdDetails(),
-                  _displayWateringDetails(),
-                  showMisting ? _displayMistingDetails() : Container(),
-                  showFood ? _displayFeedingDetails() : Container(),
+                  _displayHouseholdDetails(context),
+                  _displayWateringDetails(context),
+                  showMisting ? _displayMistingDetails(context) : Container(),
+                  showFood ? _displayFeedingDetails(context) : Container(),
                   showMisting
                       ? Container()
                       : SizedBox(
