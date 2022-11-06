@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -84,39 +85,81 @@ class _CreatePlantScreenTestState extends State<CreatePlantScreenTest> {
   }
 
   Widget _displayPlantImage() {
-    return GestureDetector(
-      onTap: _handleImageFromGallery,
-      child: CircleAvatar(
-        radius: 35,
-        backgroundColor: Colors.grey[200],
-        backgroundImage: _image == null ? null : FileImage(_image!),
-        child: _image == null
-            ? Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Icon(
-                      FontAwesomeIcons.seedling,
-                      size: 40,
-                      color: Colors.grey[350],
-                    ),
-                  ),
-                  const Align(
-                    alignment: Alignment.topRight,
-                    child: CircleAvatar(
-                      radius: 10,
+    if (widget.plant == null) {
+      return GestureDetector(
+        onTap: _handleImageFromGallery,
+        child: CircleAvatar(
+          radius: 35,
+          backgroundColor: Colors.grey[200],
+          backgroundImage: _image == null ? null : FileImage(_image!),
+          child: _image == null
+              ? Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
                       child: Icon(
-                        Icons.add,
-                        size: 16,
-                        color: MyColors.appBackgroundColor,
+                        FontAwesomeIcons.seedling,
+                        size: 40,
+                        color: Colors.grey[350],
                       ),
                     ),
+                    const Align(
+                      alignment: Alignment.topRight,
+                      child: CircleAvatar(
+                        radius: 10,
+                        child: Icon(
+                          Icons.add,
+                          size: 16,
+                          color: MyColors.appBackgroundColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : null,
+        ),
+      );
+    } else {
+      return GestureDetector(
+        onTap: _handleImageFromGallery,
+        child: CircleAvatar(
+          radius: 35,
+          child: Stack(
+            children: [
+              Align(
+                  alignment: Alignment.center,
+                  child: _image == null
+                      ? CircleAvatar(
+                          radius: 35,
+                          backgroundColor: Colors.grey[200],
+                          backgroundImage: widget.plant!.photoURL != null ? CachedNetworkImageProvider(widget.plant!.photoURL!) : null,
+                          child: widget.plant!.photoURL != null
+                              ? null
+                              : Text(
+                                  widget.plant!.name[0],
+                                  style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                                ),
+                        )
+                      : CircleAvatar(
+                          radius: 35,
+                          backgroundImage: FileImage(_image!),
+                        )),
+              const Align(
+                alignment: Alignment.topRight,
+                child: CircleAvatar(
+                  radius: 10,
+                  child: Icon(
+                    Icons.edit,
+                    size: 12,
+                    color: MyColors.appBackgroundColor,
                   ),
-                ],
-              )
-            : null,
-      ),
-    );
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 
   Widget _displayHouseholdDetails(BuildContext context) {
@@ -448,6 +491,7 @@ class _CreatePlantScreenTestState extends State<CreatePlantScreenTest> {
         context,
         originalPlant: widget.plant!,
         name: _nameController.text.trim(),
+        image: _image,
         wateringDays: wateringDays,
         wateringRecurrence: wateringRecurrence,
         wateringNotes: wateringNotesText,

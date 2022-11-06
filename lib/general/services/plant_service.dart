@@ -119,6 +119,7 @@ class PlantService {
     BuildContext context, {
     required Plant originalPlant,
     required String name,
+    required File? image,
     required List<bool> wateringDays,
     required String wateringRecurrence,
     required String wateringNotes,
@@ -134,6 +135,12 @@ class PlantService {
     await EventDatabase.deletePlantEvents(context, plantUid: originalPlant.uid);
 
     // Creat new plant
+    // Upload image
+    String? photoURL;
+    if (image != null) {
+      photoURL = await StorageService.uploadPlantImage(image);
+    }
+
     int daysUntil = 0;
     DateTime now = DateTime.now();
 
@@ -168,6 +175,7 @@ class PlantService {
 
     Plant newPlant = originalPlant.copy(
       name: name,
+      photoURL: photoURL,
       wateringDetails: wateringDetails,
       mistingDetails: mistingDetails,
       feedingDetails: feedingDetails,
