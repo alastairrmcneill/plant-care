@@ -217,6 +217,8 @@ class PlantService {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context, listen: false);
     plantNotifier.setCurrentPlant = newPlant;
 
+    await EventService.getCurrentPlantEvents(context);
+
     stopCircularProgressOverlay(context);
     Navigator.of(context).pop();
   }

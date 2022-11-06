@@ -23,6 +23,9 @@ class EventTile extends StatelessWidget {
     PlantNotifier plantNotifier = Provider.of<PlantNotifier>(context, listen: false);
     List<Event> eventList = eventNotifier.allEvents;
     Iterable<Event> events = eventList.where((element) => (element.uid == appointment.subject));
+    if (events.isEmpty) {
+      return Container();
+    }
     Event event = events.first;
 
     List<Plant> plantList = plantNotifier.myPlants!;

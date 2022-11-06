@@ -17,7 +17,6 @@ class _CalendarTabState extends State<CalendarTab> {
   @override
   Widget build(BuildContext context) {
     EventNotifier eventNotifier = Provider.of<EventNotifier>(context);
-
     return Column(
       children: [
         const SizedBox(height: 150),

@@ -115,12 +115,15 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> with SingleTicker
             ),
           ),
         ],
-        body: TabBarView(
-          controller: tabController,
-          children: const [
-            OverviewTab(),
-            CalendarTab(),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: TabBarView(
+            controller: tabController,
+            children: const [
+              OverviewTab(),
+              CalendarTab(),
+            ],
+          ),
         ),
       ),
     );
