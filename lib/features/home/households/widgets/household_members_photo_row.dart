@@ -38,6 +38,7 @@ class HouseholdMembersPhotosRow extends StatelessWidget {
             child: CircularPicture(
               photoUrl: member.photoUrl,
               text: member.initials,
+              radius: 18,
             ),
           );
         }).toList(),

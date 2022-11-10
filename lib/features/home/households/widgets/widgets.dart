@@ -6,3 +6,4 @@ export 'plants_photo_row.dart';
 export 'circular_picture.dart';
 export 'household_members_photo_row.dart';
 export 'household_calendar_tab.dart';
+export 'household_overview_tab.dart';

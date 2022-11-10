@@ -22,6 +22,7 @@ class PlantsPhotoRow extends StatelessWidget {
               child: CircularPicture(
                 photoUrl: plant.photoURL,
                 text: plant.name[0],
+                radius: 18,
               ),
             );
           }).toList(),

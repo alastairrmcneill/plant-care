@@ -118,7 +118,7 @@ class _HouseholdDetailScreenState extends State<HouseholdDetailScreen> with Sing
             child: TabBarView(
               controller: tabController,
               children: const [
-                HouseholdCalendarTab(),
+                HouseholdOverviewTab(),
                 HouseholdCalendarTab(),
               ],
             ),
