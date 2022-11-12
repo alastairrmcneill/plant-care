@@ -45,7 +45,9 @@ class MyThemes {
   }
 
   static ThemeData get darkTheme {
-    return ThemeData();
+    return ThemeData(
+      primarySwatch: Colors.blue,
+    );
   }
 }
 
