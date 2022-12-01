@@ -18,7 +18,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
+    UserNotifier userNotifier = Provider.of<UserNotifier>(context);
     SettingsNotifier settingsNotifier = Provider.of<SettingsNotifier>(context);
     AppUser user = userNotifier.currentUser!;
 
@@ -44,17 +44,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 trailing: Icon(Icons.chevron_right_rounded),
                 onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => UpdateAccountDetails())),
               ),
-              ListTile(
-                title: const Text('Dark Mode'),
-                trailing: Switch(
-                  value: settingsNotifier.darkMode,
-                  onChanged: (value) {
-                    setState(() {
-                      settingsNotifier.setDarkMode(value);
-                    });
-                  },
-                ),
-              ),
+              // ListTile(
+              //   title: const Text('Dark Mode'),
+              //   trailing: Switch(
+              //     value: settingsNotifier.darkMode,
+              //     onChanged: (value) {
+              //       setState(() {
+              //         settingsNotifier.setDarkMode(value);
+              //       });
+              //     },
+              //   ),
+              // ),
               const SizedBox(height: 10),
               const SignOutButton(),
               const DeleteAccountButton(),
