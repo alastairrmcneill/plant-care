@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:plant_care/general/models/models.dart';
@@ -12,6 +13,7 @@ import 'package:plant_care/support/wrapper.dart';
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // Auth user stream
@@ -34,12 +36,14 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
       if (user != null) {
+        String? token = await _messaging.getToken();
         AppUser appUser = AppUser(
           uid: user.uid,
           name: name,
           email: email,
           photoUrl: null,
           initials: initials,
+          token: token!,
         );
 
         // Add user to database
@@ -88,12 +92,14 @@ class AuthService {
       stopCircularProgressOverlay(context);
       User? user = result.user;
       if (user != null) {
+        String? token = await _messaging.getToken();
         AppUser appUser = AppUser(
           uid: user.uid,
           name: user.displayName!,
           email: user.email!,
           photoUrl: user.photoURL,
           initials: initials,
+          token: token!,
         );
         // Add user to database
         await UserDatabase.updateUser(context, appUser);
@@ -131,6 +137,7 @@ class AuthService {
 
   // Sign out of account
   static Future<void> signOut(BuildContext context) async {
+    await removeToken(context);
     if (_googleSignIn.currentUser != null) {
       await _googleSignIn.disconnect();
     }
@@ -149,5 +156,11 @@ class AuthService {
       stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
     }
+  }
+
+  static Future<void> removeToken(BuildContext context) async {
+    final currentUser = await _auth.currentUser;
+
+    await UserDatabase.removeToken(context, uid: currentUser!.uid);
   }
 }

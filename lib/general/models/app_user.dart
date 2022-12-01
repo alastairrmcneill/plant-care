@@ -6,6 +6,7 @@ class AppUser {
   final String initials;
   final String email;
   final String? photoUrl;
+  final String token;
 
   AppUser({
     this.uid,
@@ -13,6 +14,7 @@ class AppUser {
     required this.email,
     this.photoUrl,
     required this.initials,
+    required this.token,
   });
 
   // to json
@@ -23,6 +25,7 @@ class AppUser {
       AppUserFields.name: name,
       AppUserFields.photoUrl: photoUrl,
       AppUserFields.initials: initials,
+      AppUserFields.token: token,
     };
   }
 
@@ -34,6 +37,7 @@ class AppUser {
       email: json[AppUserFields.email] as String,
       photoUrl: json[AppUserFields.photoUrl] as String?,
       initials: json[AppUserFields.initials] as String,
+      token: json[AppUserFields.token] as String,
     );
   }
 
@@ -44,6 +48,7 @@ class AppUser {
     String? email,
     String? photoUrl,
     String? initials,
+    String? token,
   }) {
     return AppUser(
       uid: uid ?? this.uid,
@@ -51,6 +56,7 @@ class AppUser {
       email: email ?? this.email,
       photoUrl: photoUrl ?? this.photoUrl,
       initials: initials ?? this.initials,
+      token: token ?? this.token,
     );
   }
 }
@@ -61,4 +67,5 @@ class AppUserFields {
   static String email = 'email';
   static String photoUrl = 'photoUrl';
   static String initials = 'initials';
+  static String token = 'token';
 }

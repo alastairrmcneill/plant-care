@@ -3,8 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/features/onboarding/screens/screens.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
-import 'package:plant_care/support/theme.dart';
-import 'package:plant_care/support/wrapper.dart';
+import 'package:plant_care/support/app.dart';
 import 'package:provider/provider.dart';
 import 'general/services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,12 +48,7 @@ class MyApp extends StatelessWidget {
           create: (_) => PlantNotifier(),
         ),
       ],
-      child: MaterialApp(
-        title: 'Plant Care',
-        debugShowCheckedModeBanner: false,
-        theme: MyThemes.lightTheme,
-        home: showHome ? const Wrapper() : const OnboardingScreen(),
-      ),
+      child: App(showHome: showHome),
     );
   }
 }

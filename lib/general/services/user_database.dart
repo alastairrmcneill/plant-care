@@ -89,6 +89,15 @@ class UserDatabase {
     }
   }
 
+  static Future removeToken(BuildContext context, {required String uid}) async {
+    try {
+      DocumentReference ref = _usersRef.doc(uid);
+      await ref.update({'token': ''});
+    } on FirebaseException catch (error) {
+      showErrorDialog(context, error.message!);
+    }
+  }
+
   // Delete User
   static Future deleteUser(BuildContext context, {required String uid}) async {
     try {
