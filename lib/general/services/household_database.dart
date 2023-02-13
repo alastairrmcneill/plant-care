@@ -103,10 +103,31 @@ class HouseholdDatabase {
       if (snapshot.exists) {
         Household household = Household.fromJson(snapshot.data());
         household.plantsInfo.remove(plantUid);
+        household.plants.remove(plantUid);
         await HouseholdDatabase.updateHousehold(context, household: household);
       }
     } on FirebaseException catch (error) {
       showErrorDialog(context, error.message!);
+    }
+  }
+
+  static Future removeToken(BuildContext context, {required String userUid}) async {
+    QuerySnapshot querySnapshot = await _householdRef.where('members', arrayContains: userUid).get();
+
+    for (var doc in querySnapshot.docs) {
+      await doc.reference.update({
+        '${HouseholdFields.memberInfo}.$userUid.token': '',
+      });
+    }
+  }
+
+  static Future setToken(BuildContext context, {required String userUid, required String token}) async {
+    QuerySnapshot querySnapshot = await _householdRef.where('members', arrayContains: userUid).get();
+
+    for (var doc in querySnapshot.docs) {
+      await doc.reference.update({
+        '${HouseholdFields.memberInfo}.$userUid.token': token,
+      });
     }
   }
 

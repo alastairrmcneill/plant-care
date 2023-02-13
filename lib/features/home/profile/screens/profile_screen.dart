@@ -39,11 +39,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 10),
               Divider(),
-              ListTile(
-                title: Text('Account Details'),
-                trailing: Icon(Icons.chevron_right_rounded),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => UpdateAccountDetails())),
-              ),
+              // ListTile(
+              //   title: Text('Account Details'),
+              //   trailing: Icon(Icons.chevron_right_rounded),
+              //   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => UpdateAccountDetails())),
+              // ),
               // ListTile(
               //   title: const Text('Dark Mode'),
               //   trailing: Switch(

@@ -70,28 +70,33 @@ class PlantService {
 
     // Update household
     household.plantsInfo[plant.uid] = plant.toJson();
+    household.plants.add(plant.uid);
     HouseholdDatabase.updateHousehold(context, household: household);
 
     // Create Events
     await EventService.create(
       context,
       plantUid: plant.uid,
+      householdUid: household.uid!,
       days: wateringDays,
       recurrence: wateringRecurrence,
       notes: wateringNotes,
       type: EventTypes.water,
       subject: '$name - water',
+      notifcationMessage: "$name needs watered.",
     );
 
     if (mistingDays.contains(true)) {
       await EventService.create(
         context,
         plantUid: plant.uid,
+        householdUid: household.uid!,
         days: mistingDays,
         recurrence: mistingRecurrence,
         notes: mistingNotes,
         type: EventTypes.mist,
         subject: '$name - mist',
+        notifcationMessage: "$name needs misted.",
       );
     }
 
@@ -99,11 +104,13 @@ class PlantService {
       await EventService.create(
         context,
         plantUid: plant.uid,
+        householdUid: household.uid!,
         days: feedingDays,
         recurrence: feedingRecurrence,
         notes: feedingNotes,
         type: EventTypes.feed,
         subject: '$name - feed',
+        notifcationMessage: "$name needs fed.",
       );
     }
 
@@ -188,22 +195,26 @@ class PlantService {
     await EventService.create(
       context,
       plantUid: originalPlant.uid,
+      householdUid: originalPlant.householdUid,
       days: wateringDays,
       recurrence: wateringRecurrence,
       notes: wateringNotes,
       type: EventTypes.water,
       subject: '${newPlant.name} - water',
+      notifcationMessage: '${newPlant.name} needs watered.',
     );
 
     if (mistingDays.contains(true)) {
       await EventService.create(
         context,
         plantUid: originalPlant.uid,
+        householdUid: originalPlant.householdUid,
         days: mistingDays,
         recurrence: mistingRecurrence,
         notes: mistingNotes,
         type: EventTypes.mist,
         subject: '${newPlant.name} - misting',
+        notifcationMessage: '${newPlant.name} needs misted.',
       );
     }
 
@@ -211,11 +222,13 @@ class PlantService {
       await EventService.create(
         context,
         plantUid: originalPlant.uid,
+        householdUid: originalPlant.householdUid,
         days: feedingDays,
         recurrence: feedingRecurrence,
         notes: feedingNotes,
         type: EventTypes.feed,
         subject: '${newPlant.name} - feeding',
+        notifcationMessage: '${newPlant.name} needs fed.',
       );
     }
 

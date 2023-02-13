@@ -13,13 +13,20 @@ import '../../features/home/households/widgets/widgets.dart';
 class HouseholdService {
   static Future create(BuildContext context, {required String name}) async {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
-    String userId = userNotifier.currentUser!.uid!;
+    AppUser appUser = userNotifier.currentUser!;
 
     // Get unique household code
     String code = _randomString(8);
     // TODO: check if household exists with this string. If it does then repeat.
 
-    Household household = Household(name: name, code: code, members: [userId], plantsInfo: {});
+    Household household = Household(
+      name: name,
+      code: code,
+      members: [appUser.uid!],
+      plants: [],
+      plantsInfo: {},
+      memberInfo: {appUser.uid!: appUser.toJSON()},
+    );
 
     await HouseholdDatabase.create(context, household: household);
   }
@@ -27,7 +34,7 @@ class HouseholdService {
   static Future addCurrentUserToHousehold(BuildContext context, {required String code}) async {
     // Get current User ID
     UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
-    String userId = userNotifier.currentUser!.uid!;
+    AppUser appUser = userNotifier.currentUser!;
 
     // // Get household or cancel if it doesn't exist
     Household? household = await HouseholdDatabase.getHouseholdFromCode(context, code: code);
@@ -38,13 +45,14 @@ class HouseholdService {
     }
 
     // Update household
-    if (household.members.contains(userId)) {
+    if (household.members.contains(appUser.uid)) {
       // user already in household
       showErrorDialog(context, 'You are already part of this household');
       return;
     }
 
-    household.members.add(userId);
+    household.members.add(appUser.uid!);
+    household.memberInfo[appUser.uid] = appUser.toJSON();
     await HouseholdDatabase.updateHousehold(context, household: household);
 
     await HouseholdDatabase.readMyHouseholds(context);

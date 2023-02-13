@@ -103,6 +103,7 @@ class AuthService {
         );
         // Add user to database
         await UserDatabase.updateUser(context, appUser);
+        await HouseholdDatabase.setToken(context, userUid: appUser.uid!, token: token);
       }
     } on FirebaseAuthException catch (error) {
       stopCircularProgressOverlay(context);
@@ -114,6 +115,7 @@ class AuthService {
     showCircularProgressOverlay(context);
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await setToken(context);
       stopCircularProgressOverlay(context);
     } on FirebaseAuthException catch (error) {
       stopCircularProgressOverlay(context);
@@ -159,8 +161,18 @@ class AuthService {
   }
 
   static Future<void> removeToken(BuildContext context) async {
-    final currentUser = await _auth.currentUser;
+    final currentUser = _auth.currentUser;
 
     await UserDatabase.removeToken(context, uid: currentUser!.uid);
+    await HouseholdDatabase.removeToken(context, userUid: currentUser.uid);
+  }
+
+  static Future<void> setToken(BuildContext context) async {
+    final currentUser = _auth.currentUser;
+
+    String? token = await _messaging.getToken();
+
+    await UserDatabase.setToken(context, uid: currentUser!.uid, token: token!);
+    await HouseholdDatabase.setToken(context, userUid: currentUser.uid, token: token);
   }
 }

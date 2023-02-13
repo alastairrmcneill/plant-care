@@ -9,6 +9,7 @@ import 'package:plant_care/general/models/models.dart';
 class Event {
   final String? uid;
   final String plantUid;
+  final String householdUid;
   final DateTime startTime;
   final DateTime endTime;
   final DateTime lastAction;
@@ -19,10 +20,12 @@ class Event {
   final String repeats;
   final String type;
   final String notes;
+  final String notificationMessage;
 
   Event({
     this.uid,
     required this.plantUid,
+    required this.householdUid,
     required this.startTime,
     required this.endTime,
     required this.lastAction,
@@ -33,12 +36,14 @@ class Event {
     required this.repeats,
     required this.type,
     required this.notes,
+    required this.notificationMessage,
   });
 
   Map<String, Object?> toJson() {
     return {
       EventFields.uid: uid,
       EventFields.plantUid: plantUid,
+      EventFields.householdUid: householdUid,
       EventFields.startTime: startTime,
       EventFields.endTime: endTime,
       EventFields.lastAction: lastAction,
@@ -49,6 +54,7 @@ class Event {
       EventFields.repeats: repeats,
       EventFields.type: type,
       EventFields.notes: notes,
+      EventFields.notificationMessage: notificationMessage,
     };
   }
 
@@ -58,6 +64,7 @@ class Event {
     return Event(
       uid: json[EventFields.uid] as String?,
       plantUid: json[EventFields.plantUid] as String,
+      householdUid: json[EventFields.householdUid] as String,
       startTime: (json[EventFields.startTime] as Timestamp).toDate(),
       endTime: (json[EventFields.endTime] as Timestamp).toDate(),
       lastAction: (json[EventFields.lastAction] as Timestamp).toDate(),
@@ -68,12 +75,14 @@ class Event {
       repeats: json[EventFields.repeats] as String,
       type: json[EventFields.type] as String,
       notes: json[EventFields.notes] as String,
+      notificationMessage: json[EventFields.notificationMessage] as String? ?? 'You have a plant that needs attention',
     );
   }
 
   Event copy({
     String? uid,
     String? plantUid,
+    String? householdUid,
     DateTime? startTime,
     DateTime? endTime,
     DateTime? lastAction,
@@ -84,10 +93,12 @@ class Event {
     String? repeats,
     String? type,
     String? notes,
+    String? notificationMessage,
   }) =>
       Event(
         uid: uid ?? this.uid,
         plantUid: plantUid ?? this.plantUid,
+        householdUid: householdUid ?? this.householdUid,
         startTime: startTime ?? this.startTime,
         endTime: endTime ?? this.endTime,
         lastAction: lastAction ?? this.lastAction,
@@ -98,12 +109,14 @@ class Event {
         repeats: repeats ?? this.repeats,
         type: type ?? this.type,
         notes: notes ?? this.notes,
+        notificationMessage: notificationMessage ?? this.notificationMessage,
       );
 }
 
 class EventFields {
   static String uid = 'uid';
   static String plantUid = 'plantUid';
+  static String householdUid = 'householdUid';
   static String startTime = 'startTime';
   static String endTime = 'endTime';
   static String lastAction = 'lastAction';
@@ -117,6 +130,7 @@ class EventFields {
   static String feeding = 'Feeding';
   static String days = 'days';
   static String repeats = 'repeats';
+  static String notificationMessage = 'notificationMessage';
 }
 
 class EventTypes {

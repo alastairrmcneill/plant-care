@@ -9,11 +9,13 @@ class EventService {
   static Future create(
     BuildContext context, {
     required String plantUid,
+    required String householdUid,
     required List<bool> days,
     required String recurrence,
     required String notes,
     required String type,
     required String subject,
+    required String notifcationMessage,
   }) async {
     final DateTime today = DateTime.now();
     final DateTime startTime = DateTime(today.year, today.month, today.day, 0, 0, 0);
@@ -45,6 +47,7 @@ class EventService {
     // Create Event
     Event event = Event(
       plantUid: plantUid,
+      householdUid: householdUid,
       startTime: startTime,
       endTime: endTime,
       lastAction: DateTime(today.year, today.month, today.day),
@@ -55,6 +58,7 @@ class EventService {
       repeats: recurrence,
       type: type,
       notes: notes,
+      notificationMessage: notifcationMessage,
     );
 
     // Save event

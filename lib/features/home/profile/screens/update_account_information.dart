@@ -14,6 +14,7 @@ class UpdateAccountDetails extends StatelessWidget {
         child: Column(
           children: [
             UpdateNameForm(),
+            const Divider(),
             UpdatePasswordForm(),
           ],
         ),
