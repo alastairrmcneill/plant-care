@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:plant_care/features/home/plants/screens/screens.dart';
 import 'package:plant_care/features/home/plants/widgets/widgets.dart';
 import 'package:plant_care/general/notifiers/notifiers.dart';
+import 'package:plant_care/general/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class PlantsScreen extends StatelessWidget {

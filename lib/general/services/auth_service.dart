@@ -10,6 +10,7 @@ import 'package:plant_care/general/models/models.dart';
 import 'package:plant_care/general/services/services.dart';
 import 'package:plant_care/general/widgets/widgets.dart';
 import 'package:plant_care/support/wrapper.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -67,7 +68,7 @@ class AuthService {
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
   }
 
-  // Login to account
+  // Login with google
   static Future loginWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -87,8 +88,78 @@ class AuthService {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
+
       showCircularProgressOverlay(context);
       UserCredential result = await _auth.signInWithCredential(credential);
+      stopCircularProgressOverlay(context);
+      User? user = result.user;
+      if (user != null) {
+        String? token = await _messaging.getToken();
+        AppUser appUser = AppUser(
+          uid: user.uid,
+          name: user.displayName!,
+          email: user.email!,
+          photoUrl: user.photoURL,
+          initials: initials,
+          token: token!,
+        );
+        // Add user to database
+        await UserDatabase.updateUser(context, appUser);
+        await HouseholdDatabase.setToken(context, userUid: appUser.uid!, token: token);
+      }
+    } on FirebaseAuthException catch (error) {
+      stopCircularProgressOverlay(context);
+      showErrorDialog(context, error.message!);
+    }
+  }
+
+  // Apple sign in
+  static Future signInWithApple(BuildContext context) async {
+    try {
+      final appleIdCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      final OAuthProvider oAuthProvider = OAuthProvider('apple.com');
+      OAuthCredential credential = oAuthProvider.credential(
+        idToken: appleIdCredential.identityToken,
+        accessToken: appleIdCredential.authorizationCode,
+      );
+
+      print('First name: ${appleIdCredential.givenName}');
+      print('Family name: ${appleIdCredential.familyName}');
+      print('Email: ${appleIdCredential.email}');
+
+      showCircularProgressOverlay(context);
+
+      UserCredential result = await _auth.signInWithCredential(credential);
+
+      if (result.user!.displayName == null) {
+        print('updating');
+        await result.user!
+            .updateDisplayName(
+              "${appleIdCredential.givenName ?? ""} ${appleIdCredential.familyName ?? ""}",
+            )
+            .whenComplete(
+              () => result.user!.reload(),
+            );
+      }
+
+      print('User Details:');
+      print(result.user?.displayName);
+      print(result.user?.email);
+
+      String initials = '';
+      List<String> names = result.user!.displayName!.split(' ');
+
+      if (names.isEmpty) {
+        initials = names.first[0].toUpperCase();
+      } else {
+        initials = names.first[0].toUpperCase() + names.last[0].toUpperCase();
+      }
+
       stopCircularProgressOverlay(context);
       User? user = result.user;
       if (user != null) {

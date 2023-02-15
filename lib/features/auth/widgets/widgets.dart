@@ -7,3 +7,4 @@ export 'sign_in_button.dart';
 export 'forgot_password_button.dart';
 export 'register_now_button.dart';
 export 'register_button.dart';
+export 'apple_sign_in_button.dart';

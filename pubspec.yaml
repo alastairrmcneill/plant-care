@@ -45,6 +45,9 @@ dependencies:
   material_design_icons_flutter: ^5.0.6996
   iconify_flutter: ^0.0.5
   icon_forest: ^1.1.8
+  flutter_launcher_icons: ^0.11.0
+  flutter_native_splash: ^2.2.16
+  sign_in_with_apple: ^4.3.0
 
 
 
@@ -66,3 +69,19 @@ flutter:
     - assets/images/plant_logo.png
   #   - images/a_dot_ham.jpeg
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/app_icon_foreground.png"
+
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/ios_splash_screen_icon.png
+  android_12:
+    image: assets/images/android_splash_screen_icon.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/images/android_splash_screen_icon.png
+    icon_background_color_dark: "#121212"

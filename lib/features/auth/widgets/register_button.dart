@@ -32,7 +32,7 @@ class RegisterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 40,
+      height: 44,
       child: ElevatedButton(
         onPressed: () async {
           if (!formKey.currentState!.validate()) {

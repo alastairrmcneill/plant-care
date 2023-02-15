@@ -49,18 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
       // Navigator.pushNamed(context, '/message', arguments: MessageArguments(message, true));
     });
     // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-    if (Platform.isIOS) {
-      FirebaseMessaging.instance.requestPermission(
-        alert: true,
-        announcement: false,
-        badge: true,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-        sound: true,
-      );
-    }
   }
 
   Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
