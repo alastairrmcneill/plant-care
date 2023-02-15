@@ -15,10 +15,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   PageController pageController = PageController();
   bool isLastPage = false;
   List<Widget> pages = [
-    OnboardingPage(message: 'Page 1'),
-    OnboardingPage(message: 'Page 2'),
-    OnboardingPage(message: 'Page 3'),
-    OnboardingPage(message: 'Page 4'),
+    OnboardingPage(
+      imagePath: 'assets/onboarding_pages/Page 1.png',
+      title: 'Household',
+      message: 'Create a household to get started.',
+    ),
+    OnboardingPage(
+      imagePath: 'assets/onboarding_pages/Page 2.png',
+      title: 'Plant',
+      message: 'Add a plant to the household.',
+    ),
+    OnboardingPage(
+      imagePath: 'assets/onboarding_pages/Page 3.png',
+      title: 'Schedule',
+      message: 'See the schedule for all plants.',
+    ),
+    OnboardingPage(
+      imagePath: 'assets/onboarding_pages/Page 4.png',
+      title: 'Share',
+      message: 'Share with family and freinds to get help keeping those plants alive!',
+    ),
   ];
 
   @override

@@ -43,6 +43,9 @@ class EventService {
       specificEndDate: today.add(const Duration(days: 50)),
     );
     DateTime nextAction = futureAppointments.first;
+    if (startTime == DateTime(nextAction.year, nextAction.month, nextAction.day)) {
+      nextAction = futureAppointments[1];
+    }
 
     // Create Event
     Event event = Event(

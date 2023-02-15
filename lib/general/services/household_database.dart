@@ -88,6 +88,7 @@ class HouseholdDatabase {
       DocumentReference ref = _householdRef.doc(household.uid);
       await ref.update({
         HouseholdFields.members: FieldValue.arrayRemove([userUid]),
+        '${HouseholdFields.memberInfo}.$userUid': {},
       });
     } on FirebaseException catch (error) {
       showErrorDialog(context, error.message!);

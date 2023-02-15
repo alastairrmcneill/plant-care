@@ -19,7 +19,14 @@ class PlantListTile extends StatelessWidget {
     EventNotifier eventNotifier = Provider.of<EventNotifier>(context);
 
     List<Household> myHouseholds = householdNotifier.myHouseholds!;
-    Household household = myHouseholds.where((household) => household.uid == plant.householdUid).first;
+    List<Household> households = myHouseholds.where((household) => household.uid == plant.householdUid).toList();
+    Household? household;
+    if (households.isEmpty) {
+      household = Household(name: 'null', code: '', members: [], plants: [], plantsInfo: {}, memberInfo: {});
+    } else {
+      household = households.first;
+    }
+
     List<Event> events = eventNotifier.allEvents.where((event) => event.plantUid == plant.uid).toList();
 
     Widget _buildActionEntry(String type) {

@@ -128,10 +128,6 @@ class AuthService {
         accessToken: appleIdCredential.authorizationCode,
       );
 
-      print('First name: ${appleIdCredential.givenName}');
-      print('Family name: ${appleIdCredential.familyName}');
-      print('Email: ${appleIdCredential.email}');
-
       showCircularProgressOverlay(context);
 
       UserCredential result = await _auth.signInWithCredential(credential);
@@ -146,10 +142,6 @@ class AuthService {
               () => result.user!.reload(),
             );
       }
-
-      print('User Details:');
-      print(result.user?.displayName);
-      print(result.user?.email);
 
       String initials = '';
       List<String> names = result.user!.displayName!.split(' ');
