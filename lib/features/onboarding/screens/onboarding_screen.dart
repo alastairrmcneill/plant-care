@@ -14,7 +14,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   PageController pageController = PageController();
   bool isLastPage = false;
-  List<Widget> pages = [
+  List<Widget> pages = const [
     OnboardingPage(
       imagePath: 'assets/onboarding_pages/Page 1.png',
       title: 'Household',
@@ -28,7 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     OnboardingPage(
       imagePath: 'assets/onboarding_pages/Page 3.png',
       title: 'Schedule',
-      message: 'See the schedule for all plants.',
+      message: 'Mark actions as complete.',
     ),
     OnboardingPage(
       imagePath: 'assets/onboarding_pages/Page 4.png',

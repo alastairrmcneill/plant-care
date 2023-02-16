@@ -45,31 +45,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
         shadowColor: Colors.transparent,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Calendar(
-              events: eventNotifier.allEvents,
-              onTap: (calendarTapDetails) {
-                selectedDateAppointments = [];
-                if (calendarTapDetails.appointments != null && calendarTapDetails.appointments!.isNotEmpty) {
-                  // Loop through appointments and store them as Appointment
-                  for (var appointment in calendarTapDetails.appointments!) {
-                    Appointment app = appointment as Appointment;
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Calendar(
+                events: eventNotifier.allEvents,
+                onTap: (calendarTapDetails) {
+                  selectedDateAppointments = [];
+                  if (calendarTapDetails.appointments != null && calendarTapDetails.appointments!.isNotEmpty) {
+                    // Loop through appointments and store them as Appointment
+                    for (var appointment in calendarTapDetails.appointments!) {
+                      Appointment app = appointment as Appointment;
 
-                    selectedDateAppointments.add(app);
+                      selectedDateAppointments.add(app);
+                    }
                   }
-                }
-                setState(() {});
-              },
-            ),
-            Expanded(
-              child: ListView(
-                children: selectedDateAppointments.map((appointment) {
-                  return EventTile(appointment: appointment);
-                }).toList(),
+                  setState(() {});
+                },
               ),
-            ),
-          ],
+              ...selectedDateAppointments.map((appointment) {
+                return EventTile(appointment: appointment);
+              }).toList(),
+            ],
+          ),
         ),
       ),
     );
