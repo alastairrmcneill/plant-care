@@ -32,7 +32,7 @@ exports.addPlantToHousehold = functions.firestore
 
 // Check next action date
 exports.scheduledFunction = functions.pubsub.
-    schedule("every 2 minutes").onRun(async () => {
+    schedule("0 1 * * *").onRun(async () => {
       const nowTimestamp = Date.now();
       const now = new Date(nowTimestamp);
       const data = await admin.firestore()

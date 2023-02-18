@@ -31,7 +31,6 @@ class AuthService {
     } else {
       initials = names.first[0].toUpperCase() + names.last[0].toUpperCase();
     }
-    showCircularProgressOverlay(context);
 
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -54,14 +53,10 @@ class AuthService {
           image: image,
         );
       }
-
-      stopCircularProgressOverlay(context);
     } on FirebaseAuthException catch (error) {
-      stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
       return;
     } on FirebaseException catch (error) {
-      stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
       return;
     }
@@ -89,9 +84,8 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      showCircularProgressOverlay(context);
       UserCredential result = await _auth.signInWithCredential(credential);
-      stopCircularProgressOverlay(context);
+
       User? user = result.user;
       if (user != null) {
         String? token = await _messaging.getToken();
@@ -108,7 +102,6 @@ class AuthService {
         await HouseholdDatabase.setToken(context, userUid: appUser.uid!, token: token);
       }
     } on FirebaseAuthException catch (error) {
-      stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
     }
   }
@@ -128,12 +121,9 @@ class AuthService {
         accessToken: appleIdCredential.authorizationCode,
       );
 
-      showCircularProgressOverlay(context);
-
       UserCredential result = await _auth.signInWithCredential(credential);
 
       if (result.user!.displayName == null) {
-        print('updating');
         await result.user!
             .updateDisplayName(
               "${appleIdCredential.givenName ?? ""} ${appleIdCredential.familyName ?? ""}",
@@ -152,7 +142,6 @@ class AuthService {
         initials = names.first[0].toUpperCase() + names.last[0].toUpperCase();
       }
 
-      stopCircularProgressOverlay(context);
       User? user = result.user;
       if (user != null) {
         String? token = await _messaging.getToken();
@@ -169,33 +158,25 @@ class AuthService {
         await HouseholdDatabase.setToken(context, userUid: appUser.uid!, token: token);
       }
     } on FirebaseAuthException catch (error) {
-      stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
     }
   }
 
   static Future loginWithEmail(BuildContext context, {required String email, required String password}) async {
-    showCircularProgressOverlay(context);
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       await setToken(context);
-      stopCircularProgressOverlay(context);
     } on FirebaseAuthException catch (error) {
-      stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
     }
   }
 
   // Forgot password to account
   static Future forgotPassword(BuildContext context, {required String email}) async {
-    showCircularProgressOverlay(context);
-
     try {
       await _auth.sendPasswordResetEmail(email: email);
       showSnackBar(context, 'Password retreival email sent');
-      stopCircularProgressOverlay(context);
     } on FirebaseAuthException catch (error) {
-      stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
     }
   }
@@ -211,14 +192,12 @@ class AuthService {
 
   // Delete Account
   static Future delete(BuildContext context) async {
-    showCircularProgressOverlay(context);
     try {
       await UserDatabase.deleteUser(context, uid: _auth.currentUser!.uid);
       await _auth.currentUser!.delete();
-      stopCircularProgressOverlay(context);
+
       showSnackBar(context, 'User deleted');
     } on FirebaseAuthException catch (error) {
-      stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message!);
     }
   }
