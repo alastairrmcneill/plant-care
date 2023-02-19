@@ -4,14 +4,12 @@ class AppUser {
   final String? uid;
   final String name;
   final String initials;
-  final String email;
   final String? photoUrl;
   final String token;
 
   AppUser({
     this.uid,
     required this.name,
-    required this.email,
     this.photoUrl,
     required this.initials,
     required this.token,
@@ -21,7 +19,6 @@ class AppUser {
   Map<String, Object?> toJSON() {
     return {
       AppUserFields.uid: uid,
-      AppUserFields.email: email,
       AppUserFields.name: name,
       AppUserFields.photoUrl: photoUrl,
       AppUserFields.initials: initials,
@@ -34,7 +31,6 @@ class AppUser {
     return AppUser(
       uid: json[AppUserFields.uid] as String?,
       name: json[AppUserFields.name] as String,
-      email: json[AppUserFields.email] as String,
       photoUrl: json[AppUserFields.photoUrl] as String?,
       initials: json[AppUserFields.initials] as String,
       token: json[AppUserFields.token] as String,
@@ -45,7 +41,6 @@ class AppUser {
   AppUser copy({
     String? uid,
     String? name,
-    String? email,
     String? photoUrl,
     String? initials,
     String? token,
@@ -53,7 +48,6 @@ class AppUser {
     return AppUser(
       uid: uid ?? this.uid,
       name: name ?? this.name,
-      email: email ?? this.email,
       photoUrl: photoUrl ?? this.photoUrl,
       initials: initials ?? this.initials,
       token: token ?? this.token,
@@ -64,7 +58,6 @@ class AppUser {
 class AppUserFields {
   static String uid = 'uid';
   static String name = 'name';
-  static String email = 'email';
   static String photoUrl = 'photoUrl';
   static String initials = 'initials';
   static String token = 'token';

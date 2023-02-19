@@ -24,7 +24,7 @@ class PlantsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Hello ${userNotifier.currentUser?.name.split(' ')[0]}! 👋',
+              'Hello ${userNotifier.currentUser?.name.split(' ')[0] ?? ""}! 👋',
               style: const TextStyle(fontWeight: FontWeight.w400),
             ),
             const Text(
@@ -39,7 +39,8 @@ class PlantsScreen extends StatelessWidget {
         shadowColor: Colors.transparent,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CreatePlantScreen())),
+        onPressed: () => AuthService.signOut(context),
+        // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CreatePlantScreen())),
         child: const Icon(Icons.add),
       ),
       body: const SafeArea(child: PlantBody()),

@@ -24,7 +24,7 @@ class HouseholdsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Hello ${userNotifier.currentUser?.name.split(' ')[0]}! 👋',
+                'Hello ${userNotifier.currentUser?.name.split(' ')[0] ?? ""}! 👋',
                 style: const TextStyle(fontWeight: FontWeight.w400),
               ),
               const Text(

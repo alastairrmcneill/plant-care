@@ -40,7 +40,6 @@ class AuthService {
         AppUser appUser = AppUser(
           uid: user.uid,
           name: name,
-          email: email,
           photoUrl: null,
           initials: initials,
           token: token!,
@@ -92,7 +91,6 @@ class AuthService {
         AppUser appUser = AppUser(
           uid: user.uid,
           name: user.displayName!,
-          email: user.email!,
           photoUrl: user.photoURL,
           initials: initials,
           token: token!,
@@ -111,7 +109,6 @@ class AuthService {
     try {
       final appleIdCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
-          AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
       );
@@ -148,7 +145,6 @@ class AuthService {
         AppUser appUser = AppUser(
           uid: user.uid,
           name: user.displayName!,
-          email: user.email!,
           photoUrl: user.photoURL,
           initials: initials,
           token: token!,
@@ -162,6 +158,7 @@ class AuthService {
     }
   }
 
+  // Email Sign in
   static Future loginWithEmail(BuildContext context, {required String email, required String password}) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
