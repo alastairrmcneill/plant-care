@@ -137,6 +137,27 @@ class EventService {
     getCurrentPlantEvents(context);
   }
 
+  static Future markOverdueTileAsDone(BuildContext context, Event event) async {
+    DateTime now = DateTime.now();
+    DateTime lastAction = DateTime(now.year, now.month, now.day);
+    List<DateTime> futureDates = SfCalendar.getRecurrenceDateTimeCollection(
+      '${event.recurrenceRule};COUNT=1000',
+      event.startTime,
+      specificStartDate: now.add(Duration(days: 1)),
+      specificEndDate: now.add(Duration(days: 100)),
+    );
+    DateTime nextAction = futureDates[0];
+
+    Event newEvent = event.copy(
+      lastAction: lastAction,
+      nextAction: nextAction,
+    );
+
+    // Update database
+    await EventDatabase.updateEvent(context, event: newEvent);
+    getCurrentPlantEvents(context);
+  }
+
   static Future markAsUndone(BuildContext context, Event event, Appointment appointment) async {
     DateTime lastAction = event.startTime;
     DateTime nextAction = appointment.startTime;

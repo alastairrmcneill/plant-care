@@ -3,6 +3,8 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_care/features/home/plants/widgets/widgets.dart';
 import 'package:plant_care/general/models/models.dart';
+import 'package:plant_care/general/services/event_service.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class TaskTile extends StatelessWidget {
   final Event event;
@@ -27,6 +29,30 @@ class TaskTile extends StatelessWidget {
     }
 
     return dueString;
+  }
+
+  Widget _buildMarkAsDoneButton(BuildContext context) {
+    DateTime now = DateTime.now();
+    now = DateTime(now.year, now.month, now.day);
+
+    if (event.nextAction.isAfter(now)) {
+      return const SizedBox();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(),
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color?>(eventAccentColors[event.type]),
+          ),
+          onPressed: () async {
+            await EventService.markOverdueTileAsDone(context, event);
+          },
+          child: const Text('Mark as complete'),
+        ),
+      ],
+    );
   }
 
   @override
@@ -110,6 +136,7 @@ class TaskTile extends StatelessWidget {
                         style: TextStyle(color: eventAccentColors[event.type], fontWeight: FontWeight.w300, fontSize: 14),
                       )
                     : const SizedBox(),
+                _buildMarkAsDoneButton(context),
               ],
             ),
           ),
