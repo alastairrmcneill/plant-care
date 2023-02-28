@@ -20,7 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context);
     SettingsNotifier settingsNotifier = Provider.of<SettingsNotifier>(context);
-    AppUser user = userNotifier.currentUser!;
+    AppUser? user = userNotifier.currentUser;
 
     return Scaffold(
       body: SafeArea(
@@ -30,10 +30,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-              CircularHeaderImage(photoURL: user.photoUrl, initials: user.initials),
+              user != null ? CircularHeaderImage(photoURL: user.photoUrl, initials: user.initials) : const SizedBox(),
               const SizedBox(height: 10),
               AutoSizeText(
-                user.name,
+                user?.name ?? "User",
                 maxLines: 1,
                 style: TextStyle(fontSize: 20),
               ),

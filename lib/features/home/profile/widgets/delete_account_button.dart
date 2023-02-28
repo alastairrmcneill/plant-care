@@ -22,7 +22,7 @@ class DeleteAccountButton extends StatelessWidget {
                     'Cancel',
                     () {},
                   ),
-              child: Text('Delete'))),
+              child: Text('Delete Account'))),
     );
   }
 }

@@ -129,17 +129,24 @@ class AuthService {
               () => result.user!.reload(),
             );
       }
+      print('Updated name');
 
       String initials = '';
-      List<String> names = result.user!.displayName!.split(' ');
+      List<String> names = _auth.currentUser?.displayName?.split(' ') ?? [];
+      print('created names');
+      print(names);
 
       if (names.isEmpty) {
-        initials = names.first[0].toUpperCase();
+        initials = '  ';
       } else {
-        initials = names.first[0].toUpperCase() + names.last[0].toUpperCase();
+        if (names.first.isEmpty || names.last.isEmpty) {
+          initials = '  ';
+        } else {
+          initials = names.first[0].toUpperCase() + names.last[0].toUpperCase();
+        }
       }
 
-      User? user = result.user;
+      User? user = _auth.currentUser;
       if (user != null) {
         String? token = await _messaging.getToken();
         AppUser appUser = AppUser(

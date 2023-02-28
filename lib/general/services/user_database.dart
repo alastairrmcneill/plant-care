@@ -94,6 +94,7 @@ class UserDatabase {
       DocumentReference ref = _usersRef.doc(uid);
       await ref.update({'token': ''});
     } on FirebaseException catch (error) {
+      if (error.code == "not-found") return;
       showErrorDialog(context, error.message!);
     }
   }
